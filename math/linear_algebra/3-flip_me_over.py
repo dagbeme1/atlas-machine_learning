@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """ Transpose matrix """
 
- def matrix_transpose(matrix):
+
+def matrix_transpose(matrix):
     """ Given matrix perform transpose"""
     new_transpose = []
     for idx in range(len(matrix[0])):
