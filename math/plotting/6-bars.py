@@ -4,21 +4,22 @@ import matplotlib.pyplot as plt
 
 np.random.seed(5)
 fruit = np.random.randint(0, 20, (4, 3))
-names = ['Farrah', 'Fred', 'Felicia']
-f_names = {"apples": 'red', "bananas": 'yellow',
-           "oranges": '#ff8000', "peaches": '#ffe5b4'}
 
-i = 0
-for k, v in f_names.items():
-    bottom = 0
-    for x in range(i):
-        bottom += fruit[x]
-        plt.bar(names, fruit[i], width=0.5, color=v,
-                align='center', label=k, bottom=bottom)
-        i += 1
+fruit_labels = ['Apples', 'Bananas', 'Oranges', 'Peaches']
+person_labels = ['Farrah', 'Fred', 'Felicia']
 
-        plt.title("Number of Fruit per Person")
+colors = ['red', 'yellow', '#ff8000', '#ffe5b4']
+
+plt.bar(person_labels, fruit[0], color=colors[0], label=fruit_labels[0])
+for i in range(1, len(fruit_labels)):
+        plt.bar(person_labels, fruit[i], bottom=np.sum(fruit[:i], axis=0), color=colors[i], label=fruit_labels[i])
+
+        plt.xlabel('Person')
+        plt.ylabel('Quantity of Fruit')
+        plt.title('Number of Fruit per Person')
         plt.ylim(0, 80)
-        plt.ylabel("Quantity of Fruit")
+        plt.yticks(np.arange(0, 81, 10))
         plt.legend()
+
         plt.show()
+
