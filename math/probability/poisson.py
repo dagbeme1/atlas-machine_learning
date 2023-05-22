@@ -16,9 +16,9 @@ class Poisson:
             lambtha: Expected number of occurrences in a given time frame (default: 1.0).
 
         Raises:
-                ValueError: If lambtha is not a positive value.                                     
+                ValueError: If lambtha is not a positive value.
                 TypeError: If data is not a list.
-                ValueError: If data does not contain at least two data points.              
+                ValueError: If data does not contain at least two data points.
         """
         if data is None:
             self.set_lambtha(lambtha)
@@ -49,7 +49,7 @@ class Poisson:
         Returns:
                 float: The calculated lambtha value.
 
-        Raises:                                                                                     
+        Raises:
             TypeError: If data is not a list.
             ValueError: If data does not contain at least two data points.
         """
