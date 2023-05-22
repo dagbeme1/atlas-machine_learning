@@ -60,7 +60,7 @@ class Poisson:
         total = sum(data)
         count = len(data)
         return float(total) / count
-    
+
     @staticmethod
     def factorial(n):
         """Calculates factorial of given number
