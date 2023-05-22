@@ -63,7 +63,7 @@ class Poisson:
 
     def pmf(self, k):
         """
-        Calculate the value of the PMF (Probability Mass Function) for a given number of "successes".
+        Calculate the value of the PMF (Probability Mass Function)
 
         Args:
             k: Number of successes.
@@ -75,7 +75,8 @@ class Poisson:
         k = int(k)
         if k < 0:
             return 0
-        return (self.lambtha ** k) * (2.71828 ** -self.lambtha) / self.factorial(k)
+        return (self.lambtha ** k) * (2.71828 ** -self.lambtha) 
+    / self.factorial(k)
 
     def factorial(self, n):
         """
