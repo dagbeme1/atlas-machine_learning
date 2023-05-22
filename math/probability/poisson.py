@@ -26,6 +26,15 @@ class Poisson:
             self.set_lambtha(self.calculate_lambtha(data))
 
     def set_lambtha(self, lambtha):
+        """
+        Set the lambtha attribute.
+
+        Args:
+            lambtha: Expected number of occurrences in a given time frame.
+
+        Raises:
+            ValueError: If lambtha is not a positive value.
+        """
         if lambtha <= 0:
             raise ValueError("lambtha must be a positive value")
         self.lambtha = float(lambtha)
