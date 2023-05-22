@@ -60,3 +60,35 @@ class Poisson:
         total = sum(data)
         count = len(data)
         return float(total) / count
+
+    def pmf(self, k):
+        """
+        Calculate the value of the PMF (Probability Mass Function) for a given number of "successes".
+
+        Args:
+            k: Number of successes.
+
+        Returns:
+            float: The PMF value for k.
+
+        """
+        k = int(k)
+        if k < 0:
+            return 0
+        return (self.lambtha ** k) * (2.71828 ** -self.lambtha) / self.factorial(k)
+
+    def factorial(self, n):
+        """
+        Calculate the factorial of a number.
+
+        Args:
+            n: The number to calculate the factorial for.
+
+        Returns:
+            int: The factorial value of n.
+
+        """
+        if n == 0:
+            return 1
+        else:
+            return n * self.factorial(n - 1)
