@@ -13,7 +13,7 @@ class Poisson:
 
         Args:
             data: List of data to estimate the distribution (default: None).
-            lambtha: Expected number of occurrences in a given time frame (default: 1.0).
+            lambtha: Expected number of occurrences in a given time frame.
 
         Raises:
                 ValueError: If lambtha is not a positive value.
