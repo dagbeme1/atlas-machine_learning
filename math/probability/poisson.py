@@ -8,6 +8,18 @@ class Poisson:
     EULER_NUMBER = 2.7182818285
 
     def __init__(self, data=None, lambtha=1.):
+        """
+        Initialize a Poisson distribution.
+
+        Args:
+            data: List of data to estimate the distribution (default: None).
+            lambtha: Expected number of occurrences in a given time frame (default: 1.0).
+
+        Raises:
+                ValueError: If lambtha is not a positive value.                                     
+                TypeError: If data is not a list.
+                ValueError: If data does not contain at least two data points.              
+        """
         if data is None:
             self.set_lambtha(lambtha)
         else:
@@ -19,6 +31,19 @@ class Poisson:
         self.lambtha = float(lambtha)
 
     def calculate_lambtha(self, data):
+        """
+        Calculate the lambtha value based on the given data.
+
+        Args:
+            data: List of data points.
+
+        Returns:
+                float: The calculated lambtha value.
+
+        Raises:                                                                                     
+            TypeError: If data is not a list.
+            ValueError: If data does not contain at least two data points.
+        """
         if not isinstance(data, list):
             raise TypeError("data must be a list")
         if len(data) < 2:
