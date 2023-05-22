@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import math
 """Module with Poisson class"""
 
 
@@ -61,35 +60,36 @@ class Poisson:
         total = sum(data)
         count = len(data)
         return float(total) / count
-
-    def pmf(self, k):
-        """
-        Calculate the value of the PMF (Probability Mass Function)
-
-        Args:
-            k: Number of successes.
-
-        Returns:
-            float: The PMF value for k.
-
-        """
-        k = int(k)
-        if k < 0:
-            return 0
-        return (self.lambtha ** k) * (2.71828 ** -self.lambtha) / self.factorial(k)
-
-    def factorial(self, n):
-        """
-        Calculate the factorial of a number.
+    
+    @staticmethod
+    def factorial(n):
+        """Calculates factorial of given number
 
         Args:
-            n: The number to calculate the factorial for.
+            n: input number
 
         Returns:
-            int: The factorial value of n.
-
+            response of n factorial
         """
         if n == 0:
             return 1
-        else:
-            return n * self.factorial(n - 1)
+        return n * Poisson.factorial(n - 1)
+
+    def pmf(self, k):
+        """Calculates Probability Mass Function (PMF)
+
+        Args:
+            k: number of successes
+
+        Returns:
+            PMF of k or 0 if k is out of range.
+        """
+        k = int(k)
+
+        if k < 0:
+            return 0
+
+        num = (self.lambtha ** k) * (self.EULER_NUMBER ** -self.lambtha)
+        den = self.factorial(k)
+
+        return num / den
