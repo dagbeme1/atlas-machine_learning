@@ -86,6 +86,20 @@ class Binomial:
         # Calculate the PMF using the binomial
         return binomial_coefficient * ((self.p ** k) * (q ** (self.n - k)))
 
+    def cdf(self, k):
+        """Calculates Cumulative Distribution Function (CDF)
+
+        Args:
+            k: number of successes
+
+        Returns:
+            CDF of k or 0 if k is out of range.
+        """
+        k = int(k)
+        if k < 0 or k > self.n:
+            return 0
+        return sum([self.cdf_equation(i) for i in range(k + 1)])
+    
     def get_bcf(self, k):
         """Calculates binomial coefficient with a given number"""
         # Calculate the factorial of n
@@ -97,3 +111,9 @@ class Binomial:
         # Calculate the binomial coefficient using the factorials
         binomial_coefficient = n_factorial / (n_k_factorial * k_factorial)
         return binomial_coefficient
+
+    def cdf_equation(self, i):
+        """Calculates cdf for each iteration"""
+        # Calculate the value of r using the binomial coefficient and probability values
+        r = self.get_bcf(i) * ((self.p ** i) * ((1 - self.p) ** (self.n - i)))
+        return r
