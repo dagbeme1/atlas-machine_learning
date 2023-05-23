@@ -20,11 +20,11 @@ class Normal:
     def get_erf(cls, x):
         """Calculates the Error Function (erf) for a given value x"""
         seq = (
-    x - ((x ** 3) / 3)
-    + ((x ** 5) / 10)
-    - ((x ** 7) / 42)
-    + ((x ** 9) / 216)
-)
+            x - ((x ** 3) / 3)
+            + ((x ** 5) / 10)
+            - ((x ** 7) / 42)
+            + ((x ** 9) / 216)
+        )
         erf = (2 / (cls.PI ** (1 / 2))) * seq
         return erf
 
