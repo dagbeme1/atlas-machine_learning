@@ -63,3 +63,17 @@ class Normal:
         """Calculates the x-value for a given z-score."""
         # Calculate the x-value using the formula (z * stddev) + mean
         return (z * self.stddev) + self.mean
+
+    def pdf(self, x):
+        """Calculates Probability Density Function (PDF)
+
+        Args:
+            x: x-value
+
+        Returns:
+            PDF
+        """
+        exp_component = (-1/2) * (((x - self.mean)/self.stddev) ** 2)
+        euler_exp = self.EULER_NUMBER ** exp_component
+        cdf = euler_exp/(self.stddev * ((2 * self.PI) ** (1/2)))
+        return cdf
