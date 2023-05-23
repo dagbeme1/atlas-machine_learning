@@ -66,7 +66,7 @@ class Binomial:
         # Update p using the formula mean / n
         p = (mean / n)
         return n, p
-    
+
     def pmf(self, k):
         """Calculates Probability Mass Function (PMF)
         Args:
@@ -83,6 +83,6 @@ class Binomial:
         binomial_coefficient = self.get_bcf(k)
         # Calculate the complement probability q
         q = 1 - self.p
-        # Calculate the PMF using the binomial coefficient and probability values
+        # Calculate the PMF using the binomial
         return binomial_coefficient * ((self.p ** k) * (q ** (self.n - k)))
 
