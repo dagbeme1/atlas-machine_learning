@@ -85,3 +85,15 @@ class Binomial:
         q = 1 - self.p
         # Calculate the PMF using the binomial
         return binomial_coefficient * ((self.p ** k) * (q ** (self.n - k)))
+    
+    def get_bcf(self, k):
+        """Calculates binomial coefficient with a given number"""
+        # Calculate the factorial of n
+        n_factorial = self.factorial(self.n)
+        # Calculate the factorial of k
+        k_factorial = self.factorial(k)
+        # Calculate the factorial of (n - k)
+        n_k_factorial = self.factorial(self.n - k)
+        # Calculate the binomial coefficient using the factorials
+        binomial_coefficient = n_factorial / (n_k_factorial * k_factorial)
+        return binomial_coefficient
