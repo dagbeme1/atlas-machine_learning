@@ -9,23 +9,27 @@ class Exponential:
 
     def __init__(self, data=None, lambtha=1.):
         """Class constructor"""
-        # checks for the case data
         if data is not None:
-            # checks if data is a list
             if not isinstance(data, list):
                 raise TypeError('data must be a list')
-
-            # checks for data containing at least 2 values
             if len(data) < 2:
                 raise ValueError('data must contain multiple values')
-
-            # calculating for lambtha value
             self.lambtha = 1/(sum(data)/len(data))
         else:
-            # handles case when data is not provided
-            # checking if the lambtha is a positivee value
             if lambtha <= 0:
                 raise ValueError('lambtha must be a positive value')
-
-            # Assigning the lambtha value as a float
             self.lambtha = float(lambtha)
+
+    def pdf(self, x):
+        """Calculates Probability Density Function (PDF)
+
+        Args:
+            x: time period
+
+        Returns:
+            PDF of x or 0 if x is out of range.
+        """
+        if x < 0:
+            return 0
+
+        return self.lambtha * (self.EULER_NUMBER ** (-self.lambtha * x))
