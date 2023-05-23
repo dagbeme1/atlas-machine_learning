@@ -85,4 +85,3 @@ class Binomial:
         q = 1 - self.p
         # Calculate the PMF using the binomial
         return binomial_coefficient * ((self.p ** k) * (q ** (self.n - k)))
-
