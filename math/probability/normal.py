@@ -77,3 +77,11 @@ class Normal:
         euler_exp = self.EULER_NUMBER ** exp_component
         cdf = euler_exp/(self.stddev * ((2 * self.PI) ** (1/2)))
         return cdf
+
+    def cdf(self, x):
+        """Calculates the Cumulative Distribution Function (CDF) x-value."""
+        # Calculate the standardized value using (x - mean) / (stddev * sqrt(2))
+        expression = (x - self.mean) / (self.stddev * (2 ** (1/2)))
+        # Use the error function to calculate the CDF and return the result
+        return (1/2) * (1 + self.get_erf(expression))
+
