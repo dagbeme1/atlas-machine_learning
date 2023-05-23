@@ -34,7 +34,7 @@ class Exponential:
 
         return self.lambtha * (self.EULER_NUMBER ** (-self.lambtha * x))
     
-        def cdf(self, x):
+    def cdf(self, x):
         """Calculates Cumulative Distribution Function (CDF)
 
         Args:
