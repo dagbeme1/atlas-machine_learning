@@ -99,7 +99,7 @@ class Binomial:
         if k < 0 or k > self.n:
             return 0
         return sum([self.cdf_equation(i) for i in range(k + 1)])
-    
+
     def get_bcf(self, k):
         """Calculates binomial coefficient with a given number"""
         # Calculate the factorial of n
@@ -114,6 +114,6 @@ class Binomial:
 
     def cdf_equation(self, i):
         """Calculates cdf for each iteration"""
-        # Calculate the value of r using the binomial coefficient and probability values
+        # Calculate the value of r using the binomial
         r = self.get_bcf(i) * ((self.p ** i) * ((1 - self.p) ** (self.n - i)))
         return r
