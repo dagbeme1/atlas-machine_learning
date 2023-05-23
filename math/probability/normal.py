@@ -84,4 +84,3 @@ class Normal:
         expression = (x - self.mean) / (self.stddev * (2 ** (1/2)))
         # Use the error function to calculate the CDF and return the result
         return (1/2) * (1 + self.get_erf(expression))
-
