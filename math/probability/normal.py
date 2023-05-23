@@ -53,3 +53,13 @@ class Normal:
             # Assigning the mean and standard deviation values as floats
             self.mean = float(mean)
             self.stddev = float(stddev)
+
+    def z_score(self, x):
+        """Calculates the z-score for a given x-value."""
+        # Calculate the z-score using the formula (x - mean) / stddev
+        return (x - self.mean) / self.stddev
+
+    def x_value(self, z):
+        """Calculates the x-value for a given z-score."""
+        # Calculate the x-value using the formula (z * stddev) + mean
+        return (z * self.stddev) + self.mean
