@@ -11,22 +11,24 @@ class NeuralNetwork:
     def __init__(self, nx, nodes):
         """Class constructor"""
         # Check the type and value of nx
-        if type(nx) is not int:
+        if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
         if nx < 1:
             raise ValueError('nx must be a positive integer')
 
         # Check the type and value of nodes
-        if type(nodes) is not int:
+        if not isinstance(nodes, int):
             raise TypeError('nodes must be an integer')
         if nodes < 1:
             raise ValueError('nodes must be a positive integer')
 
         # Initialize the private attributes with random values
-        self.__W1 = np.random.randn(nodes, nx)  # Weight matrix for the hidden layer
+        # Weight matrix for the hidden layer
+        self.__W1 = np.random.randn(nodes, nx)
         self.__b1 = np.zeros((nodes, 1))  # Bias vector for the hidden layer
         self.__A1 = 0  # Activated output of the hidden layer
-        self.__W2 = np.random.randn(1, nodes)  # Weight matrix for the output layer
+        # Weight matrix for the output layer
+        self.__W2 = np.random.randn(1, nodes)
         self.__b2 = 0  # Bias for the output layer
         self.__A2 = 0  # Activated output of the neural network
 
