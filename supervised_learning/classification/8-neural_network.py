@@ -3,6 +3,7 @@
 import numpy as np
 
 # Define the NeuralNetwork class
+
 class NeuralNetwork:
 
 
