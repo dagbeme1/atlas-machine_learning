@@ -55,4 +55,3 @@ class NeuralNetwork:
     def A2(self):
         """A2 getter"""
         return self.__A2
-    
