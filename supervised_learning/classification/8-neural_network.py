@@ -4,6 +4,8 @@ import numpy as np
 
 # Define the NeuralNetwork class
 class NeuralNetwork:
+
+
     """Class that defines a neural network with one hidden performing
     binary classification
     """
@@ -16,7 +18,7 @@ class NeuralNetwork:
         if nx < 1:
             raise ValueError('nx must be a positive integer')
 
-        # Validate and initialize the number of nodes in the hidden layer (nodes)
+        # Validate and initialize the number of nodes in the hidden layer
         if type(nodes) is not int:
             raise TypeError('nodes must be an integer')
         if nodes < 1:
