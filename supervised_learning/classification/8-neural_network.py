@@ -3,22 +3,23 @@
 import numpy as np
 
 # Define the NeuralNetwork class
+
+
 class NeuralNetwork:
     """Class that defines a neural network with one hidden performing
     binary classification
     """
 
-
     def __init__(self, nx, nodes):
         """Class constructor"""
         # Validate and initialize the number of input features (nx)
-        if type(nx) is not int:
+        if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
         if nx < 1:
             raise ValueError('nx must be a positive integer')
 
         # Validate and initialize the number of nodes in the hidden layer
-        if type(nodes) is not int:
+        if not isinstance(nodes, int):
             raise TypeError('nodes must be an integer')
         if nodes < 1:
             raise ValueError('nodes must be a positive integer')
