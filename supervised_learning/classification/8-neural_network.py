@@ -3,14 +3,11 @@
 import numpy as np
 
 # Define the NeuralNetwork class
-
 class NeuralNetwork:
-
-
-
     """Class that defines a neural network with one hidden performing
     binary classification
     """
+
 
     def __init__(self, nx, nodes):
         """Class constructor"""
