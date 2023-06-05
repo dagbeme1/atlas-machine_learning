@@ -54,4 +54,4 @@ class NeuralNetwork:
     @property
     def A2(self):
         """A2 getter"""
-        return self.__A2 
+        return self.__A2
