@@ -9,10 +9,10 @@ class Neuron:
     def __init__(self, nx):
         """Class constructor"""
         if type(nx) is not int:
-            raise TypeError('nx must be an integer')  # Raise TypeError if nx is not an integer
+            raise TypeError('nx must be an integer')  # Raise TypeError if nx
         if nx < 1:
-            raise ValueError('nx must be a positive integer')  # Raise ValueError if nx is less than 1
-        self.__W = np.random.randn(1, nx)  # Initialize W with random values from a normal distribution
+            raise ValueError('nx must be a positive integer')  # nx is less than 1
+        self.__W = np.random.randn(1, nx)  # Initialize W
         self.__b = 0  # Initialize b to 0
         self.__A = 0  # Initialize A to 0
 
@@ -40,6 +40,6 @@ class Neuron:
         Returns:
             Activation function - calculated with sigmoid function
         """
-        A_prev = np.matmul(self.__W, X) + self.__b  # Perform matrix multiplication of W and X, and add b
-        self.__A = 1 / (1 + np.exp(-A_prev))  # Apply sigmoid activation function
+        A_prev = np.matmul(self.__W, X) + self.__b  # Perform matrix multiply
+        self.__A = 1 / (1 + np.exp(-A_prev))  # Apply sigmoid activation func
         return self.__A
