@@ -10,7 +10,6 @@ class NeuralNetwork:
 
     def __init__(self, nx, nodes):
         """Class constructor"""
-        # Validate input parameters
         if type(nx) is not int:
             raise TypeError('nx must be an integer')
         if nx < 1:
@@ -20,13 +19,12 @@ class NeuralNetwork:
         if nodes < 1:
             raise ValueError('nodes must be a positive integer')
 
-        # Initialize weights, biases, and activation outputs
-        self.__W1 = np.random.randn(nodes, nx)  # Weight matrix for hidden
-        self.__b1 = np.zeros((nodes, 1))        # Bias vector for hidden laye
-        self.__A1 = 0                           # Activation output of hidden
-        self.__W2 = np.random.randn(1, nodes)    # Weight matrix for output
-        self.__b2 = 0                           # Bias scalar for output
-        self.__A2 = 0                           # Activation output of output
+        self.__W1 = np.random.randn(nodes, nx)
+        self.__b1 = np.zeros((nodes, 1))
+        self.__A1 = 0
+        self.__W2 = np.random.randn(1, nodes)
+        self.__b2 = 0
+        self.__A2 = 0
 
     @property
     def W1(self):
@@ -67,10 +65,10 @@ class NeuralNetwork:
             Activation functions (A1 & A2) - calculated with sigmoid function
         """
         A1_prev = np.matmul(self.W1, X) + self.b1
-        self.__A1 = 1 / (1 + np.exp(-A1_prev))   # Apply sigmoid activation
+        self.__A1 = 1 / (1 + np.exp(-A1_prev))
 
         A2_prev = np.matmul(self.W2, self.A1) + self.b2
-        self.__A2 = 1 / (1 + np.exp(-A2_prev))   # Apply sigmoid activation
+        self.__A2 = 1 / (1 + np.exp(-A2_prev))
 
         return self.A1, self.A2
 
@@ -120,7 +118,6 @@ class NeuralNetwork:
         dW1 = np.matmul(dZ1, X.T) / m
         db1 = np.sum(dZ1, axis=1, keepdims=True) / m
 
-        # Update weights and biases using gradient descent
         self.__W1 -= dW1 * alpha
         self.__b1 -= db1 * alpha
         self.__W2 -= dW2 * alpha
