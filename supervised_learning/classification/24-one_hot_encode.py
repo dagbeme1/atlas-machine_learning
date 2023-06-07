@@ -7,13 +7,17 @@ def one_hot_encode(Y, classes):
 
     Args:
         Y: numpy.ndarray with shape (m,) containing numeric class labels.
-        classes: maximum number of classes found in Y.
+        classes: maximum number of classes found in Y (integer).
 
     Returns:
         One-hot encoding of Y with shape (classes, m), or None on failure.
     """
     # Check if Y is a valid numpy array with shape (m,)
     if not isinstance(Y, np.ndarray) or Y.ndim != 1:
+        return None
+
+    # Check if classes is an integer
+    if not isinstance(classes, int):
         return None
 
     # Get the number of examples (m)
