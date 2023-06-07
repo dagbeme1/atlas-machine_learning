@@ -13,7 +13,7 @@ class DeepNeuralNetwork:
         """Calculates weights using he et al method"""
         weights = dict()
         for i in range(len(layers)):
-            if type(layers[i]) is not int or layers[i] < 1:
+            if not isinstance(layers[i], int) or layers[i] < 1:
                 raise TypeError('layers must be a list of positive integers')
             prev_layer = layers[i - 1] if i > 0 else nx
             w_part1 = np.random.randn(layers[i], prev_layer)
@@ -26,11 +26,11 @@ class DeepNeuralNetwork:
 
     def __init__(self, nx, layers):
         """Class constructor"""
-        if type(nx) is not int:
+        if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
         if nx < 1:
             raise ValueError('nx must be a positive integer')
-        if type(layers) is not list or len(layers) == 0:
+        if not isinstance(layers, list) or len(layers) == 0:
             raise TypeError('layers must be a list of positive integers')
 
         self.__L = len(layers)

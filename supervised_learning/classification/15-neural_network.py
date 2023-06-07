@@ -11,11 +11,11 @@ class NeuralNetwork:
 
     def __init__(self, nx, nodes):
         """Class constructor"""
-        if type(nx) is not int:
+        if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
         if nx < 1:
             raise ValueError('nx must be a positive integer')
-        if type(nodes) is not int:
+        if not isinstance(nodes, int):
             raise TypeError('nodes must be an integer')
         if nodes < 1:
             raise ValueError('nodes must be a positive integer')
@@ -154,17 +154,17 @@ class NeuralNetwork:
             graph: boolean to graph training once finishes
             step: step to print learning information
         """
-        if type(iterations) is not int:
+        if not isinstance(iterations, int):
             raise TypeError('iterations must be an integer')
         if iterations < 0:
             raise ValueError('iterations must be a positive integer')
-        if type(alpha) is not float:
+        if not isinstance(alpha, float):
             raise TypeError('alpha must be a float')
         if alpha < 0:
             raise ValueError('alpha must be positive')
 
         if verbose and graph:
-            if type(step) is not int:
+            if not isinstance(step, int):
                 raise TypeError('step must be an integer')
             if not 0 <= step <= iterations:
                 raise ValueError('step must be positive and <= iterations')
