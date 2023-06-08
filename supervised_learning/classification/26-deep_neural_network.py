@@ -211,7 +211,7 @@ class DeepNeuralNetwork:
             filename: The file from which the object should be loaded.
 
         Returns:
-            The loaded DeepNeuralNetwork object, or None if filename doesn't exist.
+            Loaded DeepNeuralNetwork object, None if filename doesn't exist.
         """
         try:
             # Deserialize the object from the file
