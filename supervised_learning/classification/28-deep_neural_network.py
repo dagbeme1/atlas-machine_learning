@@ -10,6 +10,22 @@ class DeepNeuralNetwork:
     binary classification
     """
 
+    @staticmethod
+    def he_et_al(nx, layers):
+        """Calculates weights using he et al method"""
+        weights = dict()
+        for i in range(len(layers)):
+            if type(layers[i]) is not int or layers[i] < 1:
+                raise TypeError('layers must be a list of positive integers')
+            prev_layer = layers[i - 1] if i > 0 else nx
+            w_part1 = np.random.randn(layers[i], prev_layer)
+            w_part2 = np.sqrt(2 / prev_layer)
+            weights.update({
+                'b' + str(i + 1): np.zeros((layers[i], 1)),
+                'W' + str(i + 1): w_part1 * w_part2
+            })
+        return weights
+
     def __init__(self, nx, layers, activation='sig'):
         if type(nx) is not int:
             raise TypeError('nx must be an integer')
@@ -40,48 +56,6 @@ class DeepNeuralNetwork:
     @property
     def activation(self):
         return self.__activation
-    
-    def he_et_al(nx, layers):
-        """Calculates weights using he et al method"""
-        weights = dict()
-        for i in range(len(layers)):
-            if type(layers[i]) is not int or layers[i] < 1:
-                raise TypeError('layers must be a list of positive integers')
-            prev_layer = layers[i - 1] if i > 0 else nx
-            w_part1 = np.random.randn(layers[i], prev_layer)
-            w_part2 = np.sqrt(2 / prev_layer)
-            weights.update({
-                'b' + str(i + 1): np.zeros((layers[i], 1)),
-                'W' + str(i + 1): w_part1 * w_part2
-            })
-        return weights
-    
-    def forward_prop(self, X):
-        """Calculates the forward propagation of the deep neural network
-
-        Args:
-            X: input data
-
-        Returns:
-            Output of the neural network and the cache
-        """
-        self.cache.update({'A0': X})
-        for i in range(self.L):
-            A = self.cache.get('A' + str(i))
-            biases = self.weights.get('b' + str(i + 1))
-            weights = self.weights.get('W' + str(i + 1))
-            Z = np.matmul(weights, A) + biases
-            if i + 1 == self.L:
-                t = np.exp(Z)
-                a = t / np.sum(t, axis=0, keepdims=True)
-                self.cache.update({'A' + str(i + 1): a})
-            else:
-                if self.activation == 'sig':
-                    self.cache.update({'A' + str(i + 1): 1 / (1 + np.exp(-Z))})
-                elif self.activation == 'tanh':
-                    self.cache.update({'A' + str(i + 1): np.tanh(Z)})
-
-        return self.cache.get('A' + str(i + 1)), self.cache
 
     @staticmethod
     def plot_training_cost(list_iterations, list_cost, graph):
@@ -116,6 +90,33 @@ class DeepNeuralNetwork:
             filename += '.pkl'
         with open(filename, "wb") as f:
             pickle.dump(self, f)
+
+    def forward_prop(self, X):
+        """Calculates the forward propagation of the deep neural network
+
+        Args:
+            X: input data
+
+        Returns:
+            Output of the neural network and the cache
+        """
+        self.cache.update({'A0': X})
+        for i in range(self.L):
+            A = self.cache.get('A' + str(i))
+            biases = self.weights.get('b' + str(i + 1))
+            weights = self.weights.get('W' + str(i + 1))
+            Z = np.matmul(weights, A) + biases
+            if i + 1 == self.L:
+                t = np.exp(Z)
+                a = t / np.sum(t, axis=0, keepdims=True)
+                self.cache.update({'A' + str(i + 1): a})
+            else:
+                if self.activation == 'sig':
+                    self.cache.update({'A' + str(i + 1): 1 / (1 + np.exp(-Z))})
+                elif self.activation == 'tanh':
+                    self.cache.update({'A' + str(i + 1): np.tanh(Z)})
+
+        return self.cache.get('A' + str(i + 1)), self.cache
 
     def cost(self, Y, A):
         """Calculates the cost of the model using logistic regression
