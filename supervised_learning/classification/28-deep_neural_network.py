@@ -131,7 +131,7 @@ class DeepNeuralNetwork:
                 # introduce call to activation_prime method
                 dZi = np.multiply(np.matmul(
                     weights['W' + str(i + 1)].T, dZi
-                    ), self.activation_prime(self.cache['A' + str(i)]))
+                ), self.activation_prime(self.cache['A' + str(i)]))
             else:
                 dZi = self.cache['A' + str(i)] - Y
             dWi = np.matmul(dZi, self.cache['A' + str(i - 1)].T) / m
