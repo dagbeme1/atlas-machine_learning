@@ -3,7 +3,6 @@
 import pickle
 
 class DeepNeuralNetwork:
-    def __init__(self, ...):
         # Constructor implementation
         
     def save(self, filename):
