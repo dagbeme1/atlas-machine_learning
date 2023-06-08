@@ -24,7 +24,7 @@ def one_hot_decode(one_hot):
     m = one_hot.shape[1]
 
     # Initialize an empty label vector
-    labels = np.zeros((m,))
+    # labels = np.zeros((m,))
 
     # Iterate over the examples
     for i in range(m):
