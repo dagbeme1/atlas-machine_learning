@@ -26,7 +26,7 @@ class DeepNeuralNetwork:
             })
         return weights
 
-    def __init__(self, nx, layers, activation='sig'):
+    def __init__(self, nx, layers):
         """Class constructor"""
         if type(nx) is not int:
             raise TypeError('nx must be an integer')
@@ -34,12 +34,9 @@ class DeepNeuralNetwork:
             raise ValueError('nx must be a positive integer')
         if type(layers) is not list or len(layers) == 0:
             raise TypeError('layers must be a list of positive integers')
-        if activation != 'sig' and activation != 'tanh':
-            raise ValueError("activation must be 'sig' or 'tanh'")
 
         self.__L = len(layers)
         self.__cache = dict()
-        self.__activation = activation
         self.__weights = self.he_et_al(nx, layers)
 
     @property
@@ -53,10 +50,6 @@ class DeepNeuralNetwork:
     @property
     def weights(self):
         return self.__weights
-
-    @property
-    def activation(self):
-        return self.__activation
 
     @staticmethod
     def plot_training_cost(list_iterations, list_cost, graph):
@@ -110,13 +103,9 @@ class DeepNeuralNetwork:
             if i + 1 == self.L:
                 t = np.exp(Z)
                 a = t / np.sum(t, axis=0, keepdims=True)
+                self.cache.update({'A' + str(i + 1): a})
             else:
-                if self.activation == 'sig':
-                    a = 1 / (1 + np.exp(-Z))
-                else:
-                    a = np.tanh(Z)
-
-            self.cache.update({'A' + str(i + 1): a})
+                self.cache.update({'A' + str(i + 1): 1 / (1 + np.exp(-Z))})
 
         return self.cache.get('A' + str(i + 1)), self.cache
 
@@ -170,10 +159,7 @@ class DeepNeuralNetwork:
             if i == self.L:
                 dZ = A - Y
             else:
-                if self.activation == 'sig':
-                    dZ = np.matmul(weights_n.T, dZ_prev) * (A * (1 - A))
-                else:
-                    dZ = np.matmul(weights_n.T, dZ_prev) * (1 - (A * A))
+                dZ = np.matmul(weights_n.T, dZ_prev) * (A * (1 - A))
             dW = np.matmul(dZ, A_prev.T) / m
             db = np.sum(dZ, axis=1, keepdims=True) / m
             self.__weights['W' + str(i)] = weights_i - (dW * alpha)
