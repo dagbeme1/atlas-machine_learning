@@ -2,6 +2,7 @@
 """ Provides converting a numeric label vector into a one-hot matrix."""
 import numpy as np
 
+
 def one_hot_encode(Y, classes):
     """
     Converts a numeric label vector into a one-hot matrix.
