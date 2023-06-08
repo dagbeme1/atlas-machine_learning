@@ -26,7 +26,7 @@ class DeepNeuralNetwork:
             })
         return weights
 
-    def __init__(self, nx, layers):
+    def __init__(self, nx, layers, activation='sig'):
         """Class constructor"""
         if type(nx) is not int:
             raise TypeError('nx must be an integer')
@@ -34,9 +34,12 @@ class DeepNeuralNetwork:
             raise ValueError('nx must be a positive integer')
         if type(layers) is not list or len(layers) == 0:
             raise TypeError('layers must be a list of positive integers')
+        if activation != 'sig' and activation != 'tanh':
+            raise ValueError("activation must be 'sig' or 'tanh'")
 
         self.__L = len(layers)
         self.__cache = dict()
+        self.__activation = activation
         self.__weights = self.he_et_al(nx, layers)
 
     @property
@@ -50,6 +53,10 @@ class DeepNeuralNetwork:
     @property
     def weights(self):
         return self.__weights
+
+    @property
+    def activation(self):
+        return self.__activation
 
     @staticmethod
     def plot_training_cost(list_iterations, list_cost, graph):
@@ -100,7 +107,16 @@ class DeepNeuralNetwork:
             biases = self.weights.get('b' + str(i + 1))
             weights = self.weights.get('W' + str(i + 1))
             Z = np.matmul(weights, A) + biases
-            self.cache.update({'A' + str(i + 1): 1 / (1 + np.exp(-Z))})
+            if i + 1 == self.L:
+                t = np.exp(Z)
+                a = t / np.sum(t, axis=0, keepdims=True)
+            else:
+                if self.activation == 'sig':
+                    a = 1 / (1 + np.exp(-Z))
+                else:
+                    a = np.tanh(Z)
+
+            self.cache.update({'A' + str(i + 1): a})
 
         return self.cache.get('A' + str(i + 1)), self.cache
 
@@ -115,8 +131,7 @@ class DeepNeuralNetwork:
             The cost
         """
         m = Y.shape[1]
-        cost = - (1 / m) * np.sum(np.multiply(Y, np.log(A)) +
-                                  np.multiply(1 - Y, np.log(1.0000001 - A)))
+        cost = - (1 / m) * np.sum(np.multiply(Y, np.log(A)))
         return cost
 
     def evaluate(self, X, Y):
@@ -155,7 +170,10 @@ class DeepNeuralNetwork:
             if i == self.L:
                 dZ = A - Y
             else:
-                dZ = np.matmul(weights_n.T, dZ_prev) * (A * (1 - A))
+                if self.activation == 'sig':
+                    dZ = np.matmul(weights_n.T, dZ_prev) * (A * (1 - A))
+                else:
+                    dZ = np.matmul(weights_n.T, dZ_prev) * (1 - (A * A))
             dW = np.matmul(dZ, A_prev.T) / m
             db = np.sum(dZ, axis=1, keepdims=True) / m
             self.__weights['W' + str(i)] = weights_i - (dW * alpha)
