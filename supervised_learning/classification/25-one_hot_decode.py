@@ -13,7 +13,7 @@ def one_hot_decode(one_hot):
                  m: number of examples.
 
     Returns:
-        numpy.ndarray with shape (m,) containing the numeric labels for each example,
+        numpy.ndarray with shape (m,) containing the numeric labels for e.g,
         or None on failure.
     """
     # Check if one_hot is a valid numpy array with shape (classes, m)
@@ -29,7 +29,7 @@ def one_hot_decode(one_hot):
     # Iterate over the examples
     for i in range(m):
         # Find the index of the maximum value in each example (column-wise)
-        max_index = np.argmax(one_hot, axis =0)
+        max_index = np.argmax(one_hot[:, i])
 
         # Set the corresponding label to the maximum index
         labels[i] = max_index
