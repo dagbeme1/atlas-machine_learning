@@ -27,14 +27,13 @@ class DeepNeuralNetwork:
         return weights
 
     def __init__(self, nx, layers, activation='sig'):
-        """Class constructor"""
         if type(nx) is not int:
             raise TypeError('nx must be an integer')
         if nx < 1:
             raise ValueError('nx must be a positive integer')
         if type(layers) is not list or len(layers) == 0:
             raise TypeError('layers must be a list of positive integers')
-        if activation != 'sig' and activation != 'tanh':
+        if activation not in ['sig', 'tanh']:
             raise ValueError("activation must be 'sig' or 'tanh'")
 
         self.__L = len(layers)
