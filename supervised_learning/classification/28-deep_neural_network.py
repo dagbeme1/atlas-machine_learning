@@ -100,12 +100,7 @@ class DeepNeuralNetwork:
             biases = self.weights.get('b' + str(i + 1))
             weights = self.weights.get('W' + str(i + 1))
             Z = np.matmul(weights, A) + biases
-            if i + 1 == self.L:
-                t = np.exp(Z)
-                a = t / np.sum(t, axis=0, keepdims=True)
-                self.cache.update({'A' + str(i + 1): a})
-            else:
-                self.cache.update({'A' + str(i + 1): 1 / (1 + np.exp(-Z))})
+            self.cache.update({'A' + str(i + 1): 1 / (1 + np.exp(-Z))})
 
         return self.cache.get('A' + str(i + 1)), self.cache
 
@@ -120,7 +115,8 @@ class DeepNeuralNetwork:
             The cost
         """
         m = Y.shape[1]
-        cost = - (1 / m) * np.sum(np.multiply(Y, np.log(A)))
+        cost = - (1 / m) * np.sum(np.multiply(Y, np.log(A)) +
+                                  np.multiply(1 - Y, np.log(1.0000001 - A)))
         return cost
 
     def evaluate(self, X, Y):
