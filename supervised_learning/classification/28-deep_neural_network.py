@@ -15,7 +15,7 @@ class DeepNeuralNetwork:
         """Calculates weights using he et al method"""
         weights = dict()
         for i in range(len(layers)):
-            if type(layers[i]) is not int or layers[i] < 1:
+            if not isinstance(layers[i], int) or layers[i] < 1:
                 raise TypeError('layers must be a list of positive integers')
             prev_layer = layers[i - 1] if i > 0 else nx
             w_part1 = np.random.randn(layers[i], prev_layer)
@@ -28,11 +28,11 @@ class DeepNeuralNetwork:
 
     def __init__(self, nx, layers, activation='sig'):
         """Class constructor"""
-        if type(nx) is not int:
+        if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
         if nx < 1:
             raise ValueError('nx must be a positive integer')
-        if type(layers) is not list or len(layers) == 0:
+        if not isinstance(layers, list) or len(layers) == 0:
             raise TypeError('layers must be a list of positive integers')
         if activation != 'sig' and activation != 'tanh':
             raise ValueError("activation must be 'sig' or 'tanh'")
@@ -193,17 +193,17 @@ class DeepNeuralNetwork:
         Returns:
             The evaluation of the training data after iterations of training
         """
-        if type(iterations) is not int:
+        if not isinstance(iterations, int):
             raise TypeError('iterations must be an integer')
         if iterations < 0:
             raise ValueError('iterations must be a positive integer')
-        if type(alpha) is not float:
+        if not isinstance(alpha, float):
             raise TypeError('alpha must be a float')
         if alpha < 0:
             raise ValueError('alpha must be positive')
 
         if verbose and graph:
-            if type(step) is not int:
+            if not isinstance(step, int):
                 raise TypeError('step must be an integer')
             if not 0 <= step <= iterations:
                 raise ValueError('step must be positive and <= iterations')
