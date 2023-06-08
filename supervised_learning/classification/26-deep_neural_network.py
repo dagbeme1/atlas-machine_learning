@@ -7,6 +7,7 @@ import pickle
 
 class DeepNeuralNetwork:
     """Neural Network Class"""
+
     def __init__(self, nx, layers):
         """Constructor"""
         if not isinstance(nx, int):
@@ -27,8 +28,8 @@ class DeepNeuralNetwork:
                 j = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
                 self.__weights['W' + str(i + 1)] = j
             else:
-                jjj = np.sqrt(2 / layers[i-1])
-                jj = np.random.randn(layers[i], layers[i-1]) * jjj
+                jjj = np.sqrt(2 / layers[i - 1])
+                jj = np.random.randn(layers[i], layers[i - 1]) * jjj
                 self.__weights['W' + str(i + 1)] = jj
             self.__weights['b' + str(i + 1)] = np.zeros((layers[i], 1))
 
@@ -54,7 +55,7 @@ class DeepNeuralNetwork:
         """Cost Func"""
         m = Y.shape[1]
         j = np.log(1.0000001 - A)
-        return ((-1/m) * np.sum(Y * np.log(A) + (1 - Y) * j))
+        return ((-1 / m) * np.sum(Y * np.log(A) + (1 - Y) * j))
 
     def evaluate(self, X, Y):
         """Evaluate Func"""
@@ -89,11 +90,11 @@ class DeepNeuralNetwork:
     def train(self, X, Y, iterations=5000, alpha=0.05,
               verbose=True, graph=True, step=100):
         """trains the neuron"""
-        if type(iterations) is not int:
+        if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
         if iterations <= 0:
             raise ValueError("iterations must be a positive integer")
-        if type(alpha) is not float:
+        if not isinstance(alpha, float):
             raise TypeError("alpha must be a float")
         if alpha <= 0:
             raise ValueError("alpha must be positive")
@@ -121,7 +122,7 @@ class DeepNeuralNetwork:
                 plt.title('Training Cost')
 
             if verbose or graph:
-                if type(step) is not int:
+                if not isinstance(step, int):
                     raise TypeError("step must be in integer")
                 if step <= 0 or step > iterations:
                     raise ValueError("step must be positive and <= iterations")
