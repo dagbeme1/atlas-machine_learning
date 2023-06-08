@@ -197,8 +197,6 @@ class DeepNeuralNetwork:
         # Add .pkl extension if not present
         if not filename.endswith('.pkl'):
             filename += '.pkl'
-
-        # Serialize and save the object to a file
         with open(filename, 'wb') as file:
             pickle.dump(self, file)
 
