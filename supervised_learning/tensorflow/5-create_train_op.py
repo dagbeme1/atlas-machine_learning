@@ -5,7 +5,6 @@ Train_Op
 import tensorflow as tf
 
 
-
 def create_train_op(loss, alpha):
     """
     Function that creates the training operation for the network.
