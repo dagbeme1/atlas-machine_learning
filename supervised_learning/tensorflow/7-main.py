@@ -12,7 +12,7 @@ def one_hot(Y, classes):
     return one_hot
 
 if __name__ == '__main__':
-    lib= np.load('../data/MNIST.npz')
+    lib= np.load('data/MNIST.npz')
     X_test_3D = lib['X_test']
     Y_test = lib['Y_test']
     X_test = X_test_3D.reshape((X_test_3D.shape[0], -1))
