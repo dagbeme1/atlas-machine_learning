@@ -4,6 +4,7 @@ Evaluate the output of a neural network
 """
 import tensorflow as tf
 
+
 def evaluate(X, Y, save_path):
     """function that evaluates the output of a nn"""
     with tf.Session() as sess:
