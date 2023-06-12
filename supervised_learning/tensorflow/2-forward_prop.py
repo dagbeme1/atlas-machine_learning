@@ -14,9 +14,9 @@ def forward_prop(x, layer_sizes=[], activations=[]):
         # handle the first iteration of the loop
         if i == 0:
             # Initialize the prev variable with the value of x
-            y_prev = x
+            y_pred = x
         # Get the number of nodes in the current layer
         # Get the activation function for the current layer
         # Create the current layer using the create_layer function
-        y_prev = create_layer(y_prev, layer_sizes[i], activations[i])
-    return y_prev
+        y_pred = create_layer(y_pred, layer_sizes[i], activations[i])
+    return y_pred
