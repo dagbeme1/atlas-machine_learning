@@ -13,6 +13,7 @@ def evaluate(X, Y, save_path):
         # Retrieve the required tensors from the graph's collection
         var_names = ['x', 'y', 'y_pred', 'accuracy', 'loss']
         for var_name in var_names:
+            # Get the tensor by name and assign it to a global variable
             globals()[var_name] = tf.get_collection(var_name)[0]
 
         # Run the evaluation operations
