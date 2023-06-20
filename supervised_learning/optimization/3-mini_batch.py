@@ -16,11 +16,11 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32,
 
     Args:
         X_train: numpy.ndarray of shape (m, 784) containing the training data
-        Y_train: one-hot numpy.ndarray of shape (m, 10) containing the training labels
+        Y_train: one-hot numpy.ndarray of shape (m, 10) containing training
         X_valid: numpy.ndarray of shape (m, 784) containing the validation data
-        Y_valid: one-hot numpy.ndarray of shape (m, 10) containing the validation labels
+        Y_valid: one-hot numpy.ndarray of shape (m, 10) containing validation
         batch_size: number of data points in a batch
-        epochs: number of times the training should pass through the whole dataset
+        epochs: number of times the training should pass through whole dataset
         load_path: path from which to load the model
         save_path: path to where the model should be saved after training
 
