@@ -2,6 +2,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+import zipfile
 update_variables_momentum = __import__('5-momentum').update_variables_momentum
 
 def forward_prop(X, W, b):
@@ -58,7 +59,13 @@ def calculate_cost(Y, A):
     return cost
 
 if __name__ == '__main__':
-    lib_train = np.load('../data/Binary_Train.npz')
+    zip_path = 'data/Binary_Train.zip'
+
+    zip_file = zipfile.ZipFile(zip_path, 'r')
+
+    npz_file = zip_file.open('Binary_Train.npz')
+
+    lib_train = np.load(npz_file)
     X_3D, Y = lib_train['X'], lib_train['Y'].T
     X = X_3D.reshape((X_3D.shape[0], -1))
 
