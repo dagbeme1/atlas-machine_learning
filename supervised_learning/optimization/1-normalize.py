@@ -11,7 +11,7 @@ def normalize(X, m, s):
     Args:
         X (numpy.ndarray): Input matrix to normalize.
         m (numpy.ndarray): Array containing the mean of each feature.
-        s (numpy.ndarray): Array containing the standard deviation of each feature.
+        s (numpy.ndarray): Array containing the standard deviation each fea..
 
     Returns:
         numpy.ndarray: The normalized X matrix.
