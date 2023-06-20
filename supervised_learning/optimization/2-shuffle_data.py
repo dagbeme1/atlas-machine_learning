@@ -11,7 +11,7 @@ def shuffle_data(X, Y):
     """Function that shuffles the data points in two matrices the same way"""
     # Generate a random permutation of indices
     shuffle = np.random.permutation(X.shape[0])
-    
+
     # Shuffle the rows of X based on the generated permutation
     X_shuf = X[shuffle]
 
