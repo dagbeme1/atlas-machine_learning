@@ -6,7 +6,7 @@ Momentum
 
 def update_variables_momentum(alpha, beta1, var, grad, v):
     """
-    Function that updates a variable using a 
+    Function that updates a variable using a
     gradient descent with momentum optimization.
 
     Args:
