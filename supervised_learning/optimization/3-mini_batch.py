@@ -13,7 +13,7 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32,
                      save_path="/tmp/model.ckpt"):
     """
     Trains a loaded neural network model using mini-batch gradient descent.
-    
+
     Args:
         X_train: numpy.ndarray of shape (m, 784) containing the training data
         Y_train: one-hot numpy.ndarray of shape (m, 10) containing the training labels
@@ -23,7 +23,7 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32,
         epochs: number of times the training should pass through the whole dataset
         load_path: path from which to load the model
         save_path: path to where the model should be saved after training
-    
+
     Returns:
         The path where the model was saved.
     """
@@ -83,8 +83,12 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32,
 
                     # Print after every 100 gradient descent steps
                     if step % 100 == 0:
-                        loss_b = sess.run(loss, feed_dict={x: X_batch, y: Y_batch})
-                        acc_b = sess.run(accuracy, feed_dict={x: X_batch, y: Y_batch})
+                        loss_b = sess.run(
+                            loss, feed_dict={
+                                x: X_batch, y: Y_batch})
+                        acc_b = sess.run(
+                            accuracy, feed_dict={
+                                x: X_batch, y: Y_batch})
                         print("\tStep {}:".format(step))
                         print("\t\tCost: {}".format(loss_b))
                         print("\t\tAccuracy: {}".format(acc_b))
