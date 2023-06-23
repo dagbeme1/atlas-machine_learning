@@ -8,14 +8,14 @@ import tensorflow as tf
 def create_Adam_op(loss, alpha, beta1, beta2, epsilon):
     """
     Function that implements Adam gradient descent in TensorFlow.
-    
+
     Args:
         loss: The loss of the network.
         alpha: The learning rate, controls the step size during optimization
         beta1: The weight used for the first moment estimation in Adam.
         beta2: The weight used for the second moment estimation in Adam.
         epsilon: A small number to avoid division by zero.
-        
+
     Returns:
         The Adam optimization operation.
     """
