@@ -39,7 +39,7 @@ def create_batch_norm_layer(prev, n, activation):
     mean, variance = tf.nn.moments(layer_output, axes=[0])
 
     # Create trainable variables for beta and gamma, initialized as vectors of
-    # zeros and ones
+    # zeros and ones.
     beta = tf.Variable(
         tf.zeros(
             shape=(
