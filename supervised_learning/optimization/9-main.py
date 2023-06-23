@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import matplotlib.pyplot as plt
 import numpy as np
+import zipfile
 update_variables_Adam = __import__('9-Adam').update_variables_Adam
 
 def update_variables_Adam(alpha, beta1, beta2, epsilon, var, grad, v, s, t):
