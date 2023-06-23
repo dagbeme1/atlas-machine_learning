@@ -12,13 +12,13 @@ def create_batch_norm_layer(prev, n, activation):
     Args:
         prev: The activated output of the previous layer.
         n: The number of nodes in the layer to be created.
-        activation: The activation function to be used 
+        activation: The activation function to be used
         on the output of the layer.
 
     Returns:
         A tensor of the activated output for the layer.
     """
-    
+
     # Initialize the layer with the variance scaling initializer
     initializer = tf.contrib.layers.variance_scaling_initializer(
         mode="FAN_AVG")
