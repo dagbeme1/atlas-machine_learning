@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
 import matplotlib.pyplot as plt
 import numpy as np
+update_variables_Adam = __import__('9-Adam').update_variables_Adam
 
 def update_variables_Adam(alpha, beta1, beta2, epsilon, var, grad, v, s, t):
     """
@@ -52,7 +54,13 @@ def calculate_cost(Y, A):
 
 
 if __name__ == '__main__':
-    lib_train = np.load('../data/Binary_Train.npz')
+    zip_path = 'data/Binary_Train.zip'
+
+    zip_file = zipfile.ZipFile(zip_path, 'r')
+
+    npz_file = zip_file.open('Binary_Train.npz')
+
+    lib_train = np.load(npz_file)
     X_3D, Y = lib_train['X'], lib_train['Y'].T
     X = X_3D.reshape((X_3D.shape[0], -1))
 

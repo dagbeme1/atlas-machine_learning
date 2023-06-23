@@ -30,7 +30,7 @@ def update_variables_Adam(alpha, beta1, beta2, epsilon, var, grad, v, s, t):
     s = beta2 * s + (1 - beta2) * (grad ** 2)
     # Introduce bias correction for the second moment
     s_corr = s / (1 - (beta2 ** t))
-
+    # Update variable using Adam update rule
     var -= alpha * (v_corr / (np.sqrt(s_corr) + epsilon))
 
     return var, v, s
