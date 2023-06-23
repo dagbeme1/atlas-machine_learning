@@ -2,7 +2,7 @@
 
 import numpy as np
 import tensorflow as tf
-from batch_norm import create_batch_norm_layer
+create_batch_norm_layer = __import__('14-batch_norm').create_batch_norm_layer
 
 if __name__ == '__main__':
     # Load MNIST data
