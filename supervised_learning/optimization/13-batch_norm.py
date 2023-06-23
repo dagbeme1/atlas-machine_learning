@@ -6,7 +6,7 @@ import numpy as np
 
 
 def batch_norm(Z, gamma, beta, epsilon):
-    """function that normalizes an unactivated output by batch normalization"""
+    """function that normalizes unactivated output by batch normalization"""
     
     # Compute the mean and standard deviation of Z
     m, stddev = normalization_constants(Z)
