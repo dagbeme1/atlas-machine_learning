@@ -19,14 +19,6 @@ def create_batch_norm_layer(prev, n, activation):
         A tensor of the activated output for the layer.
     """
     
-    initializer = tf.contrib.layers.variance_scaling_initializer(
-        mode="FAN_AVG")
-    
-    # Create a dense layer with the specified number of units,
-    # no activation function
-    layer = tf.layers.Dense(units=n, activation=None,
-                            kernel_initializer=initializer, name='layer')
-
     # Initialize the layer with the variance scaling initializer
     initializer = tf.contrib.layers.variance_scaling_initializer(
         mode="FAN_AVG")
