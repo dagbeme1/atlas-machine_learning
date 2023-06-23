@@ -16,12 +16,12 @@ def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
         decay_step: The number of passes of gradient descent that
         should occur before alpha is decayed further.
 
-        decay_rate: The weight used to determine 
+        decay_rate: The weight used to determine
         the rate at which alpha will decay.
         global_step: The number of passes of gradient descent have elapsed.
-        decay_step: The number of passes of gradient descent 
+        decay_step: The number of passes of gradient descent
         that should occur before alpha is decayed further.
-        
+
     Returns:
         The updated value for alpha.
     """
