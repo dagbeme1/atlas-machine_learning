@@ -10,15 +10,15 @@ def create_confusion_matrix(labels, logits):
     # Get the shape of the labels array
     # (m: number of data points, classes: number of classes)
     m, classes = labels.shape
-    
+
     # Find the indices of the maximum values in
     # each row of the labels and logits arrays
     v1 = np.argmax(labels, axis=1)
     v2 = np.argmax(logits, axis=1)
-    
+
     # Create an empty confusion matrix with shape (classes, classes)
     confusion = np.zeros(shape=(classes, classes))
-    
+
     # Iterate over each class combination and count
     # the occurrences in the data points
     for i in range(classes):
@@ -29,5 +29,5 @@ def create_confusion_matrix(labels, logits):
                 if i == v1[k] and j == v2[k]:
                     # Increment the corresponding entry in confusion matrix
                     confusion[i][j] += 1
-    
+
     return confusion
