@@ -10,7 +10,9 @@ if __name__ == '__main__':
     X_3D = lib['X_train']
     X = X_3D.reshape((X_3D.shape[0], -1))
 
+    # set random seed
     tf.set_random_seed(0)
+    
     # Create a placeholder for input data
     x = tf.placeholder(tf.float32, shape=[None, 784])
     # Apply batch normalization using the create_batch_norm_layer function
