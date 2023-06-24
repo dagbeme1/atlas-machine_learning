@@ -5,6 +5,7 @@ Assemble Model
 import tensorflow as tf
 import numpy as np
 
+
 def model(Data_train, Data_valid, layers, activations, alpha=0.001,
           beta1=0.9, beta2=0.999, epsilon=1e-8, decay_rate=1,
           batch_size=32, epochs=5, save_path='/tmp/model.ckpt'):
@@ -92,14 +93,26 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
 
         for epoch in range(epochs + 1):
             # Calculate loss and accuracy on training and validation data
-            loss_t = sess.run(loss, feed_dict=
-                              {x: Data_train[0], y: Data_train[1]})
-            acc_t = sess.run(accuracy, feed_dict=
-                             {x: Data_train[0], y: Data_train[1]})
-            loss_v = sess.run(loss, feed_dict=
-                              {x: Data_valid[0], y: Data_valid[1]})
-            acc_v = sess.run(accuracy, feed_dict=
-                             {x: Data_valid[0], y: Data_valid[1]})
+            loss_t = sess.run(
+                loss,
+                feed_dict={
+                    x: Data_train[0],
+                    y: Data_train[1]})
+            acc_t = sess.run(
+                accuracy,
+                feed_dict={
+                    x: Data_train[0],
+                    y: Data_train[1]})
+            loss_v = sess.run(
+                loss,
+                feed_dict={
+                    x: Data_valid[0],
+                    y: Data_valid[1]})
+            acc_v = sess.run(
+                accuracy,
+                feed_dict={
+                    x: Data_valid[0],
+                    y: Data_valid[1]})
 
             print("After {} epochs:".format(epoch))
             print("\tTraining Cost: {}".format(loss_t))
@@ -144,8 +157,12 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
 
                     # print after every 100 gradient descent steps
                     if step % 100 == 0:
-                        loss_b = sess.run(loss, feed_dict={x: X_batch, y: Y_batch})
-                        acc_b = sess.run(accuracy, feed_dict={x: X_batch, y: Y_batch})
+                        loss_b = sess.run(
+                            loss, feed_dict={
+                                x: X_batch, y: Y_batch})
+                        acc_b = sess.run(
+                            accuracy, feed_dict={
+                                x: X_batch, y: Y_batch})
                         print("\tStep {}:".format(step))
                         print("\t\tCost: {}".format(loss_b))
                         print("\t\tAccuracy: {}".format(acc_b))
@@ -154,4 +171,3 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
         save_path = saver.save(sess, save_path)
 
     return save_path
-
