@@ -155,7 +155,7 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
                     # then pass the copies on to feed_dict / train_op
                     sess.run(train_op, feed_dict={x: X_batch, y: Y_batch})
 
-                    # print after every 100 gradient descent steps
+                    # prints after every 100 gradient descent steps
                     if step % 100 == 0:
                         loss_b = sess.run(
                             loss, feed_dict={
