@@ -11,91 +11,103 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
     """function that builds, trains, and saves a nn model in tensorflow"""
 
     # create placeholders for input data and labels
-    nx = Data_train[0].shape[1]
+    nx = Data_train[0].shape[1]  # Number of features
+    # Input data placeholder
     x = tf.placeholder(tf.float32, shape=(None, nx), name='x')
-    classes = Data_train[1].shape[1]
+    classes = Data_train[1].shape[1]  # Number of classes
+    # Labels placeholder
     y = tf.placeholder(tf.float32, shape=(None, classes), name='y')
 
     # build forward propagation graph
     # include batch normalization filters
     for i in range(len(layers)):
         if i == 0:
-            y_pred = x
+            y_pred = x  # Initial prediction is the input data
         initializer = tf.contrib.layers.variance_scaling_initializer(
-            mode="FAN_AVG")
+            mode="FAN_AVG")  # Variance scaling initializer
         if i == len(layers) - 1:
             layer = tf.layers.Dense(units=layers[i],
                                     activation=None,
                                     kernel_initializer=initializer,
-                                    name='layer')
+                                    name='layer')  # Output layer (no activation)
             if len(activations) and activations[i]:
+                # Apply activation function if specified
                 y_pred = activations[i](layer(y_pred))
             else:
+                # Otherwise, use the output of the layer directly
                 y_pred = layer(y_pred)
             break
         layer = tf.layers.Dense(units=layers[i],
                                 activation=None,
                                 kernel_initializer=initializer,
-                                name='layer')
+                                name='layer')  # Hidden layer (no activation)
         # Important: make a copy of layer(y_pred) here
         # before the batch normalization operation
-        Z = layer(y_pred)
+        Z = layer(y_pred)  # Linear output of the layer
+        # Compute mean and variance for batch normalization
         m, v = tf.nn.moments(Z, axes=[0])
         beta = tf.Variable(
             tf.zeros(shape=(1, layers[i]), dtype=tf.float32),
             trainable=True, name='beta'
-        )
+        )  # Offset parameter for batch normalization
         gamma = tf.Variable(
             tf.ones(shape=(1, layers[i]), dtype=tf.float32),
             trainable=True, name='gamma'
-        )
+        )  # Scale parameter for batch normalization
         Z_b_norm = tf.nn.batch_normalization(
             x=Z, mean=m, variance=v, offset=beta, scale=gamma,
             variance_epsilon=epsilon, name=None
-        )
+        )  # Batch normalization operation
         if len(activations) and activations[i]:
+            # Apply activation function if specified
             y_pred = activations[i](Z_b_norm)
         else:
+            # Otherwise, use the output of the batch normalization directly
             y_pred = Z_b_norm
 
     # define graph operation for accuracy
-    label = tf.argmax(y, axis=1)
-    pred = tf.argmax(y_pred, axis=1)
+    label = tf.argmax(y, axis=1)  # Get the index of the true label
+    pred = tf.argmax(y_pred, axis=1)  # Get the index of the predicted label
+    # Compute accuracy
     accuracy = tf.reduce_mean(tf.cast(tf.equal(pred, label), tf.float32))
 
     # define graph operation for loss function
+    # Compute softmax cross entropy loss
     loss = tf.losses.softmax_cross_entropy(onehot_labels=y, logits=y_pred)
 
     # define graph operation for the train method
     # update the learning rate using inverse time decay
-    global_step = tf.Variable(0, trainable=False)
+    global_step = tf.Variable(0, trainable=False)  # Global step for inverse time decay
     alpha = tf.train.inverse_time_decay(
         learning_rate=alpha, global_step=global_step, decay_steps=1,
         decay_rate=decay_rate, staircase=True, name=None
-    )
+    )  # Compute learning rate using inverse time decay
     train_op = tf.train.AdamOptimizer(
         learning_rate=alpha, beta1=beta1, beta2=beta2, epsilon=epsilon,
         use_locking=False, name='Adam'
-    ).minimize(loss)
+    ).minimize(loss)  # Adam optimizer and minimize the loss function
 
     # add variables and operations to collections
     params = {'x': x, 'y': y, 'y_pred': y_pred, 'accuracy': accuracy,
+              # Collect relevant variables and operations
               'loss': loss, 'train_op': train_op}
-    for k, v in params.items():
-        tf.add_to_collection(k, v)
 
     # call to global init, open session
-    saver = tf.train.Saver()
-    init = tf.global_variables_initializer()
-    with tf.Session() as sess:
-        sess.run(init)
+    saver = tf.train.Saver()  # Saver to save the trained model
+    init = tf.global_variables_initializer()  # Initialize all variables
+    with tf.Session() as sess:  # Start a new TensorFlow session
+        sess.run(init)  # Run the initialization operation
 
-        for epoch in range(epochs + 1):
+        for epoch in range(epochs + 1):  # Iterate over epochs
             # Calculate loss and accuracy on training and validation data
-            loss_t = sess.run(loss, feed_dict={x: Data_train[0], y: Data_train[1]})
-            acc_t = sess.run(accuracy, feed_dict={x: Data_train[0], y: Data_train[1]})
-            loss_v = sess.run(loss, feed_dict={x: Data_valid[0], y: Data_valid[1]})
-            acc_v = sess.run(accuracy, feed_dict={x: Data_valid[0], y: Data_valid[1]})
+            loss_t = sess.run(loss, feed_dict=
+                              {x: Data_train[0], y: Data_train[1]})
+            acc_t = sess.run(accuracy, feed_dict=
+                             {x: Data_train[0], y: Data_train[1]})
+            loss_v = sess.run(loss, feed_dict=
+                              {x: Data_valid[0], y: Data_valid[1]})
+            acc_v = sess.run(accuracy, feed_dict=
+                             {x: Data_valid[0], y: Data_valid[1]})
 
             print("After {} epochs:".format(epoch))
             print("\tTraining Cost: {}".format(loss_t))
@@ -121,12 +133,14 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
                 gs = sess.run(global_step.assign(epoch))
                 a = sess.run(alpha)
 
+                # Iterate over mini-batches
                 for i in range(0, batches_int + 1):
                     step += 1
 
                     # Important: make copies of X_shuff and Y_shuff
                     if i == batches_int:
                         if batches_float > batches_int:
+                            # Last batch (possibly smaller)
                             X_batch = X_shuff[i * batch_size:]
                             Y_batch = Y_shuff[i * batch_size:]
                         else:
@@ -136,6 +150,7 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
                         Y_batch = Y_shuff[i * batch_size: (i + 1) * batch_size]
 
                     # then pass the copies on to feed_dict / train_op
+                    # Perform a training step
                     sess.run(train_op, feed_dict={x: X_batch, y: Y_batch})
 
                     # print after every 100 gradient descent steps
