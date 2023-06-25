@@ -77,10 +77,6 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001,
         learning_rate=alpha, beta1=beta1, beta2=beta2, epsilon=epsilon,
         use_locking=False, name='Adam'
     ).minimize(loss)
-    # note: passing global_step to minimize would
-    # increment global_step by one on every gradient
-    # descent as opposed to every epoch
-    # ).minimize(loss, global_step=global_step)
 
     # add variables and operations to collections
     params = {'x': x, 'y': y, 'y_pred': y_pred, 'accuracy': accuracy,
