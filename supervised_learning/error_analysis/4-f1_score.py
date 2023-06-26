@@ -15,6 +15,7 @@ precision = __import__('2-precision').precision
 # Importing the 'precision' function from the module '2-precision'
 # using the '__import__' function and assigning it to the variable 'precision'
 
+
 def f1_score(confusion):
     """function that calculates the F1 score of a confusion matrix"""
     # Function definition with a docstring explaining its purpose
