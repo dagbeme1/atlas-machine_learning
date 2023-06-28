@@ -1,4 +1,1 @@
-echo "A,B,D"
-echo "A,B,D"
-echo "B,C,E"
-echo "F"
+A,B,C
