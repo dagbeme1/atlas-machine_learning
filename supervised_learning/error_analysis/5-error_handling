@@ -1,3 +1,4 @@
-A,B,D
-B,C,E
-F
+echo "A,B,D"
+echo "A,B,D"
+echo "B,C,E"
+echo "F"
