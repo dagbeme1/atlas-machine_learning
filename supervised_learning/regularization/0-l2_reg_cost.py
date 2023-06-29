@@ -6,7 +6,8 @@ import numpy as np
 
 
 def l2_reg_cost(cost, lambtha, weights, L, m):
-    """Function that calculates cost of a neural network with L2 regularization"""
+    """Function that calculates cost of
+    a neural network with L2 regularization"""
 
     frobenius_norm = 0  # Variable to store the Frobenius norm
 
