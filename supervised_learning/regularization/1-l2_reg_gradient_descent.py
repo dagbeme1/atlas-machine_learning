@@ -2,6 +2,7 @@
 """Gradient Descent with L2 Regularization"""
 import numpy as np
 
+
 def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     # Create a copy of the weights dictionary
     weights_copy = weights.copy()
