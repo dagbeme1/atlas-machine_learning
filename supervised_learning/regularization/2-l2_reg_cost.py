@@ -4,6 +4,7 @@ L2 Regularization Cost
 """
 import tensorflow as tf
 
+
 def l2_reg_cost(cost):
     """
     Function that calculates the cost of a neural network

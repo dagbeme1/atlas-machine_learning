@@ -14,7 +14,7 @@ def one_hot(Y, classes):
 np.random.seed(4)
 m = np.random.randint(1000, 2000)
 c = 10
-lib= np.load('../data/MNIST.npz')
+lib= np.load('data/MNIST.npz')
 
 X = lib['X_train'][:m].reshape((m, -1))
 Y = one_hot(lib['Y_train'][:m], c).T
