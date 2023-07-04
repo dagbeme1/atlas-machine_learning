@@ -11,10 +11,12 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
         # Get the number of training examples
         m = Y.shape[1]
 
-        # Calculate the derivative of the activation function for the current layer
+        # Calculate the derivative of activation function for current layer
         if i != L:
             # All layers use a tanh activation, except the last layer
-            dZi = np.multiply(np.matmul(weights_copy['W' + str(i + 1)].T, dZi), 1 - cache['A' + str(i)] ** 2)
+            dZi = np.multiply
+            (np.matmul(weights_copy['W' + str(i + 1)].T, dZi), 
+             1 - cache['A' + str(i)] ** 2)
         else:
             # Last layer uses a softmax activation
             dZi = cache['A' + str(i)] - Y
