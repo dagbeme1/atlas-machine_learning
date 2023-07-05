@@ -18,6 +18,6 @@ def train_model(network, data, labels, batch_size, epochs,
                           verbose=verbose,
                           shuffle=shuffle,
                           validation_data=validation_data)
-    
+
     # Return history object, which contains training metrics and loss values
     return history
