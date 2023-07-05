@@ -7,7 +7,8 @@ Early Stopping
 
 def early_stopping(cost, opt_cost, threshold, patience, count):
     """
-    Determines if gradient descent should be stopped early based on validation cost.
+    Determines if gradient descent should be 
+    stopped early based on validation cost.
 
     Arguments:
     - cost: Current validation cost of the neural network.
