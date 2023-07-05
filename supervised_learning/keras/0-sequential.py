@@ -32,6 +32,6 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
         # Add dropout layer after each hidden layer, except the last one
         if i != len(layers) - 1:
             network.add(K.layers.Dropout(1 - keep_prob))
-    
+
     # Return the constructed network
     return network
