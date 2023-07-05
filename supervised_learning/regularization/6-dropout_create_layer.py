@@ -11,9 +11,11 @@ def dropout_create_layer(prev, n, activation, keep_prob):
     """function that creates a tf layer using dropout"""
 
     # Initialize the weights of the layer using variance_scaling_initializer
-    initializer = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+    initializer = tf.contrib.layers.variance_scaling_initializer(
+        mode="FAN_AVG")
 
-    # Create a dense layer with the specified number of neurons, activation function, initializer, and name
+    # Create a dense layer with the specified number of neurons
+    # activation function, initializer, and name
     layer = tf.layers.Dense(
         units=n,
         activation=activation,
