@@ -38,7 +38,7 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
             # Calculate dZi for hidden layer using tanh activation and Dropout
             dZi = np.multiply(np.matmul(
                 weights_copy['W' + str(i + 1)].T, dZi
-                ), tanh_prime(cache['A' + str(i)]))
+            ), tanh_prime(cache['A' + str(i)]))
             # Apply Dropout mask to dZi, regularize, normalize by keep_prob
             dZi *= cache['D' + str(i)]
             dZi /= keep_prob
