@@ -11,7 +11,7 @@ def train_model(network, data, labels, batch_size, epochs,
                 patience=0, verbose=True, shuffle=False):
     """function that trains a model using mini-batch gradient descent"""
     callbacks = []
-    
+
     # Add early stopping callback if validation
     # data and early stopping are enabled
     if validation_data and early_stopping:
@@ -21,7 +21,7 @@ def train_model(network, data, labels, batch_size, epochs,
         early_stop = K.callbacks.EarlyStopping(monitor='val_loss',
                                                patience=patience)
         callbacks.append(early_stop)
-    
+
     # Train the network using the fit method of the network object
     # Pass the data, labels, and other training parameters
     # Include the validation data and callbacks if provided
@@ -32,6 +32,6 @@ def train_model(network, data, labels, batch_size, epochs,
                           shuffle=shuffle,
                           validation_data=validation_data,
                           callbacks=callbacks)
-    
+
     # Return the history object,which contains training metrics & loss values
     return history
