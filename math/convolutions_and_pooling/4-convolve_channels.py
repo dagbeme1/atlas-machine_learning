@@ -33,7 +33,9 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
 
     if isinstance(padding, tuple) or padding == 'same':
         # Pad images before convolution, padding always symmetric here
-        images = np.pad(images, pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)), mode='constant')
+        images = np.pad(
+            images, pad_width=(
+                (0, 0), (ph, ph), (pw, pw), (0, 0)), mode='constant')
 
     output = np.zeros(shape=(m,
                              int((h - kh + 2 * ph) / sh + 1),
@@ -42,7 +44,8 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     for i in range(int((h - kh + 2 * ph) / sh + 1)):
         for j in range(int((w - kw + 2 * pw) / sw + 1)):
             # Perform element-wise multiplication of the strided image patch and kernel,
-            # then sum the results along the height, width, and channel dimensions (axis 1, 2, 3)
+            # then sum the results along the height, width, and channel
+            # dimensions (axis 1, 2, 3)
             output[
                 image_num,
                 i,
