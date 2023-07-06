@@ -21,7 +21,7 @@ def convolve_grayscale_valid(images, kernel):
     for i in range(h - kh + 1):
         for j in range(w - kw + 1):
             # Perform element-wise multiplication of the image patch & kernel
-            # then sum the results along 
+            # then sum the results along
             # the height and width dimensions (axis 1 and axis 2)
             output[image_num, i, j] = np.sum(
                 images[
