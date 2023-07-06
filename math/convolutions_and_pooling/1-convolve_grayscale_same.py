@@ -30,7 +30,7 @@ def convolve_grayscale_same(images, kernel):
         for j in range(w):
             # Perform element-wise multiplication
             # of the padded image patch and kernel,
-            # then sum the results along 
+            # then sum the results along
             # the height and width dimensions (axis 1 and axis 2)
             output[
                 image_num,
