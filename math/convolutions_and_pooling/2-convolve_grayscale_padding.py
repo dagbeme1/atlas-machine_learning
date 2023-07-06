@@ -21,7 +21,7 @@ def convolve_grayscale_padding(images, kernel, padding):
     # Pad images before convolution, padding always symmetric here
     padded_images = np.pad(images, pad_width=((0, 0), (ph, ph), (pw, pw)),
                            mode='constant')
-    
+
     # Output size depends on filter size and padding
     output = np.zeros(shape=(m, h - kh + 1 + 2 * ph, w - kw + 1 + 2 * pw))
 
