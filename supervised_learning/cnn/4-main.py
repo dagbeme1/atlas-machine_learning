@@ -12,7 +12,7 @@ if __name__ == "__main__":
     tf.set_random_seed(0)  # Setting the random seed for reproducibility in TensorFlow
 
     # Load the MNIST dataset from the specified file
-    lib = np.load('../data/MNIST.npz')
+    lib = np.load('data/MNIST.npz')
     X_train = lib['X_train']  # Get the training images from the loaded dataset
     Y_train = lib['Y_train']  # Get the training labels from the loaded dataset
     X_valid = lib['X_valid']  # Get the validation images from the loaded dataset
