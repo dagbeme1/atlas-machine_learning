@@ -7,6 +7,7 @@ Forward Pooling
 
 import numpy as np  # Importing the numpy module for numerical computations
 
+
 def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
     """function that performs forward propagation over a pooling layer"""
     # Function definition with input parameters and docstring
