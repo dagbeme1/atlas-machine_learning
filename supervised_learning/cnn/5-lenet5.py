@@ -8,6 +8,7 @@ LeNet-5 in Keras
 # Importing the tensorflow.keras module for deep learning
 import tensorflow.keras as K
 
+
 def lenet5(X):
     """function that builds a modified version of LeNet-5"""
     # Function definition with input parameter and docstring
@@ -21,10 +22,10 @@ def lenet5(X):
                             # Convolutional layer with 6 filters,
                             # kernel size 5x5, same padding, ReLU activation
                             activation='relu')
-    
+
     output = layer(X)  # Apply the convolutional layer to the input
     layer = K.layers.MaxPool2D(pool_size=2,
-                               strides=2)  # Max pooling layer 
+                               strides=2)  # Max pooling layer
     # with pool size 2x2 and stride 2
     output = layer(output)  # Apply the max pooling layer to the output
     layer = K.layers.Conv2D(filters=16,
