@@ -7,6 +7,7 @@ Backpropagation over Pooling Layer
 
 import numpy as np  # Importing the numpy module for numerical computations
 
+
 def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
     """function that performs a backpropagation over a pooling layer"""
     # Function definition with input parameters and docstring
@@ -64,8 +65,8 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
                             i,
                             j,
                             k
-                        # Propagate the gradients to
-                        # the previous layer using the mask
+                            # Propagate the gradients to
+                            # the previous layer using the mask
                         ]
 
     return dA_prev  # Return the computed gradients of the previous layer
