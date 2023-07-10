@@ -7,6 +7,7 @@ Backpropagation over Convolution Layer
 
 import numpy as np  # Importing the numpy module for numerical computations
 
+
 def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     """function that performs a backpropagation over a convolutional layer"""
     # Function definition with input parameters and docstring
