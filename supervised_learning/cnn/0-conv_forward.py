@@ -23,7 +23,8 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         ph = 0
         pw = 0
     elif padding == 'same':
-        # Calculate padding size for 'same' padding to match input and output size
+        # Calculate padding size for 'same' padding to match input and output
+        # size
         ph = int(np.ceil(((sh * h_prev) - sh + kh - h_prev) / 2))
         pw = int(np.ceil(((sw * w_prev) - sw + kw - w_prev) / 2))
 
