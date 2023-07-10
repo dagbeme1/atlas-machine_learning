@@ -11,7 +11,7 @@ if __name__ == "__main__":
     np.random.seed(0)  # Setting the random seed for reproducibility
     
     # Load the MNIST dataset from the specified file
-    lib = np.load('../data/MNIST.npz')
+    lib = np.load('data/MNIST.npz')
     X_train = lib['X_train']  # Get the training images from the loaded dataset
     m, h, w = X_train.shape  # Get the number of training examples, height, and width of the images
     X_train_c = X_train.reshape((-1, h, w, 1))  # Reshape the training images to have a single channel

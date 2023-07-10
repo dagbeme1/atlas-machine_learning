@@ -6,7 +6,7 @@ import numpy as np
 
 
 def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
-    """function that performs a forward propagation over a convolution layer"""
+    """function that performs a forward propagation over convolution layer"""
     m = A_prev.shape[0]  # Number of examples in the input
     h_prev = A_prev.shape[1]  # Height of the input
     w_prev = A_prev.shape[2]  # Width of the input
@@ -23,14 +23,14 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         ph = 0
         pw = 0
     elif padding == 'same':
-        # Calculate padding size for 'same' padding to match input and output
-        # size
+        # Calculate padding size for 'same' padding; match input & output size
         ph = int(np.ceil(((sh * h_prev) - sh + kh - h_prev) / 2))
         pw = int(np.ceil(((sw * w_prev) - sw + kw - w_prev) / 2))
 
     if padding == 'same':
         # Pad the input with zeros before convolution
-        A_prev = np.pad(A_prev, pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)),
+        A_prev = np.pad(A_prev, pad_width=((0, 0), (ph, ph),
+                                           (pw, pw), (0, 0)),
                         mode='constant')
 
     # Initialize the output with zeros
