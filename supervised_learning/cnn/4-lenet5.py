@@ -7,17 +7,19 @@ LeNet-5 in Tensorflow
 
 import tensorflow as tf  # Importing the tensorflow module for deep learning
 
+
 def lenet5(x, y):
     """function that builds a modified version of LeNet-5"""
     # Function definition with input parameters and docstring
 
     # Initializer for the layer weights
     initializer = tf.contrib.layers.variance_scaling_initializer()
-    layer = tf.layers.Conv2D(filters=6,
-                             kernel_size=5,
-                             padding='same',
-                             kernel_initializer=initializer,
-                             activation=tf.nn.relu)  # Convolutional layer with 6 filters,
+    layer = tf.layers.Conv2D(
+        filters=6,
+        kernel_size=5,
+        padding='same',
+        kernel_initializer=initializer,
+        activation=tf.nn.relu)  # Convolutional layer with 6 filters,
     # kernel size 5x5, same padding, ReLU activation
     output = layer(x)  # Apply the convolutional layer to the input
     layer = tf.layers.MaxPooling2D(pool_size=2,
