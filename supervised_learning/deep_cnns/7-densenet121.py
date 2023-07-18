@@ -3,7 +3,7 @@
 # Import the Keras library as K
 import tensorflow.keras as K
 
-# Import the dense_block and transition_layer functions from the respective modules
+# Import the dense_block & transition_layer functions from respective modules
 dense_block = __import__('5-dense_block').dense_block
 transition_layer = __import__('6-transition_layer').transition_layer
 
@@ -75,7 +75,7 @@ def densenet121(growth_rate=32, compression=1.0):
                              kernel_regularizer=K.regularizers.l2())
     output_4 = softmax(output_3)
 
-    # Instantiate a model from the Model class with input X and output output_4
+    # Instantiate a model from the Model class with input X & output output_4
     model = K.models.Model(inputs=X, outputs=output_4)
 
     return model
