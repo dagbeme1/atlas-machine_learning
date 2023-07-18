@@ -23,7 +23,8 @@ def transition_layer(X, nb_filters, compression):
     l1_activ = K.layers.Activation('relu')
     l1_output = l1_activ(l1_output)
 
-    # Apply a 1x1 Convolution to reduce the number of filters with compression factor
+    # Apply a 1x1 Convolution to reduce
+    # the number of filters with compression factor
     l1_layer = K.layers.Conv2D(filters=int(nb_filters*compression),
                                kernel_size=1,
                                padding='same',
