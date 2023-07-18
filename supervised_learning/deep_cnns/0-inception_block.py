@@ -4,6 +4,7 @@ Inception Block
 """
 import tensorflow.keras as K
 
+
 def inception_block(A_prev, filters):
     """
     function that builds an inception block
