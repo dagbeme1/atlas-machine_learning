@@ -6,6 +6,7 @@ Dense Block
 # Import the Keras library as K
 import tensorflow.keras as K
 
+
 def transition_layer(X, nb_filters, compression):
     """
     function that builds a transition layer
@@ -25,7 +26,7 @@ def transition_layer(X, nb_filters, compression):
 
     # Apply a 1x1 Convolution to reduce
     # the number of filters with compression factor
-    l1_layer = K.layers.Conv2D(filters=int(nb_filters*compression),
+    l1_layer = K.layers.Conv2D(filters=int(nb_filters * compression),
                                kernel_size=1,
                                padding='same',
                                kernel_initializer=initializer,
