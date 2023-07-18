@@ -6,6 +6,7 @@ import tensorflow.keras as K
 # Import the inception_block function from the '0-inception_block' module
 inception_block = __import__('0-inception_block').inception_block
 
+
 def inception_network():
     """
     function that builds an inception network
@@ -13,7 +14,7 @@ def inception_network():
     """
     # Use the He normal initializer for the weights
     initializer = K.initializers.he_normal()
-    
+
     # Define the input tensor with shape (224, 224, 3)
     X = K.Input(shape=(224, 224, 3))
 
@@ -60,30 +61,31 @@ def inception_network():
     output_5 = inception_block(output_4, [64, 96, 128, 16, 32, 32])
     output_6 = inception_block(output_5, [128, 128, 192, 32, 96, 64])
     output_7 = K.layers.MaxPool2D(pool_size=3,
-                                 padding='same',
-                                 strides=2)(output_6)
+                                  padding='same',
+                                  strides=2)(output_6)
     output_8 = inception_block(output_7, [192, 96, 208, 16, 48, 64])
     output_9 = inception_block(output_8, [160, 112, 224, 24, 64, 64])
     output_10 = inception_block(output_9, [128, 128, 256, 24, 64, 64])
     output_11 = inception_block(output_10, [112, 144, 288, 32, 64, 64])
     output_12 = inception_block(output_11, [256, 160, 320, 32, 128, 128])
     output_13 = K.layers.MaxPool2D(pool_size=3,
-                                  padding='same',
-                                  strides=2)(output_12)
+                                   padding='same',
+                                   strides=2)(output_12)
     output_14 = inception_block(output_13, [256, 160, 320, 32, 128, 128])
     output_15 = inception_block(output_14, [384, 192, 384, 48, 128, 128])
     output_16 = K.layers.AvgPool2D(pool_size=7,
-                                  padding='same',
-                                  strides=None)(output_15)
+                                   padding='same',
+                                   strides=None)(output_15)
 
     # Apply 40% dropout
     output_17 = K.layers.Dropout(0.4)(output_16)
 
     # Final fully connected layer with softmax activation for 1000 classes
-    output_18 = K.layers.Dense(units=1000,
-                              activation='softmax',
-                              kernel_initializer=initializer,
-                              kernel_regularizer=K.regularizers.l2())(output_17)
+    output_18 = K.layers.Dense(
+        units=1000,
+        activation='softmax',
+        kernel_initializer=initializer,
+        kernel_regularizer=K.regularizers.l2())(output_17)
 
     # Instantiate a model from the Model class with input X & output output_18
     model = K.models.Model(inputs=X, outputs=output_18)
