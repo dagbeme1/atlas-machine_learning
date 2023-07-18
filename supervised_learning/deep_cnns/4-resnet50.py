@@ -7,11 +7,14 @@ ResNet-50
 # Import the Keras library as K
 import tensorflow.keras as K
 
-# Import the identity_block and projection_block functions from the respective modules
+# Import the identity_block and projection_block functions from the
+# respective modules
 identity_block = __import__('2-identity_block').identity_block
 projection_block = __import__('3-projection_block').projection_block
 
 # Define a function called resnet50 that builds a ResNet-50 network
+
+
 def resnet50():
     """
     Function that builds a ResNet-50 network as described
@@ -20,11 +23,12 @@ def resnet50():
 
     # Use the He normal initializer for the weights
     initializer = K.initializers.he_normal()
-    
+
     # Define the input tensor with shape (224, 224, 3)
     X = K.Input(shape=(224, 224, 3))
-    
-    # Layer 1: 7x7 Convolution with 64 filters, stride 2, and no activation function applied yet
+
+    # Layer 1: 7x7 Convolution with 64 filters, stride 2, and no activation
+    # function applied yet
     layer_1 = K.layers.Conv2D(filters=64,
                               kernel_size=7,
                               padding='same',
@@ -32,7 +36,7 @@ def resnet50():
                               kernel_initializer=initializer,
                               activation=None)
     output_1 = layer_1(X)
-    
+
     # Batch normalization and ReLU activation for Layer 1 output
     norm_1 = K.layers.BatchNormalization()
     output_1 = norm_1(output_1)
