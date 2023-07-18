@@ -3,12 +3,12 @@
 # Import the Keras library as K
 import tensorflow.keras as K
 
-<<<<<<< HEAD
+<< << << < HEAD
 # Import the dense_block and transition_layer functions from the
 # respective modules
-=======
+== == == =
 # Import the dense_block & transition_layer functions from respective modules
->>>>>>> 4774beb18fdc3515380eb9c88a69768e1f9880fc
+>>>>>> > 4774beb18fdc3515380eb9c88a69768e1f9880fc
 dense_block = __import__('5-dense_block').dense_block
 transition_layer = __import__('6-transition_layer').transition_layer
 
@@ -53,56 +53,58 @@ def densenet121(growth_rate=32, compression=1.0):
 
     # Apply the first transition layer with compression factor
     tl1_output = transition_layer(
-<<<<<<< HEAD
+<< << << < HEAD
         db1_output[0], int(
             db1_output[1]), compression)
-=======
+
+
+== == == =
         db1_output[0], int(db1_output[1]), compression)
->>>>>>> 4774beb18fdc3515380eb9c88a69768e1f9880fc
+>> >>>> > 4774beb18fdc3515380eb9c88a69768e1f9880fc
 
     # Apply the second dense block with 12 layers and specified growth rate
-    db2_output = dense_block(tl1_output[0], tl1_output[1], growth_rate, 12)
+    db2_output=dense_block(tl1_output[0], tl1_output[1], growth_rate, 12)
 
     # Apply the second transition layer with compression factor
-    tl2_output = transition_layer(
-<<<<<<< HEAD
+    tl2_output=transition_layer(
+<< << << < HEAD
         db2_output[0], int(
             db2_output[1]), compression)
-=======
+== == == =
         db2_output[0], int(db2_output[1]), compression)
->>>>>>> 4774beb18fdc3515380eb9c88a69768e1f9880fc
+>> >>>> > 4774beb18fdc3515380eb9c88a69768e1f9880fc
 
     # Apply the third dense block with 24 layers and specified growth rate
-    db3_output = dense_block(
+    db3_output=dense_block(
         tl2_output[0], tl2_output[1], growth_rate, 24)
 
     # Apply the third transition layer with compression factor
-    tl3_output = transition_layer(
-<<<<<<< HEAD
+    tl3_output=transition_layer(
+<< << << < HEAD
         db3_output[0], int(
             db3_output[1]), compression)
-=======
+== == == =
         db3_output[0], int(db3_output[1]), compression)
->>>>>>> 4774beb18fdc3515380eb9c88a69768e1f9880fc
+>> >>>> > 4774beb18fdc3515380eb9c88a69768e1f9880fc
 
     # Apply the fourth dense block with 16 layers and specified growth rate
-    db4_output = dense_block(
+    db4_output=dense_block(
         tl3_output[0], tl3_output[1], growth_rate, 16)
 
     # Layer 3: 7x7 AveragePooling to reduce data to 1x1
-    layer_3 = K.layers.AvgPool2D(pool_size=7,
+    layer_3=K.layers.AvgPool2D(pool_size=7,
                                  padding='same',
                                  strides=None)
-    output_3 = layer_3(db4_output[0])
+    output_3=layer_3(db4_output[0])
 
     # Define a dense layer with softmax activation for final classification
-    softmax = K.layers.Dense(units=1000,
+    softmax=K.layers.Dense(units=1000,
                              activation='softmax',
                              kernel_initializer=initializer,
                              kernel_regularizer=K.regularizers.l2())
-    output_4 = softmax(output_3)
+    output_4=softmax(output_3)
 
     # Instantiate a model from the Model class with input X & output output_4
-    model = K.models.Model(inputs=X, outputs=output_4)
+    model=K.models.Model(inputs=X, outputs=output_4)
 
     return model
