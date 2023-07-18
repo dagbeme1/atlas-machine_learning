@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+"""
+ResNet-50
+"""
 # Import the Keras library as K
 import tensorflow.keras as K
 
@@ -66,14 +68,14 @@ def resnet50():
                                   strides=None)
     output_6 = avg_pool(output_5)
 
-    # Define a dense layer with softmax activation for the final classification
+    # Define a dense layer with softmax activation for final classification
     softmax = K.layers.Dense(units=1000,
                              activation='softmax',
                              kernel_initializer=initializer,
                              kernel_regularizer=K.regularizers.l2())
     output_7 = softmax(output_6)
 
-    # Instantiate a model from the Model class with input X and output output_7
+    # Instantiate a model from the Model class with input X & output output_7
     model = K.models.Model(inputs=X, outputs=output_7)
 
     return model
