@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+DenseNet-121
+"""
 
 # Import the Keras library as K
 import tensorflow.keras as K
