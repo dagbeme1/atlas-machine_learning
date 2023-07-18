@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+
 """
 ResNet-50
 """
+
 # Import the Keras library as K
 import tensorflow.keras as K
 
@@ -11,13 +13,18 @@ projection_block = __import__('3-projection_block').projection_block
 
 # Define a function called resnet50 that builds a ResNet-50 network
 def resnet50():
+    """
+    Function that builds a ResNet-50 network as described
+    in Deep Residual Learning for Image Recognition (2015)
+    """
+
     # Use the He normal initializer for the weights
     initializer = K.initializers.he_normal()
     
     # Define the input tensor with shape (224, 224, 3)
     X = K.Input(shape=(224, 224, 3))
     
-    # Layer 1: 7x7 Convolution with 64 filters, stride 2, and ReLU activation
+    # Layer 1: 7x7 Convolution with 64 filters, stride 2, and no activation function applied yet
     layer_1 = K.layers.Conv2D(filters=64,
                               kernel_size=7,
                               padding='same',
