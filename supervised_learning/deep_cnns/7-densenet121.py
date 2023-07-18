@@ -42,25 +42,31 @@ def densenet121(growth_rate=32, compression=1.0):
     output_2 = layer_2(output_1)
 
     # Apply the first dense block with 6 layers and specified growth rate
-    db1_output = dense_block(output_2, output_2.shape[-1], growth_rate, 6)
+    db1_output = dense_block(
+        output_2, output_2.shape[-1], growth_rate, 6)
 
     # Apply the first transition layer with compression factor
-    tl1_output = transition_layer(db1_output[0], int(db1_output[1]), compression)
+    tl1_output = transition_layer(
+        db1_output[0], int(db1_output[1]), compression)
 
     # Apply the second dense block with 12 layers and specified growth rate
     db2_output = dense_block(tl1_output[0], tl1_output[1], growth_rate, 12)
 
     # Apply the second transition layer with compression factor
-    tl2_output = transition_layer(db2_output[0], int(db2_output[1]), compression)
+    tl2_output = transition_layer(
+        db2_output[0], int(db2_output[1]), compression)
 
     # Apply the third dense block with 24 layers and specified growth rate
-    db3_output = dense_block(tl2_output[0], tl2_output[1], growth_rate, 24)
+    db3_output = dense_block(
+        tl2_output[0], tl2_output[1], growth_rate, 24)
 
     # Apply the third transition layer with compression factor
-    tl3_output = transition_layer(db3_output[0], int(db3_output[1]), compression)
+    tl3_output = transition_layer(
+        db3_output[0], int(db3_output[1]), compression)
 
     # Apply the fourth dense block with 16 layers and specified growth rate
-    db4_output = dense_block(tl3_output[0], tl3_output[1], growth_rate, 16)
+    db4_output = dense_block(
+        tl3_output[0], tl3_output[1], growth_rate, 16)
 
     # Layer 3: 7x7 AveragePooling to reduce data to 1x1
     layer_3 = K.layers.AvgPool2D(pool_size=7,
