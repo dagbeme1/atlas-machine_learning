@@ -83,4 +83,23 @@ def inception_network():
     # instantiate a model from the Model class
     model = K.models.Model(inputs=X, outputs=output_18)
 
+    # Create the model
+model = inception_network()
+
+# Print the model summary
+model.summary()
+
+# Check the activations of Conv layers
+sample_input = K.Input(shape=(224, 224, 3))
+sample_output = model(sample_input)
+activation_model = K.models.Model(inputs=sample_input, outputs=sample_output)
+
+# Print activations of Conv layers
+layer_names = [layer.name for layer in model.layers if isinstance(layer, K.layers.Conv2D)]
+activations = activation_model.predict(sample_input)
+
+for i, name in enumerate(layer_names):
+    print(f"Activation of {name}:")
+    print(activations[i])
+
     return model
