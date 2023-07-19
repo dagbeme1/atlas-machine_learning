@@ -1,86 +1,89 @@
 #!/usr/bin/env python3
-"""
-Inception Network
-"""
-import tensorflow.keras as K
-inception_block = __import__('0-inception_block').inception_block
 
+"""DCNN - Inception Network"""
+
+import tensorflow.keras as K
+# Importing the TensorFlow Keras library using the alias 'K'.
+
+inception_block = __import__('0-inception_block').inception_block
+# Importing a function 'inception_block' from the module '0-inception_block'.
 
 def inception_network():
-    """
-    function that builds an inception network
-    as described in Going Deeper with Convolutions (2014)
-    """
-    initializer = K.initializers.he_normal()
-    X = K.Input(shape=(224, 224, 3))
+    """Inception Network"""
+    # This is a docstring, a multiline comment that provides
+    # a brief description of the function.
 
-    layer_1 = K.layers.Conv2D(filters=64,
-                              kernel_size=7,
-                              padding='same',
-                              strides=2,
-                              kernel_initializer=initializer,
-                              activation='relu')
-    output_1 = layer_1(X)
-    layer_2 = K.layers.MaxPool2D(pool_size=3,
-                                 padding='same',
-                                 strides=2)
-    output_2 = layer_2(output_1)
-    layer_3R = K.layers.Conv2D(filters=64,
-                               kernel_size=1,
-                               padding='same',
-                               strides=1,
-                               kernel_initializer=initializer,
-                               activation='relu')
-    output_3R = layer_3R(output_2)
-    layer_3 = K.layers.Conv2D(filters=192,
-                              kernel_size=3,
-                              padding='same',
-                              strides=1,
-                              kernel_initializer=initializer,
-                              activation='relu')
-    output_3 = layer_3(output_3R)
-    layer_4 = K.layers.MaxPool2D(pool_size=3,
-                                 padding='same',
-                                 strides=2)
-    output_4 = layer_4(output_3)
-    output_5 = inception_block(output_4, [64, 96, 128, 16, 32, 32])
-    output_6 = inception_block(output_5, [128, 128, 192, 32, 96, 64])
-    layer_7 = K.layers.MaxPool2D(pool_size=3,
-                                 padding='same',
-                                 strides=2)
-    output_7 = layer_7(output_6)
-    output_8 = inception_block(output_7, [192, 96, 208, 16, 48, 64])
-    output_9 = inception_block(output_8, [160, 112, 224, 24, 64, 64])
-    output_10 = inception_block(output_9, [128, 128, 256, 24, 64, 64])
-    output_11 = inception_block(output_10, [112, 144, 288, 32, 64, 64])
-    output_12 = inception_block(output_11, [256, 160, 320, 32, 128, 128])
-    layer_13 = K.layers.MaxPool2D(pool_size=3,
-                                  padding='same',
-                                  strides=2)
-    output_13 = layer_13(output_12)
-    output_14 = inception_block(output_13, [256, 160, 320, 32, 128, 128])
-    output_15 = inception_block(output_14, [384, 192, 384, 48, 128, 128])
-    layer_16 = K.layers.AvgPool2D(pool_size=7,
-                                  padding='same',
-                                  strides=None)
-    output_16 = layer_16(output_15)
+    X_input = K.Input(shape=(224, 224, 3))
+    # Creating an input tensor with shape (224, 224, 3) using Keras'
+    # Input function. This defines the shape of the
+    # input images for the network.
 
-    layer_17 = K.layers.Dropout(0.4)
-    output_17 = layer_17(output_16)
+    X = K.layers.Conv2D(64, (7, 7), strides=(2, 2),
+                        padding='same', activation='relu')(X_input)
+    # Adding a 2D convolutional layer with 64 filters,
+    # a kernel size of (7, 7), a stride of (2, 2), and 'same' padding.
+    # The 'relu' activation function is used.
 
-    # output_17 is now 1 x 1: no need to flatten the data
-    # layer_18 = K.layers.Flatten()
-    # output = layer_18(output_17)
+    X = K.layers.MaxPool2D((3, 3), strides=(2, 2), padding='same')(X)
+    # Adding a 2D max pooling layer with a pool size
+    # of (3, 3), a stride of (2, 2), and 'same' padding.
 
-    # here pass 'softmax' activation to the model
-    # prior to compiling/training the model (not recommended)
-    layer_18 = K.layers.Dense(units=1000,
-                              activation='softmax',
-                              kernel_initializer=initializer,
-                              kernel_regularizer=K.regularizers.l2())
-    output_18 = layer_18(output_17)
+    X = K.layers.Conv2D(192, (3, 3), activation='relu', padding='same')(X)
+    # Adding another 2D convolutional layer with 192 filters,
+    # a kernel size of (3, 3), 'relu' activation, and 'same' padding.
 
-    # instantiate a model from the Model class
-    model = K.models.Model(inputs=X, outputs=output_18)
+    X = K.layers.MaxPool2D((3, 3), strides=(2, 2), padding='same')(X)
+    # Adding another 2D max pooling layer with a pool size of
+    # (3, 3), a stride of (2, 2), and 'same' padding.
+
+    # The next lines use a function 'inception_block' with
+    # specific parameters to create multiple inception blocks,
+    # which are commonly used in Inception networks.
+
+    X = inception_block(X, [64, 96, 128, 16, 32, 32])
+    # Creating an inception block with
+    # filter sizes [64, 96, 128, 16, 32, 32].
+
+    X = inception_block(X, [128, 128, 192, 32, 96, 64])
+    # Creating an inception block with filter
+    # sizes [128, 128, 192, 32, 96, 64].
+
+    X = K.layers.MaxPool2D((3, 3), strides=(2, 2), padding='same')(X)
+    # Adding another 2D max pooling layer with
+    # a pool size of (3, 3), a stride of (2, 2), and 'same' padding.
+
+    # Similar lines follow to create more inception blocks.
+
+    X = inception_block(X, [192, 96, 208, 16, 48, 64])
+    # Creating an inception block with
+    # filter sizes [192, 96, 208, 16, 48, 64].
+
+    # ... more inception blocks ...
+
+    X = inception_block(X, [384, 192, 384, 48, 128, 128])
+    # Creating an inception block with
+    # filter sizes [384, 192, 384, 48, 128, 128].
+
+    X = K.layers.AveragePooling2D(pool_size=(7, 7),
+                                  strides=(7, 7), padding='valid')(X)
+    # Adding an average pooling layer with a pool size
+    # of (7, 7), a stride of (7, 7), and 'valid' padding.
+
+    X = K.layers.Dropout(0.4)(X)
+    # Adding a dropout layer with a dropout rate
+    # of 0.4, which helps prevent overfitting.
+
+    X = K.layers.Dense(1000, activation='softmax')(X)
+    # Adding a dense (fully connected) layer with 1000 units
+    # and a 'softmax' activation function for multiclass classification.
+
+    model = K.models.Model(inputs=X_input, outputs=X)
+    # Creating a Keras Model using the input tensor
+    # X_input and the output tensor X.
 
     return model
+    # Returning the constructed model.
+
+# The function 'inception_network' defines an Inception
+# Network with multiple inception blocks and specific layers
+# for image classification. The model is returned at the end of the function.
