@@ -83,7 +83,9 @@ def inception_network():
     # instantiate a model from the Model class
     model = K.models.Model(inputs=X, outputs=output_18)
 
-    # Create the model
+    return model
+
+# Create the model
 model = inception_network()
 
 # Print the model summary
@@ -101,5 +103,3 @@ activations = activation_model.predict(sample_input)
 for i, name in enumerate(layer_names):
     print(f"Activation of {name}:")
     print(activations[i])
-
-    return model
