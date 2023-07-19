@@ -86,4 +86,4 @@ def inception_network():
 
 # The function 'inception_network' defines an Inception
 # Network with multiple inception blocks and specific layers
-# for image classification. The model is returned at the end of the function.
+# for image classification. The model is returned at the end of the function
