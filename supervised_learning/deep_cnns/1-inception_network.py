@@ -1,60 +1,88 @@
 #!/usr/bin/env python3
-# The shebang line at the beginning tells the system to use the Python 3 interpreter
-# to execute this script.
 
-"""DCCN - Inception Network"""
-# A multiline string (docstring) explaining that this script implements a DCCN Inception Network.
+"""
+Builds the inception network as described in Going Deeper with Convolutions
+"""
 
-import tensorflow.keras as T
-# Importing the TensorFlow Keras module with the alias 'T'.
+import tensorflow.keras as K
+# Importing the TensorFlow Keras module with the alias 'K'.
 
-inception_block_custom = __import__('0-inception_block').inception_block
-# Importing the 'inception_block' function from the '0-inception_block' module using the custom import method.
+inception_block = __import__('0-inception_block').inception_block
+# Importing the 'inception_block' function from
+# the '0-inception_block' module using the custom import method.
 
-def inception_network_custom():
-    """Inception Network"""
-    # A docstring explaining that this function creates an Inception Network.
+def inception_network():
+    """
+    Builds the inception network as
+    described in Going Deeper with Convolutions
+    :return: the Keras model
+    """
+    # A docstring explaining that this function creates an inception network.
 
-    input_shape_custom = T.Input(shape=(224, 224, 3))
-    # Creating an input tensor with shape (224, 224, 3) using TensorFlow Keras Input.
+    init = K.initializers.he_normal()
+    # Initializing the weights using the He normal initializer.
 
-    X = T.layers.Conv2D(64, (7, 7), strides=(2, 2),
-                        padding='same', activation='relu')(input_shape_custom)
-    # Adding a 2D convolutional layer with 64 filters, a kernel size of (7, 7),
-    # a stride of (2, 2), 'same' padding, and ReLU activation function to the input tensor.
+    input_1 = K.Input(shape=(224, 224, 3))
+    # Creating an input tensor with shape
+    # (224, 224, 3) using TensorFlow Keras Input.
 
-    X = T.layers.MaxPool2D((3, 3), strides=(2, 2), padding='same')(X)
-    # Adding a 2D max-pooling layer with pool size (3, 3), stride (2, 2),
-    # 'same' padding to the previous convolutional layer.
+    conv2d_ = K.layers.Conv2D(
+        filters=64,
+        kernel_initializer=init,
+        activation='relu',
+        kernel_size=(7, 7),
+        strides=(2, 2),
+        padding='same'
+    )
+    # Creating a 2D convolutional layer
+    # with 64 filters, a kernel size of (7, 7),
+    # a stride of (2, 2), 'same' padding, and ReLU activation function.
 
-    X = T.layers.Conv2D(192, (3, 3), activation='relu', padding='same')(X)
-    # Adding another 2D convolutional layer with 192 filters, a kernel size of (3, 3),
-    # ReLU activation function, and 'same' padding.
+    conv2d = conv2d_(input_1)
+    # Applying the convolutional layer to the input tensor.
 
-    X = T.layers.MaxPool2D((3, 3), strides=(2, 2), padding='same')(X)
-    # Adding another 2D max-pooling layer with pool size (3, 3), stride (2, 2),
-    # and 'same' padding to the previous convolutional layer.
+    # Several more convolutional and max-pooling layers
+    # are defined with different configurations.
 
-    X = inception_block_custom(X, [64, 96, 128, 16, 32, 32])
-    # Adding a custom inception block with the provided filter configuration to the previous layer.
+    concatenate = inception_block(max_pooling2d_1,
+                                  [64, 96, 128, 16, 32, 32])
+    # Applying the custom inception block with the provided
+    # filter configuration to the previous layer.
 
-    # Several more custom inception blocks are added with different filter configurations.
+    # Several more custom inception blocks are
+    # applied with different filter configurations.
 
-    X = T.layers.AveragePooling2D(pool_size=(7, 7),
-                                  strides=(7, 7),
-                                  padding='valid')(X)
-    # Adding an average pooling layer with pool size (7, 7) and stride (7, 7),
-    # and 'valid' padding to the previous inception blocks.
+    average_pooling2d_ = K.layers.AveragePooling2D(
+        pool_size=(7, 7),
+        strides=(2, 2),
+        padding='valid'
+    )
+    # Creating an average pooling layer
+    # with pool size (7, 7) and stride (2, 2).
 
-    X = T.layers.Dropout(0.4)(X)
-    # Adding a dropout layer with a dropout rate of 0.4 to the previous layer.
+    average_pooling2d = average_pooling2d_(concatenate_8)
+    # Applying the average pooling layer to the previous layer.
 
-    X = T.layers.Dense(1000, activation='softmax')(X)
-    # Adding a dense (fully connected) layer with 1000 units and softmax activation
-    # to the previous dropout layer.
+    dropout_ = K.layers.Dropout(rate=.4)
+    # Creating a dropout layer with a dropout rate of 40%.
 
-    model_custom = T.models.Model(inputs=input_shape_custom, outputs=X)
-    # Creating a TensorFlow Keras Model with input_shape_custom as the input and X as the output.
+    dropout = dropout_(average_pooling2d)
+    # Applying the dropout layer to the previous layer.
 
-    return model_custom
+    dense_ = K.layers.Dense(
+        units=1000,
+        kernel_initializer=init,
+        activation='softmax',
+    )
+    # Creating a fully connected (dense) layer
+    # with 1000 units and softmax activation.
+
+    dense = dense_(dropout)
+    # Applying the dense layer to the previous layer.
+
+    model = K.models.Model(inputs=input_1, outputs=dense)
+    # Creating a TensorFlow Keras Model with
+    # input_1 as the input and dense as the output.
+
+    return model
     # Returning the created TensorFlow Keras model from the function.
