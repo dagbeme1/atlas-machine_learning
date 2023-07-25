@@ -48,7 +48,8 @@ if __name__ == '__main__':
     # preprocess the data using the application's preprocess_input method
     # and convert the labels to one-hot encodings
     x_train, y_train = preprocess_data(x_train, y_train)
-    # Preprocessing the training data using the preprocess_data function defined earlier.
+    # Preprocessing the training data using the preprocess_data
+    # function defined earlier.
     x_test, y_test = preprocess_data(x_test, y_test)
     # Preprocessing the test data using the preprocess_data function defined earlier.
 
