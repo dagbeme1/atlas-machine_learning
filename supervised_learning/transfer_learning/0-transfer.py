@@ -51,7 +51,8 @@ if __name__ == '__main__':
     # Preprocessing the training data using the preprocess_data
     # function defined earlier.
     x_test, y_test = preprocess_data(x_test, y_test)
-    # Preprocessing the test data using the preprocess_data function defined earlier.
+    # Preprocessing the test data using the preprocess_data
+    # function defined earlier.
 
     # instantiate a pre-trained model from the Keras API
     input_tensor = K.Input(shape=(32, 32, 3))
