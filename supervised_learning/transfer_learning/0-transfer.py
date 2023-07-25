@@ -56,19 +56,23 @@ if __name__ == '__main__':
 
     # instantiate a pre-trained model from the Keras API
     input_tensor = K.Input(shape=(32, 32, 3))
-    # Creating an input tensor with shape (32, 32, 3) using Keras' Input function. This defines the shape of the input images for the model.
+    # Creating an input tensor with shape (32, 32, 3) using
+    # Keras' Input function. This defines the shape of
+    # the input images for the model.
 
     # upsampling helps improve the validation accuracy to some extent
     # (insufficient here):
     # output = K.layers.UpSampling2D(size=(2, 2),
     #                                interpolation='nearest')(input_tensor)
-    # The above code uses upsampling to improve validation accuracy, but it's commented out in the current script.
+    # The above code uses upsampling to improve validation accuracy,
+    # but it's commented out in the current script.
 
     # another approach: resize images to the image size upon which the network
     # was pre-trained:
     resized_images = K.layers.Lambda(
         lambda image: tf.image.resize(image, (224, 224)))(input_tensor)
-    # Using Lambda layer to resize the images from (32, 32, 3) to (224, 224, 3).
+    # Using Lambda layer to resize the images
+    # from (32, 32, 3) to (224, 224, 3).
 
     base_model = K.applications.DenseNet201(include_top=False,
                                             weights='imagenet',
@@ -76,13 +80,15 @@ if __name__ == '__main__':
                                             input_shape=(224, 224, 3),
                                             pooling='max',
                                             classes=1000)
-    # Creating a DenseNet201 base model, excluding the top classification layers. The model is pre-trained on ImageNet.
+    # Creating a DenseNet201 base model, excluding the top classification
+    # layers. The model is pre-trained on ImageNet.
 
     output = base_model.layers[-1].output
     # Getting the output tensor from the last layer of the base model.
 
     base_model = K.models.Model(inputs=input_tensor, outputs=output)
-    # Creating a Keras Model using the input tensor 'input_tensor' and the output tensor 'output'.
+    # Creating a Keras Model using the input tensor 'input_tensor'
+    # and the output tensor 'output'.
 
     # extract the bottleneck features (output feature maps)
     # from the pre-trained network (here, base-model)
@@ -96,7 +102,8 @@ if __name__ == '__main__':
     # Creating a data generator for the training data.
 
     features_train = base_model.predict(train_generator)
-    # Extracting bottleneck features (output feature maps) from the base model for the training data.
+    # Extracting bottleneck features (output feature maps)
+    # from the base model for the training data.
 
     # repeat the same operation with the test data (here used for validation)
     val_datagen = K.preprocessing.image.ImageDataGenerator()
@@ -109,20 +116,23 @@ if __name__ == '__main__':
     # Creating a data generator for the validation data.
 
     features_valid = base_model.predict(val_generator)
-    # Extracting bottleneck features (output feature maps) from the base model for the validation data (test data).
+    # Extracting bottleneck features (output feature maps) from
+    # the base model for the validation data (test data).
 
     # create a densely-connected head classifier
     initializer = K.initializers.he_normal()
-    # Using He normal initializer to initialize the weights of the dense layers.
+    # Using He normal initializer to initialize the weights of dense layers
 
     input_tensor = K.Input(shape=features_train.shape[1])
-    # Creating an input tensor with shape (num_features,) where num_features is the number of features extracted by the base model.
+    # Creating an input tensor with shape (num_features,) where
+    # num_features is the number of features extracted by the base model.
 
     layer_256 = K.layers.Dense(units=256,
                                activation='elu',
                                kernel_initializer=initializer,
                                kernel_regularizer=K.regularizers.l2())
-    # Adding a dense (fully connected) layer with 256 units, 'elu' activation, He normal initializer, and L2 regularization.
+    # Adding a dense (fully connected) layer with 256 units,
+    # 'elu' activation, He normal initializer, and L2 regularization.
 
     output = layer_256(input_tensor)
     # Connecting the input tensor to the layer_256.
