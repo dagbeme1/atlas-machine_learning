@@ -29,19 +29,21 @@ import numpy as np
 def preprocess_data(X, Y):
     """function that pre-processes the data"""
     X = K.applications.densenet.preprocess_input(X)
-    # Using Keras' densenet.preprocess_input method to preprocess the input data 'X'.
+    # Using Keras' densenet.preprocess_input method
+    # to preprocess the input data 'X'.
     Y = K.utils.to_categorical(Y)
-    # Using Keras' to_categorical method to convert the target labels 'Y' to one-hot encodings.
+    # Using Keras' to_categorical method to
+    # convert the target labels 'Y' to one-hot encodings.
     return X, Y
     # Returning the preprocessed data 'X' and one-hot encoded labels 'Y'.
 
 
 if __name__ == '__main__':
-    # This block of code is executed only when the script is run directly, not when it is imported as a module.
 
     # load the Cifar10 dataset, 50,000 training images and 10,000 test images
     (x_train, y_train), (x_test, y_test) = K.datasets.cifar10.load_data()
-    # Loading the CIFAR-10 dataset using Keras' load_data function. The data is split into training and test sets.
+    # Loading the CIFAR-10 dataset using Keras' load_data function.
+    # The data is split into training and test sets.
 
     # preprocess the data using the application's preprocess_input method
     # and convert the labels to one-hot encodings
