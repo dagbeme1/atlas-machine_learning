@@ -138,7 +138,7 @@ if __name__ == '__main__':
     # Connecting the input tensor to the layer_256.
 
     dropout = K.layers.Dropout(0.5)
-    # Adding a dropout layer with a dropout rate of 0.5 to prevent overfitting.
+    # Adding a dropout layer with a dropout rate of 0.5 to prevent overfitting
 
     output = dropout(output)
     # Connecting the output of layer_256 to the dropout layer.
@@ -147,19 +147,24 @@ if __name__ == '__main__':
                              activation='softmax',
                              kernel_initializer=initializer,
                              kernel_regularizer=K.regularizers.l2())
-    # Adding the final dense (fully connected) layer with 10 units (for 10 classes), 'softmax' activation, He normal initializer, and L2 regularization.
+    # Adding the final dense (fully connected) layer with 10 units
+    # (for 10 classes), 'softmax' activation, He normal initializer,
+    # and L2 regularization.
 
     output = softmax(output)
     # Connecting the output of the dropout layer to the final softmax layer.
 
     model = K.models.Model(inputs=input_tensor, outputs=output)
-    # Creating a Keras Model using the input tensor 'input_tensor' and the output tensor 'output'.
+    # Creating a Keras Model using the input tensor
+    # 'input_tensor' and the output tensor 'output'.
 
     # compile the densely-connected head classifier
     model.compile(optimizer=K.optimizers.Adam(learning_rate=1e-4),
                   loss='categorical_crossentropy',
                   metrics=['accuracy'])
-    # Compiling the model with Adam optimizer, categorical cross-entropy loss (for multiclass classification), and accuracy as the evaluation metric.
+    # Compiling the model with Adam optimizer, categorical cross-entropy
+    # loss (for multiclass classification), and accuracy as
+    # the evaluation metric.
 
     # reduce learning rate when val_accuracy has stopped improving
     lr_reduce = K.callbacks.ReduceLROnPlateau(monitor='val_accuracy',
@@ -168,14 +173,16 @@ if __name__ == '__main__':
                                               verbose=1,
                                               mode='max',
                                               min_lr=1e-7)
-    # Adding a learning rate reduction callback to reduce learning rate when validation accuracy stops improving.
+    # Adding a learning rate reduction callback to reduce learning
+    # rate when validation accuracy stops improving.
 
     # stop training when val_accuracy has stopped improving
     early_stop = K.callbacks.EarlyStopping(monitor='val_accuracy',
                                            patience=3,
                                            verbose=1,
                                            mode='max')
-    # Adding an early stopping callback to stop training when validation accuracy stops improving.
+    # Adding an early stopping callback to stop training when
+    # validation accuracy stops improving.
 
     # callback to save the Keras model and (best) weights obtained
     # on an epoch basis
@@ -186,7 +193,8 @@ if __name__ == '__main__':
                                              save_best_only=True,
                                              mode='max',
                                              save_freq='epoch')
-    # Adding a callback to save the model and weights on the basis of validation accuracy.
+    # Adding a callback to save the model and weights on
+    # the basis of validation accuracy.
 
     # train the densely-connected head classifier
     history = model.fit(features_train, y_train,
@@ -196,4 +204,6 @@ if __name__ == '__main__':
                         callbacks=[lr_reduce, early_stop, checkpoint],
                         validation_data=(features_valid, y_test),
                         shuffle=True)
-    # Training the model using the extracted features from the base model. The training data is augmented using the ImageDataGenerator.
+    # Training the model using the extracted features from
+    # the base model. The training data is augmented
+    # using the ImageDataGenerator.
