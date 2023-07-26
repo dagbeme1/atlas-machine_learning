@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import tensorflow.keras as K
 preprocess_data = __import__('0-transfer').preprocess_data
+# Importing the preprocess_data function from the '0-transfer' module.
+# This function is used for preprocessing the CIFAR-10 data.
 
 K.learning_phase = K.backend.learning_phase
 _, (X, Y) = K.datasets.cifar10.load_data()
