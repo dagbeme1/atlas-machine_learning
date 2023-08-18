@@ -20,4 +20,4 @@ class Yolo:
 
         self.class_t = class_t  # Set the threshold for classifying objects
         self.nms_t = nms_t  # Set the threshold for non-maximum suppression
-        self.anchors = anchors  # Store the anchor box dimensions used for predictions
+        self.anchors = anchors  # Store anchor box dimensions for predictions
