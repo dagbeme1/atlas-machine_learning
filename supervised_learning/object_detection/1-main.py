@@ -10,7 +10,7 @@ if __name__ == '__main__':
                         [[10, 13], [16, 30], [33, 23]]])
     
     # Create an instance of the Yolo class with specified parameters
-    yolo = Yolo('../data/yolo.h5', '../data/coco_classes.txt', 0.6, 0.5, anchors)
+    yolo = Yolo('data/yolo.h5', 'data/coco_classes.txt', 0.6, 0.5, anchors)
     
     # Generate random output predictions for different feature maps
     output1 = np.random.randn(13, 13, 3, 85)
