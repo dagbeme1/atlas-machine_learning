@@ -4,12 +4,14 @@ Initialize Yolo
 """
 import tensorflow as tf  # Import the TensorFlow library
 
+
 class Yolo:
     """define the YOLO class"""
 
     def __init__(self, model_path, classes_path, class_t, nms_t, anchors):
         """define and initialize attributes and variables"""
-        self.model = tf.keras.models.load_model(model_path)  # Load the pre-trained YOLO model
+        self.model = tf.keras.models.load_model(
+            model_path)  # Load the pre-trained YOLO model
 
         # Open the file containing class names
         with open(classes_path, 'r') as f:
