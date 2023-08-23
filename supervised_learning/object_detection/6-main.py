@@ -8,8 +8,8 @@ if __name__ == '__main__':
     anchors = np.array([[[116, 90], [156, 198], [373, 326]],
                         [[30, 61], [62, 45], [59, 119]],
                         [[10, 13], [16, 30], [33, 23]]])
-    yolo = Yolo('../data/yolo.h5', '../data/coco_classes.txt', 0.6, 0.5, anchors)
-    images, image_paths = yolo.load_images('../data/yolo')
+    yolo = Yolo('data/yolo.h5', 'data/coco_classes.txt', 0.6, 0.5, anchors)
+    images, image_paths = yolo.load_images('data/yolo')
     boxes = np.array([[119.22100287, 118.62197718, 567.75985556, 440.44121152],
                       [468.53530752, 84.48338278, 696.04923556, 167.98947829],
                       [124.2043716, 220.43365057, 319.4254314 , 542.13706101]])
