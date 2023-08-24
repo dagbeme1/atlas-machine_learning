@@ -6,7 +6,6 @@ import tensorflow as tf
 import numpy as np
 import cv2
 import os
-# from google.colab.patches import cv2_imshow
 
 
 class Yolo:
@@ -250,7 +249,7 @@ class Yolo:
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """
-        function that filters boxes based on their IOU threshold with the box
+        function that filters boxes based on their intersection over union(IOU) threshold with the box
         having the highest probability for the prediction of a given object
         (class)
         """
@@ -445,7 +444,7 @@ class Yolo:
         key = cv2.waitKey(0)
         if key == ord('s'):
             if not os.path.exists('detections'):
-                os.makedirs('detections')
+                   os.makedirs('detections')
             cv2.imwrite('detections/' + file_name, image)
         cv2.destroyAllWindows()
 
