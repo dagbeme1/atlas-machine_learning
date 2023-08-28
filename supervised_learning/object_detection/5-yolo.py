@@ -398,3 +398,54 @@ class Yolo:
         pimages = np.array(pimages)
 
         return (pimages, image_shapes)
+
+    def predict(self, folder_path):
+        """function that displays all images in folder_path, along with
+        all of the objects detected (via their bounding boxes)"""
+
+        predictions = []
+
+        # Load the images from folder_path
+        images, image_paths = self.load_images(folder_path)
+        # Preprocess the images for matching with yolo.h5 input image size
+        pimages, image_shapes = self.preprocess_images(images)
+        # Extract the output features from the yolo.h5 model
+        # here, outputs is a list of numpy.ndarrays containing the
+        # predictions from the Darknet model
+        all_outputs = self.model.predict(pimages)
+        # print("len(outputs):", len(all_outputs))
+        # print("outputs[0].shape:", all_outputs[0].shape)
+
+        for i in range(len(images)):
+
+            # Extract the "outputs" feature maps of an individual image
+            outputs = [all_outputs[x][i, ...] for x in range(len(all_outputs))]
+            # Process the outputs (here 13x13, 26x26, 52x52 feature maps)
+            boxes, box_confidences, box_class_probs = (
+                self.process_outputs(
+                    outputs,
+                    image_shapes[i]))
+            # Filter the boxes based on box scores
+            filtered_boxes, box_classes, box_scores = (
+                self.filter_boxes(
+                    boxes,
+                    box_confidences,
+                    box_class_probs))
+            # Apply non_max_suppression and remove overlaping box duplicates
+            box_predictions, predicted_box_classes, predicted_box_scores = (
+                self.non_max_suppression(
+                    filtered_boxes,
+                    box_classes,
+                    box_scores))
+            # Slice off the file_name from the image_path
+            file_name = image_paths[i].split('/')[-1]
+            # Store the predictions
+            predictions.append((box_predictions,
+                                predicted_box_classes, predicted_box_scores))
+            # Display the image along with the bounding boxes
+            self.show_boxes(images[i], box_predictions,
+                            predicted_box_classes, predicted_box_scores,
+                            file_name)
+
+        return (predictions, image_paths)
+
