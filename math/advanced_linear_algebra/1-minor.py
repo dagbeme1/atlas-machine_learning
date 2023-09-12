@@ -27,6 +27,9 @@ def minor(matrix):
     # Get the size (number of rows) of the matrix
     n = len(matrix)
 
+    if n == 0:
+        raise ValueError("matrix must be a non-empty square matrix")
+
     # Handle the case of a 1x1 matrix
     if n == 1:
         return [[1]]
@@ -74,6 +77,9 @@ def determinant(matrix):
 
     # Get the number of rows in the matrix
     num_rows = len(matrix)
+
+    if num_rows == 0:
+        raise ValueError("matrix must be a non-empty square matrix")
 
     # Base case: 1x1 matrix
     if num_rows == 1:
