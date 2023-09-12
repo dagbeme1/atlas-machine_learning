@@ -5,7 +5,7 @@ Advanced Linear Algebra determinant
 
 # Function to omit the given row and column of a square matrix
 def minor_m(m, row, col):
-    """Omits the given row and column of a square matrix.
+    """The given row and column of a square matrix.
 
     Args:
         m (list): matrix.
@@ -107,6 +107,6 @@ def cofactor(matrix):
     for i in range(height):
         for j in range(width):
             sign = (-1) ** (i + j)
-            cofactor[i][j] = sign * minors[i][j]
+            cofactor[i][j] = sign * determinant(minor_m(matrix, i, j))
 
     return cofactor
