@@ -63,32 +63,39 @@ def determinant(matrix):
         matrix (list): matrix to calculate.
 
     Returns:
-        The determinant.
+        float: the determinant.
     """
-    # Check if the input is a valid list of lists
+    # Check if the input is a list and not empty
     if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
 
-    # Check if all elements are lists
-    if all(isinstance(i, list) for i in matrix) is False:
-        raise TypeError("matrix must be a list of lists")
+    # Check if each element of the input is a list
+    for row in matrix:
+        if not isinstance(row, list):
+            raise TypeError("matrix must be a list of lists")
 
-    # Get the number of rows in the matrix
-    num_rows = len(matrix)
+    # Get the size (number of rows/columns) of the matrix
+    n = len(matrix)
 
-    # Base case: 1x1 matrix
-    if num_rows == 1:
+    # Check if the matrix is square and non-empty
+    for row in matrix:
+        if len(row) != n:
+            raise ValueError("matrix must be a non-empty square matrix")
+
+    # Base case: 1x1 matrix, return the single element
+    if n == 1:
         return matrix[0][0]
 
-    # Handle base case for 2x2 matrix
-    if num_rows == 2:
+    # Base case: 2x2 matrix, return the determinant formula
+    if n == 2:
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
 
     # Initialize the determinant value
     det = 0
+    # Iterate through the columns of the matrix
     for j in range(len(matrix[0])):
-        # Create a submatrix without the first row and the current column
-        omited_matrix = [row[:j] + row[j + 1:] for row in matrix[1:]]
+        # Create a submatrix by excluding the current row and column
+        omited_matrix = minor_m(matrix, 0, j)
         # Calculate the determinant using recursive calls
         det += matrix[0][j] * ((-1) ** j) * determinant(omited_matrix)
 
