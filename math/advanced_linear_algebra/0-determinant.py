@@ -17,7 +17,7 @@ def determinant(matrix):
 
     # Check if the matrix is square
     if num_rows != num_cols:
-        raise ValueError("matrix must be a square matrix")
+        raise ValueError
 
     # Base case: 0x0 matrix
     if num_rows == 0:
