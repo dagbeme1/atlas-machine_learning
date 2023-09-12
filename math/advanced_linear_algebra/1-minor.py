@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Advanced Linear Algebra Minor
+Advanced Linear Algebra (Minor)
 """
 
 
@@ -30,9 +30,9 @@ def minor(matrix):
     if n == 0 or len(matrix[0]) != n:
         raise ValueError("matrix must be a non-empty square matrix")
 
-    # Handle the case of an empty square matrix
-    if n == 1 and matrix[0][0] == []:
-        raise ValueError("matrix must be a non-empty square matrix")
+    # Handle the case of a 1x1 matrix
+    if n == 1:
+        return [[1]]
 
     # Initialize an empty list for the minor matrix
     minor_mat = []
@@ -71,16 +71,8 @@ def determinant(matrix):
         raise TypeError("matrix must be a list of lists")
 
     # Check if all elements are lists
-    if all([isinstance(i, list) for i in matrix]) is False:
+    if all(isinstance(i, list) for i in matrix) is False:
         raise TypeError("matrix must be a list of lists")
-
-    # Check if the matrix is square
-    if matrix and len(matrix) != len(matrix[0]):
-        raise ValueError("matrix must be a square matrix")
-
-    # Handle the special case of an empty matrix
-    if matrix == [[]]:
-        raise ValueError("matrix must be a non-empty square matrix")
 
     # Get the number of rows in the matrix
     num_rows = len(matrix)
@@ -89,17 +81,15 @@ def determinant(matrix):
     if num_rows == 1:
         return matrix[0][0]
 
-    # Handle base cases for 1x1 and 2x2 matrices
-    if len(matrix) == 1:
-        return matrix[0][0]
-    if len(matrix) == 2:
+    # Handle base case for 2x2 matrix
+    if num_rows == 2:
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
 
     # Initialize the determinant value
     det = 0
     for j in range(len(matrix[0])):
         # Create a submatrix without the first row and the current column
-        omited_matrix = minor_m(matrix, 0, j)
+        omited_matrix = [row[:j] + row[j + 1:] for row in matrix[1:]]
         # Calculate the determinant using recursive calls
         det += matrix[0][j] * ((-1) ** j) * determinant(omited_matrix)
 
