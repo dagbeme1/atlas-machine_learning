@@ -89,4 +89,7 @@ def determinant(matrix):
     for j in range(len(matrix[0])):
         # Create a submatrix without the first row and the current column
         omited_matrix = [row[:j] + row[j + 1:] for row in matrix[1:]]
-        # Calculate the determinant using
+        # Calculate the determinant using recursive calls
+        det += matrix[0][j] * ((-1) ** j) * determinant(omited_matrix)
+
+    return det
