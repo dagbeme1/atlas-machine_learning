@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+"""
+Advanced Linear Algebra Determinant
+"""
+
 def determinant(matrix):
     """
     Calculates the determinant of a square matrix.
