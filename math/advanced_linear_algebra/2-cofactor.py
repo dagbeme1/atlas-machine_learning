@@ -5,7 +5,7 @@ Advanced Linear Algebra determinant
 
 # Function to omit the given row and column of a square matrix
 def minor_m(m, row, col):
-    """The given row and column of a square matrix.
+    """Omits the given row and column of a square matrix.
 
     Args:
         m (list): matrix.
@@ -13,7 +13,7 @@ def minor_m(m, row, col):
         col (int): column to omit.
 
     Returns:
-        the matrix with the omitted row, column.
+        The matrix with the omitted row and column.
     """
     return [[m[i][j] for j in range(len(m[i])) if j != col]
             for i in range(len(m)) if i != row]
@@ -26,7 +26,7 @@ def determinant(matrix):
         matrix (list): matrix to calculate.
 
     Returns:
-        the determinant.
+        The determinant.
     """
     # Check if the input is a valid list of lists
     if not isinstance(matrix, list) or len(matrix) == 0:
@@ -35,7 +35,7 @@ def determinant(matrix):
         raise TypeError("matrix must be a list of lists")
 
     # Check if the matrix is square
-    if matrix[0] and len(matrix) != len(matrix[0]):
+    if matrix and len(matrix) != len(matrix[0]):
         raise ValueError("matrix must be a square matrix")
 
     # Handle special case of an empty matrix
@@ -65,7 +65,7 @@ def minor(matrix):
         matrix (list): matrix to calculate.
 
     Returns:
-        the determinant.
+        The determinant.
     """
     # Check if the input is a valid list of lists
     if not isinstance(matrix, list) or len(matrix) == 0:
@@ -93,7 +93,7 @@ def cofactor(matrix):
         matrix (list): matrix to calculate.
 
     Returns:
-        the cofactor matrix.
+        The cofactor matrix.
     """
     # Calculate the minor matrix
     minors = minor(matrix)
