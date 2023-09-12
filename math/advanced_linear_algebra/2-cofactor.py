@@ -7,7 +7,8 @@ Advanced Linear Algebra determinant
 
 
 def minor_m(m, row, col):
-    """The given row and column of a square matrix.
+    """
+    Omits the given row and column of a square matrix.
 
     Args:
         m (list): matrix.
@@ -17,6 +18,7 @@ def minor_m(m, row, col):
     Returns:
         The matrix with the omitted row and column.
     """
+    # Create a new matrix without the specified row and column
     return [[m[i][j] for j in range(len(m[i])) if j != col]
             for i in range(len(m)) if i != row]
 
@@ -24,7 +26,8 @@ def minor_m(m, row, col):
 
 
 def determinant(matrix):
-    """Calculates the determinant of a square matrix.
+    """
+    Calculates the determinant of a square matrix.
 
     Args:
         matrix (list): matrix to calculate.
@@ -35,6 +38,8 @@ def determinant(matrix):
     # Check if the input is a valid list of lists
     if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
+
+    # Check if all elements are lists
     if all([isinstance(i, list) for i in matrix]) is False:
         raise TypeError("matrix must be a list of lists")
 
@@ -42,13 +47,13 @@ def determinant(matrix):
     if matrix and len(matrix) != len(matrix[0]):
         raise ValueError("matrix must be a square matrix")
 
-    # Handle special case of an empty matrix
+    # Handle the special case of an empty matrix
     if matrix == [[]]:
         return 1
 
-    # Get the dimensions of the matrix
+    # Get the number of rows in the matrix
     num_rows = len(matrix)
-    
+
     # Base case: 1x1 matrix
     if num_rows == 1:
         return matrix[0][0]
@@ -62,6 +67,7 @@ def determinant(matrix):
     # Initialize the determinant value
     det = 0
     for j in range(len(matrix[0])):
+        # Create a submatrix without the first row and the current column
         omited_matrix = minor_m(matrix, 0, j)
         # Calculate the determinant using recursive calls
         det += matrix[0][j] * ((-1) ** j) * determinant(omited_matrix)
@@ -72,17 +78,20 @@ def determinant(matrix):
 
 
 def minor(matrix):
-    """Calculates the minor matrix of a matrix.
+    """
+    Calculates the minor matrix of a matrix.
 
     Args:
         matrix (list): matrix to calculate.
 
     Returns:
-        The determinant.
+        The minor matrix.
     """
     # Check if the input is a valid list of lists
     if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
+
+    # Check if all elements are lists
     if all([isinstance(i, list) for i in matrix]) is False:
         raise TypeError("matrix must be a list of lists")
 
@@ -95,6 +104,7 @@ def minor(matrix):
     if len(matrix) == 1 and len(matrix[0]) == 1:
         return [[1]]
 
+    # Calculate the minor matrix
     return [[((-1) ** (i + j)) * determinant(minor_m(matrix, i, j))
              for j in range(len(matrix[i]))] for i in range(len(matrix))]
 
@@ -102,7 +112,8 @@ def minor(matrix):
 
 
 def cofactor(matrix):
-    """Calculates the cofactor matrix of a matrix.
+    """
+    Calculates the cofactor matrix of a matrix.
 
     Args:
         matrix (list): matrix to calculate.
@@ -110,6 +121,23 @@ def cofactor(matrix):
     Returns:
         The cofactor matrix.
     """
+    # Check if the input is a valid list of lists
+    if not isinstance(matrix, list) or len(matrix) == 0:
+        raise TypeError("matrix must be a list of lists")
+
+    # Check if all elements are lists
+    if all([isinstance(i, list) for i in matrix]) is False:
+        raise TypeError("matrix must be a list of lists")
+
+    # Check if the matrix is square and non-empty
+    if (len(matrix) == 0 or len(matrix) != len(matrix[0])) \
+            or matrix == [[]]:
+        raise ValueError("matrix must be a non-empty square matrix")
+
+    # Handle base case for 1x1 matrix
+    if len(matrix) == 1 and len(matrix[0]) == 1:
+        return [[1]]
+
     # Calculate the minor matrix
     minors = minor(matrix)
     height = len(minors)
