@@ -74,14 +74,17 @@ def determinant(matrix):
     if any(len(row) != len(matrix) for row in matrix):
         raise ValueError("matrix must be a square matrix")
 
-    # Get the size (number of rows) of the matrix
-    n = len(matrix)
+    # Get the number of rows in the matrix
+    num_rows = len(matrix)
 
-    # Handle the base cases for 1x1 and 2x2 matrices
-    if n == 1:
+    # Base case: 1x1 matrix
+    if num_rows == 1:
         return matrix[0][0]
 
-    if n == 2:
+    # Handle base cases for 1x1 and 2x2 matrices
+    if len(matrix) == 1:
+        return matrix[0][0]
+    if len(matrix) == 2:
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
 
     # Initialize the determinant value
