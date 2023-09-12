@@ -8,7 +8,7 @@ Advanced Linear Algebra determinant
 
 def minor_m(m, row, col):
     """
-    Omits the given row and column of a square matrix.
+    Removes the given row and column of a square matrix.
 
     Args:
         m (list): matrix.
@@ -49,7 +49,7 @@ def determinant(matrix):
 
     # Handle the special case of an empty matrix
     if matrix == [[]]:
-        return 1
+        raise ValueError("matrix must be a non-empty square matrix")
 
     # Get the number of rows in the matrix
     num_rows = len(matrix)
@@ -113,10 +113,10 @@ def minor(matrix):
 
 def cofactor(matrix):
     """
-    Calculates the cofactor matrix of a matrix.
+    Calculates cofactor matrix of a matrix.
 
     Args:
-        matrix (list): matrix to calculate.
+        (list): matrix to calculate.
 
     Returns:
         The cofactor matrix.
