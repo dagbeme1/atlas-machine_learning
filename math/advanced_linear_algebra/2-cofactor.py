@@ -46,6 +46,13 @@ def determinant(matrix):
     if matrix == [[]]:
         return 1
 
+    # Get the dimensions of the matrix
+    num_rows = len(matrix)
+    
+    # Base case: 1x1 matrix
+    if num_rows == 1:
+        return matrix[0][0]
+
     # Handle base cases for 1x1 and 2x2 matrices
     if len(matrix) == 1:
         return matrix[0][0]
