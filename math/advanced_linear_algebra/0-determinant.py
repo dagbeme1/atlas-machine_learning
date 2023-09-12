@@ -3,6 +3,7 @@
 Advanced Linear Algebra Determinant
 """
 
+
 def determinant(matrix):
     """
     Calculates the determinant of a matrix.
@@ -45,8 +46,9 @@ def determinant(matrix):
         else:
             # Iterate through the column indices
             for col in range(num_cols):
-                # Create a submatrix without the first row and the current column
-                submatrix = [row[0:col] + row[col+1:] for row in matrix[1:]]
+                # Create a submatrix without the first row and the current
+                # column
+                submatrix = [row[0:col] + row[col + 1:] for row in matrix[1:]]
                 # Calculate the cofactor
                 cofactor = matrix[0][col] * determinant(submatrix)
                 # Add or subtract the cofactor to the determinant
