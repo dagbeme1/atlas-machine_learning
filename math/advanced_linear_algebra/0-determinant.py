@@ -13,7 +13,7 @@ def determinant(matrix):
 
     # Get the dimensions of the matrix
     num_rows = len(matrix)
-    num_cols = (matrix[0])
+    num_cols = len(matrix[0])
 
     # Check if the matrix is square
     if num_rows != num_cols:
