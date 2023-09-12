@@ -3,10 +3,12 @@
 Advance Linear Algebra (Determinant)
 """
 
+
 def determinant(matrix):
+    """function that calculates the determinant of a matrix"""
     # Check if matrix is a list of lists
     if not isinstance(matrix, list) or not all(isinstance(row, list)
-            for row in matrix):
+                                               for row in matrix):
         raise TypeError("matrix must be a list of lists")
 
     # Get the dimensions of the matrix
