@@ -11,12 +11,16 @@ def determinant(matrix):
                                                for row in matrix):
         raise TypeError("matrix must be a list of lists")
 
+    # Get the dimensions of the matrix
+    num_rows = len(matrix)
+    num_cols = len(matrix[0])
+
     # Check if the matrix is square
-    if len(matrix) != len(matrix[0]):
+    if num_rows != num_cols:
         raise ValueError("matrix must be a square matrix")
 
     # Base case: 0x0 matrix
-    if num_rows == 0:
+    if num_rows == [[]]:
         return 1
 
     # Base case: 1x1 matrix
