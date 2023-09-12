@@ -5,7 +5,7 @@ Advanced Linear Algebra Determinant
 
 def determinant(matrix):
     """
-    Calculates the determinant of a square matrix.
+    Calculates the determinant of a matrix.
 
     Args:
         matrix (list): matrix to calculate.
@@ -13,33 +13,46 @@ def determinant(matrix):
     Returns:
         The determinant.
     """
-    # Check if the matrix is square
-    if matrix and len(matrix) != len(matrix[0]):
-        raise ValueError("matrix must be a square matrix")
+    # Check if the input is a valid list of lists
+    if not isinstance(matrix, list) or len(matrix) == 0:
+        raise TypeError("matrix must be a list of lists")
 
-    # Get the number of rows in the matrix
+    # Check if all elements are lists
+    if all(isinstance(i, list) for i in matrix) is False:
+        raise TypeError("matrix must be a list of lists")
+
+    # Get the number of rows and columns in the matrix
     num_rows = len(matrix)
+    num_cols = len(matrix[0])
 
     # Base case: 0x0 matrix
-    if num_rows == 0:
-        return 1
+    if num_rows == 0 and num_cols == 0:
+        return 1  # 0x0 matrix, return 1 by convention
 
     # Base case: 1x1 matrix
-    if num_rows == 1:
+    if num_rows == 1 and num_cols == 1:
         return matrix[0][0]
 
-    # Handle base cases for 1x1 and 2x2 matrices
-    if len(matrix) == 1:
-        return matrix[0][0]
-    if len(matrix) == 2:
-        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-
-    # Initialize the determinant value
+    # Initialize the determinant
     det = 0
-    for j in range(len(matrix[0])):
-        # Create a submatrix without the first row and the current column
-        omited_matrix = minor_m(matrix, 0, j)
-        # Calculate the determinant using recursive calls
-        det += matrix[0][j] * ((-1) ** j) * determinant(omited_matrix)
+
+    # Choose the method based on the size of the matrix
+    if num_rows == num_cols:
+        # Square matrix
+        if num_rows == 2:
+            # Handle base case for 2x2 square matrix
+            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+        else:
+            # Iterate through the column indices
+            for col in range(num_cols):
+                # Create a submatrix without the first row and the current column
+                submatrix = [row[0:col] + row[col+1:] for row in matrix[1:]]
+                # Calculate the cofactor
+                cofactor = matrix[0][col] * determinant(submatrix)
+                # Add or subtract the cofactor to the determinant
+                det += cofactor if col % 2 == 0 else -cofactor
+    else:
+        # Non-square matrix
+        raise ValueError("matrix must be a square matrix")
 
     return det
