@@ -20,9 +20,9 @@ def minor(matrix):
     # Get the size (number of rows) of the matrix
     n = len(matrix)
 
-    # Check if the matrix is square and non-empty
+    # Check if the matrix is square
     if n == 0 or len(matrix[0]) != n:
-        raise ValueError("matrix must be a non-empty square matrix")
+        raise ValueError("matrix must be a square matrix")  # Update the error message
 
     # Handle the case of a 1x1 matrix
     if n == 1:
