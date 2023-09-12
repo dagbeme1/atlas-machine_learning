@@ -4,6 +4,8 @@ Advanced Linear Algebra determinant
 """
 
 # Function to omit the given row and column of a square matrix
+
+
 def minor_m(m, row, col):
     """The given row and column of a square matrix.
 
@@ -19,6 +21,8 @@ def minor_m(m, row, col):
             for i in range(len(m)) if i != row]
 
 # Function to calculate the determinant of a square matrix
+
+
 def determinant(matrix):
     """Calculates the determinant of a square matrix.
 
@@ -29,9 +33,9 @@ def determinant(matrix):
         the determinant.
     """
     # Check if the input is a valid list of lists
-    if type(matrix) is not list or len(matrix) == 0:
+    if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
-    if all([type(i) is list for i in matrix]) is False:
+    if all([isinstance(i, list) for i in matrix]) is False:
         raise TypeError("matrix must be a list of lists")
 
     # Check if the matrix is square
@@ -58,6 +62,8 @@ def determinant(matrix):
     return det
 
 # Function to calculate the minor matrix of a matrix
+
+
 def minor(matrix):
     """Calculates the minor matrix of a matrix.
 
@@ -68,9 +74,9 @@ def minor(matrix):
         the determinant.
     """
     # Check if the input is a valid list of lists
-    if type(matrix) is not list or len(matrix) == 0:
+    if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
-    if all([type(i) is list for i in matrix]) is False:
+    if all([isinstance(i, list) for i in matrix]) is False:
         raise TypeError("matrix must be a list of lists")
 
     # Check if the matrix is square and non-empty
@@ -86,6 +92,8 @@ def minor(matrix):
              for j in range(len(matrix[i]))] for i in range(len(matrix))]
 
 # Function to calculate the cofactor matrix of a matrix
+
+
 def cofactor(matrix):
     """Calculates the cofactor matrix of a matrix.
 
@@ -99,14 +107,14 @@ def cofactor(matrix):
     minors = minor(matrix)
     height = len(minors)
     width = len(minors[0])
-    
+
     # Initialize the cofactor matrix
     cofactor = [[0 for _ in range(width)] for _ in range(height)]
-    
+
     # Calculate the cofactor matrix values
     for i in range(height):
         for j in range(width):
             sign = (-1) ** (i + j)
             cofactor[i][j] = sign * minors[i][j]
-    
+
     return cofactor
