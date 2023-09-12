@@ -14,16 +14,16 @@ def determinant(matrix):
     Returns:
         The determinant.
     """
-    # Check if the input is a valid list of lists
+    # Check if the input is a list
     if not isinstance(matrix, list):
-        return 1  # 0x0 matrix, return 1 by convention
+        raise TypeError("matrix must be a list of lists")
 
     # Check if the matrix is empty
     if len(matrix) == 0:
         return 1  # 0x0 matrix, return 1 by convention
 
     # Check if all elements are lists
-    if all(isinstance(i, list) for i in matrix) is False:
+    if not all(isinstance(i, list) for i in matrix):
         raise TypeError("matrix must be a list of lists")
 
     # Get the number of rows and columns in the matrix
