@@ -26,50 +26,35 @@ def minor_m(m, row, col):
 
 
 def determinant(matrix):
-    """
-    Calculates the determinant of a square matrix.
+    """Calculates the determinant of a square matrix.
 
     Args:
         matrix (list): matrix to calculate.
 
     Returns:
-        The determinant.
+        float: the determinant.
     """
-    # Check if the input is a valid list of lists
     if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
 
-    # Check if all elements are lists
-    if all([isinstance(i, list) for i in matrix]) is False:
-        raise TypeError("matrix must be a list of lists")
+    for row in matrix:
+        if not isinstance(row, list):
+            raise TypeError("matrix must be a list of lists")
 
-    # Check if the matrix is square
-    if matrix and len(matrix) != len(matrix[0]):
-        raise ValueError("matrix must be a square matrix")
+    n = len(matrix)
+    for row in matrix:
+        if len(row) != n:
+            raise ValueError("matrix must be a non-empty square matrix")
 
-    # Handle the special case of an empty matrix
-    if matrix == [[]]:
-        raise ValueError("matrix must be a non-empty square matrix")
-
-    # Get the number of rows in the matrix
-    num_rows = len(matrix)
-
-    # Base case: 1x1 matrix
-    if num_rows == 1:
+    if n == 1:
         return matrix[0][0]
 
-    # Handle base cases for 1x1 and 2x2 matrices
-    if len(matrix) == 1:
-        return matrix[0][0]
-    if len(matrix) == 2:
+    if n == 2:
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
 
-    # Initialize the determinant value
     det = 0
     for j in range(len(matrix[0])):
-        # Create a submatrix without the first row and the current column
         omited_matrix = minor_m(matrix, 0, j)
-        # Calculate the determinant using recursive calls
         det += matrix[0][j] * ((-1) ** j) * determinant(omited_matrix)
 
     return det
