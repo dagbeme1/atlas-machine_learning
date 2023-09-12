@@ -27,12 +27,12 @@ def minor(matrix):
     n = len(matrix)
 
     # Check if the matrix is square and non-empty
-    if (n == 0 or len(matrix[0]) != n) or matrix == [[]]:
+    if n == 0 or len(matrix[0]) != n:
         raise ValueError("matrix must be a non-empty square matrix")
 
-    # Handle the base case of a 1x1 matrix
-    if n == 1:
-        return [[1]]
+    # Handle the case of an empty square matrix
+    if n == 1 and matrix[0][0] == []:
+        raise ValueError("matrix must be a non-empty square matrix")
 
     # Initialize an empty list for the minor matrix
     minor_mat = []
