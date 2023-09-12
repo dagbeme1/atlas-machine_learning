@@ -27,7 +27,7 @@ def minor(matrix):
     n = len(matrix)
 
     # Check if the matrix is square and non-empty
-    if n == 0 or len(matrix[0]) != n:
+    if (n == 0 or len(matrix[0]) != n) or matrix == [[]]:
         raise ValueError("matrix must be a non-empty square matrix")
 
     # Handle the base case of a 1x1 matrix
