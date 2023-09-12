@@ -15,19 +15,19 @@ def minor(matrix):
         list of lists: The minor matrix.
     """
     # Check if matrix is a list of lists
-    if not isinstance(matrix, list):
-        raise TypeError("matrix must be a list of lists")
-
-    if not matrix:
-        raise ValueError("matrix must be a non-empty square matrix")
-
-    if not all(isinstance(row, list) for row in matrix):
+    if not isinstance(
+        matrix,
+        list) or not all(
+        isinstance(
+            row,
+            list) for row in matrix):
         raise TypeError("matrix must be a list of lists")
 
     # Get the size (number of rows) of the matrix
     n = len(matrix)
 
-    if n == 0:
+    # Check if the matrix is square and non-empty
+    if n == 0 or len(matrix[0]) != n:
         raise ValueError("matrix must be a non-empty square matrix")
 
     # Handle the case of a 1x1 matrix
@@ -66,20 +66,15 @@ def determinant(matrix):
         The determinant.
     """
     # Check if the input is a valid list of lists
-    if not isinstance(matrix, list):
+    if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
 
-    if not matrix:
-        raise ValueError("matrix must be a non-empty square matrix")
-
-    if not all(isinstance(i, list) for i in matrix):
+    # Check if all elements are lists
+    if all(isinstance(i, list) for i in matrix) is False:
         raise TypeError("matrix must be a list of lists")
 
     # Get the number of rows in the matrix
     num_rows = len(matrix)
-
-    if num_rows == 0:
-        raise ValueError("matrix must be a non-empty square matrix")
 
     # Base case: 1x1 matrix
     if num_rows == 1:
@@ -94,7 +89,4 @@ def determinant(matrix):
     for j in range(len(matrix[0])):
         # Create a submatrix without the first row and the current column
         omited_matrix = [row[:j] + row[j + 1:] for row in matrix[1:]]
-        # Calculate the determinant using recursive calls
-        det += matrix[0][j] * ((-1) ** j) * determinant(omited_matrix)
-
-    return det
+        # Calculate the determinant using
