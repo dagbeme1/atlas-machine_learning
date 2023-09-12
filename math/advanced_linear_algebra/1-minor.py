@@ -3,6 +3,19 @@
 Advanced Linear Algebra (Determinant and Minor)
 """
 
+def minor_m(m, row, col):
+    """ The the given row and column of a square matrix.
+
+    Args:
+        m (list): matrix.
+        row (int): row to omit.
+        col (int): column to omit.
+
+    Returns:
+        the matrix with the omitted row, column.
+    """
+    return [[m[i][j] for j in range(len(m[i])) if j != col]
+            for i in range(len(m)) if i != row]
 
 def minor(matrix):
     """
