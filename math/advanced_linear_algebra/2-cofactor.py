@@ -4,10 +4,8 @@ Advanced Linear Algebra determinant
 """
 
 # Function to omit the given row and column of a square matrix
-
-
 def minor_m(m, row, col):
-    """The given row and column of a square matrix.
+    """Omits the given row and column of a square matrix.
 
     Args:
         m (list): matrix.
@@ -21,8 +19,6 @@ def minor_m(m, row, col):
             for i in range(len(m)) if i != row]
 
 # Function to calculate the determinant of a square matrix
-
-
 def determinant(matrix):
     """Calculates the determinant of a square matrix.
 
@@ -62,8 +58,6 @@ def determinant(matrix):
     return det
 
 # Function to calculate the minor matrix of a matrix
-
-
 def minor(matrix):
     """Calculates the minor matrix of a matrix.
 
@@ -92,8 +86,6 @@ def minor(matrix):
              for j in range(len(matrix[i]))] for i in range(len(matrix))]
 
 # Function to calculate the cofactor matrix of a matrix
-
-
 def cofactor(matrix):
     """Calculates the cofactor matrix of a matrix.
 
