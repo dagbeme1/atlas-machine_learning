@@ -13,12 +13,11 @@ def determinant(matrix):
 
     # Get the dimensions of the matrix
     num_rows = len(matrix)
-    num_cols = len(matrix[0])
+    num_cols = (matrix[0])
 
     # Check if the matrix is square
-    Error = "matrix must be a square matrix"
-    if num_rows != num_cols:
-        raise ValueError(Error)
+    if num_cols and num_rows != len(matrix[0]):
+        raise ValueError("matrix must be a square matrix")
 
     # Base case: 0x0 matrix
     if num_rows == 0:
