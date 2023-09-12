@@ -61,18 +61,26 @@ def determinant(matrix):
     Calculates the determinant of a square matrix.
 
     Args:
-        matrix (list of lists): The input matrix.
+        matrix (list): matrix to calculate.
 
     Returns:
-        float: The determinant value.
+        The determinant.
     """
-    # Check if matrix is a list of lists
+    # Check if the input is a valid list of lists
     if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
 
-    # Check if the matrix is square (all rows have the same length)
-    if any(len(row) != len(matrix) for row in matrix):
+    # Check if all elements are lists
+    if all([isinstance(i, list) for i in matrix]) is False:
+        raise TypeError("matrix must be a list of lists")
+
+    # Check if the matrix is square
+    if matrix and len(matrix) != len(matrix[0]):
         raise ValueError("matrix must be a square matrix")
+
+    # Handle the special case of an empty matrix
+    if matrix == [[]]:
+        raise ValueError("matrix must be a non-empty square matrix")
 
     # Get the number of rows in the matrix
     num_rows = len(matrix)
@@ -89,16 +97,10 @@ def determinant(matrix):
 
     # Initialize the determinant value
     det = 0
+    for j in range(len(matrix[0])):
+        # Create a submatrix without the first row and the current column
+        omited_matrix = minor_m(matrix, 0, j)
+        # Calculate the determinant using recursive calls
+        det += matrix[0][j] * ((-1) ** j) * determinant(omited_matrix)
 
-    # Iterate through the first row (expansion by minors)
-    for j in range(n):
-        # Calculate the cofactor (product of current element and minor
-        # determinant)
-        cofactor = matrix[0][j] * \
-            determinant([row[:j] + row[j + 1:] for row in matrix[1:]])
-        # Add or subtract the cofactor to the determinant based on the column
-        # index
-        det += cofactor if j % 2 == 0 else -cofactor
-
-    # Return the determinant value
     return det
