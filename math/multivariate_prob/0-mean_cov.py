@@ -2,7 +2,6 @@
 
 import numpy as np
 
-
 def mean_cov(X):
     """
     Calculates the mean and covariance matrix of a data set.
@@ -11,7 +10,7 @@ def mean_cov(X):
         X (np.ndarray): dataset of shape (n, d)
 
     Returns:
-        mean and covariance matrix of dataset.
+        Tuple containing the mean and covariance matrix of the dataset.
     """
     # Check if X is a numpy.ndarray and has the correct shape
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
