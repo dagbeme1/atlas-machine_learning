@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Correlation Calculator
+Correlation
 """
 import numpy as np
 
@@ -9,7 +9,7 @@ def correlation(C):
     """Calculates a correlation matrix.
 
     Args:
-        C (np.ndarray): covariance of shape (d, d)
+        C (np.ndarray): covariance matrix of shape (d, d)
 
     Returns:
         correlation matrix.
@@ -18,9 +18,9 @@ def correlation(C):
     if not isinstance(C, np.ndarray):
         raise TypeError("C must be a numpy.ndarray")
 
-    # Check if C is a square matrix
-    if C.shape != C.T.shape:
-        raise ValueError("C must be a square matrix")
+    # Check if C is a 2D square matrix
+    if len(C.shape) != 2 or C.shape[0] != C.shape[1]:
+        raise ValueError("C must be a 2D square matrix")
 
     # Calculate the square root of the diagonal elements of C
     diagonal = np.sqrt(np.diag(C))
