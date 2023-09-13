@@ -63,6 +63,15 @@ def transpose(m):
 
 
 def adjugate(matrix):
+    """ Calculates adjugate of a square matrix.
+
+    Args:
+        matrix (list): matrix to calculate.
+
+    Returns:
+        adjugate.
+    """
+
     # Check if matrix is a list of lists and is not empty
     if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
