@@ -7,6 +7,14 @@ import numpy as np
 
 
 class MultiNormal:
+    """
+    Represents a Multivariate Normal distribution.
+
+    Attributes:
+        mean (np.ndarray): The mean vector of the dataset, shape (d, 1).
+        cov (np.ndarray): The covariance matrix of the dataset, shape (d, d).
+    """
+
     def __init__(self, data):
         """
         Initializes a Multivariate Normal distribution.
