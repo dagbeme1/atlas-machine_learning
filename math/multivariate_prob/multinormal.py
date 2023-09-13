@@ -16,7 +16,8 @@ class MultiNormal:
 
         Raises:
             TypeError: If data is not a 2D numpy.ndarray.
-            ValueError: If n is less than 2 (data must contain multiple data points).
+            ValueError: If n is less than 2
+            (data must contain multiple data points).
 
         Attributes:
             mean (np.ndarray): The mean of data, shape (d, 1).
