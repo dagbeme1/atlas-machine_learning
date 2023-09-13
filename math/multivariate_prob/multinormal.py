@@ -74,8 +74,7 @@ class MultiNormal:
         d = self.mean.shape[0]
         x_minus_mean = x - self.mean
         exponent = -0.5 * \
-            np.matmul(x_minus_mean.T, np.matmul(np.linalg.inv(self.cov),
-                                                x_minus_mean))
+            np.matmul(x_minus_mean.T, np.matmul(np.linalg.inv(self.cov), x_minus_mean))
         denominator = np.sqrt((2 * np.pi) ** d * np.linalg.det(self.cov))
         pdf_value = np.exp(exponent) / denominator
 
