@@ -3,9 +3,21 @@
 Advanced Linear Algebra (Inverse Determinant)
 """
 
-
 # Define a function to omit the given row and column of a square matrix.
+
+
 def minor_m(m, row, col):
+    """
+    Remove given row and column of a square matrix.
+
+    Args:
+        m (list): The input square matrix.
+        row (int): The row index to omit.
+        col (int): The column index to omit.
+
+    Returns:
+        list: The matrix with the specified row and column removed.
+    """
     return [[m[i][j] for j in range(len(m[i])) if j != col]
             for i in range(len(m)) if i != row]
 
@@ -13,6 +25,16 @@ def minor_m(m, row, col):
 
 
 def determinant(matrix):
+    """
+    Calculate the determinant of a square matrix using recursion.
+
+    Args:
+        matrix (list): The input square matrix.
+
+    Returns:
+        float: The determinant of the matrix.
+    """
+
     # Check if matrix is a list of lists and is not empty
     if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
@@ -56,6 +78,15 @@ def determinant(matrix):
 
 
 def transpose(m):
+    """
+    Transpose a given matrix.
+
+    Args:
+        m (list): The input matrix.
+
+    Returns:
+        list: The transposed matrix.
+    """
     return [[m[row][col] for row in range(len(m))]
             for col in range(len(m[0]))]
 
@@ -63,13 +94,14 @@ def transpose(m):
 
 
 def adjugate(matrix):
-    """ Calculates adjugate of a square matrix.
+    """
+    Calculate the adjugate of a square matrix.
 
     Args:
-        matrix (list): matrix to calculate.
+        matrix (list): The input square matrix.
 
     Returns:
-        adjugate.
+        list: The adjugate matrix.
     """
 
     # Check if matrix is a list of lists and is not empty
@@ -101,6 +133,16 @@ def adjugate(matrix):
 
 
 def inverse(matrix):
+    """
+    Calculate the inverse of a square matrix if it exists.
+
+    Args:
+        matrix (list): The input square matrix.
+
+    Returns:
+        list: The inverse matrix or None if the matrix is singular.
+    """
+
     # Check if matrix is a list of lists and is not empty
     if not isinstance(matrix, list) or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
