@@ -55,7 +55,7 @@ def determinant(matrix):
 # Define a function to transpose a matrix.
 
 
-def transponse(m):
+def transpose(m):
     return [[m[row][col] for row in range(len(m))]
             for col in range(len(m[0]))]
 
@@ -86,7 +86,7 @@ def adjugate(matrix):
                  for j in range(len(matrix[i]))] for i in range(len(matrix))]
 
     # Transpose the cofactor matrix to obtain the adjugate
-    return transponse(cofactor)
+    return transpose(cofactor)
 
 # Define a function to calculate the inverse of a matrix.
 
@@ -107,7 +107,7 @@ def inverse(matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
     # Check if any row has a different length
-    if any([len(l) != len(matrix) for l in matrix]):
+    if any([len(row) != len(matrix) for row in matrix]):
         raise ValueError("matrix must be a non-empty square matrix")
 
     # Calculate the determinant of the matrix
