@@ -24,11 +24,13 @@ class MultiNormal:
 
         Raises:
             TypeError: If data is not a 2D numpy.ndarray.
-            ValueError: If n is less than 2 (data must contain multiple data points).
+            ValueError: If n is less than 2
+            (data must contain multiple data points).
 
         Attributes:
             mean (np.ndarray): The mean vector of the dataset, shape (d, 1).
-            cov (np.ndarray): The covariance matrix of the dataset, shape (d, d).
+            cov (np.ndarray): The covariance matrix of the dataset,
+            shape (d, d).
         """
         # Check if data is a numpy.ndarray and has the correct shape
         if not isinstance(data, np.ndarray) or len(data.shape) != 2:
@@ -72,7 +74,8 @@ class MultiNormal:
         d = self.mean.shape[0]
         x_minus_mean = x - self.mean
         exponent = -0.5 * \
-            np.matmul(x_minus_mean.T, np.matmul(np.linalg.inv(self.cov), x_minus_mean))
+            np.matmul(x_minus_mean.T, np.matmul(np.linalg.inv(self.cov),
+                                                x_minus_mean))
         denominator = np.sqrt((2 * np.pi) ** d * np.linalg.det(self.cov))
         pdf_value = np.exp(exponent) / denominator
 
