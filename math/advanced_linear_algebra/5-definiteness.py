@@ -18,7 +18,8 @@ def definiteness(matrix):
         matrix (np.ndarray): The input matrix.
 
     Returns:
-        str: The definiteness type (e.g., 'Positive definite', 'Negative definite', etc.)
+        str: The definiteness type 
+        (e.g., 'Positive definite', 'Negative definite', etc.)
              or None if the matrix is invalid.
     """
 
