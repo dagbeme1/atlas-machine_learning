@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-
+"""
+Mean and Covariance (calculator)
+"""
 import numpy as np
+
 
 def mean_cov(X):
     """
