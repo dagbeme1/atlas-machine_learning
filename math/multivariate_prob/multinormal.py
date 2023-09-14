@@ -63,7 +63,8 @@ class MultiNormal:
         pdf_value = np.exp(exponent) / denominator
         return pdf_value.flatten()[0]
 
-    def _validate_data_point(self, x):
+
+def _validate_data_point(self, x):
     if not isinstance(x, np.ndarray):
         raise TypeError("x must be a numpy.ndarray")
     if x.shape != self.mean.shape:
