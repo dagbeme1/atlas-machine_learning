@@ -36,10 +36,12 @@ def likelihood(x, n, P):
         raise ValueError("All values in P must be in the range [0, 1]")
 
     # Compute the binomial coefficient manually
-    binomial_coefficient = np.math.factorial(
-        n) / (np.math.factorial(x) * np.math.factorial(n - x))
+    binomial_coefficient = (np.math.factorial(
+        n) / (np.math.factorial(x) * np.math.factorial(n - x)))
 
     # Calculate the likelihood for each probability in P
-    likelihood_values = binomial_coefficient * (P ** x) * ((1 - P) ** (n - x))
+    likelihood_values = (
+        binomial_coefficient * (P ** x) * ((1 - P) ** (n - x))
+    )
 
     return likelihood_values
