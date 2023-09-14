@@ -20,11 +20,13 @@ class MultiNormal:
 
         Raises:
             TypeError: If data is not a 2D numpy.ndarray.
-            ValueError: If n is less than 2 (data must contain multiple data points).
+            ValueError: If n is less than 2
+            (data must contain multiple data points).
 
         Attributes:
             mean (np.ndarray): The mean vector of the dataset, shape (d, 1).
-            cov (np.ndarray): The covariance matrix of the dataset, shape (d, d).
+            cov (np.ndarray): The covariance matrix of
+            the dataset, shape (d, d).
         """
         # Calculate mean and covariance when the instance is created
         self.mean, self.cov = self.calculate_mean_covariance(data)
