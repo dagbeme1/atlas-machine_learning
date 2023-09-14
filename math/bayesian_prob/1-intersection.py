@@ -16,7 +16,7 @@ def intersection(x, n, P, Pr):
         P (np.ndarray): Array of hypothetical probabilities.
 
     Returns:
-        np.ndarray: Array containing the likelihood of obtaining
+        np.ndarray: Array containing the intersection of obtaining
         the data for each probability.
 
     Raises:
@@ -36,6 +36,10 @@ def intersection(x, n, P, Pr):
         raise TypeError("P must be a 1D numpy.ndarray")
     if np.any((P < 0) | (P > 1)):
         raise ValueError("All values in P must be in the range [0, 1]")
+
+    # Ensure that Pr has the same shape as P
+    if not isinstance(Pr, np.ndarray) or Pr.ndim != 1 or Pr.shape != P.shape:
+        raise ValueError("Pr must be a numpy.ndarray with the same shape as P")
 
     # Compute the binomial coefficient manually
     binomial_coefficient = (np.math.factorial(
