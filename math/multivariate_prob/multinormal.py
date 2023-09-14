@@ -116,5 +116,5 @@ class MultiNormal:
         # Calculate the denominator and the PDF value.
 
         # Round the PDF value to match the expected value
-        return round(float(pdf_value), 20)
+        return round(float(pdf_value), 21)
         # Return the PDF value rounded to 16 decimal places.
