@@ -41,6 +41,10 @@ def intersection(x, n, P, Pr):
     if not isinstance(Pr, np.ndarray) or Pr.ndim != 1 or Pr.shape != P.shape:
         raise ValueError("Pr must be a numpy.ndarray with the same shape as P")
 
+    # Check if the sum of values in Pr is approximately equal to 1
+    if not np.isclose(np.sum(Pr), 1):
+        raise ValueError("Pr must sum to 1")
+
     # Compute the binomial coefficient manually
     binomial_coefficient = (np.math.factorial(
         n) / (np.math.factorial(x) * np.math.factorial(n - x)))
