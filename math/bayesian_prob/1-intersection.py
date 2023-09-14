@@ -7,7 +7,7 @@ import numpy as np
 
 def intersection(x, n, P, Pr):
     """
-    Calculate the likelihood of obtaining this data given various
+    Calculate the intersection of obtaining this data given various
     hypothetical probabilities of developing severe side effects.
 
     Args:
@@ -21,29 +21,39 @@ def intersection(x, n, P, Pr):
 
     Raises:
         ValueError: If n is not a positive integer,
-        if x is not a valid integer, if x > n,
-                    or if any value in P is not in [0, 1].
-        TypeError: If P is not a 1D numpy.ndarray.
+        if x is not a valid integer, if x > n, or if any value in P or Pr is not in [0, 1],
+        or if Pr does not sum to 1.
     """
+    # Check if n is a positive integer
     if not isinstance(n, int) or n < 1:
         raise ValueError("n must be a positive integer")
+
+    # Check if x is a non-negative integer
     if not isinstance(x, int) or x < 0:
         raise ValueError(
             "x must be an integer that is greater than or equal to 0")
+
+    # Check if x is greater than n
     if x > n:
         raise ValueError("x cannot be greater than n")
-    if not isinstance(P, np.ndarray) or P.ndim != 1:
-        raise TypeError("P must be a 1D numpy.ndarray")
-    if np.any((P < 0) | (P > 1)):
-        raise ValueError("All values in P must be in the range [0, 1]")
 
-    # Ensure that Pr has the same shape as P
-    if not isinstance(Pr, np.ndarray) or Pr.ndim != 1 or Pr.shape != P.shape:
-        raise ValueError("Pr must be a numpy.ndarray with the same shape as P")
+    # Check if P is a 1D numpy array in the range [0, 1]
+    if not isinstance(
+        P, np.ndarray) or P.ndim != 1 or np.any(
+        (P < 0) | (
+            P > 1)):
+        raise ValueError(
+            "P must be a 1D numpy.ndarray with values in the range [0, 1]")
 
-    # Check if all values in Pr are within the range [0, 1]
-    if np.any((Pr < 0) | (Pr > 1)):
-        raise ValueError("All values in Pr must be in the range [0, 1]")
+    # Check if Pr is a 1D numpy array with the same shape as P and in the
+    # range [0, 1]
+    if not isinstance(
+        Pr,
+        np.ndarray) or Pr.ndim != 1 or Pr.shape != P.shape or np.any(
+        (Pr < 0) | (
+            Pr > 1)):
+        raise ValueError(
+            "Pr must be a 1D numpy.ndarray with the same shape as P and values in the range [0, 1]")
 
     # Check if the sum of values in Pr is approximately equal to 1
     if not np.isclose(np.sum(Pr), 1):
@@ -54,9 +64,7 @@ def intersection(x, n, P, Pr):
         n) / (np.math.factorial(x) * np.math.factorial(n - x)))
 
     # Calculate the likelihood for each probability in P
-    intersection_values = (
-        binomial_coefficient * (P ** x) * ((1 - P) ** (n - x))
-    ) * Pr
+    intersection_values = binomial_coefficient * \
+        (P ** x) * ((1 - P) ** (n - x)) * Pr
 
     return intersection_values
-
