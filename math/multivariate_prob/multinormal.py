@@ -64,7 +64,10 @@ class MultiNormal:
         return pdf_value.flatten()[0]
 
     def _validate_data_point(self, x):
-        if not isinstance(x, np.ndarray):
-            raise TypeError("x must be a numpy.ndarray")
-        if x.shape != self.mean.shape:
-            raise ValueError(f"x must have the shape {tuple(self.mean.shape)}")
+    if not isinstance(x, np.ndarray):
+        raise TypeError("x must be a numpy.ndarray")
+    if x.shape != self.mean.shape:
+        raise ValueError(
+            "x must have the shape {}".format(
+                tuple(
+                    self.mean.shape)))
