@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-0-likelihood.py
+Combined Likelihood
 """
-import numpy as np
 
+import numpy as np
 
 def likelihood(x, n, probability_array):
     """
@@ -34,14 +34,11 @@ def likelihood(x, n, probability_array):
     if x > n:
         raise ValueError("x cannot be greater than n")
 
-    if not isinstance(
-            probability_array,
-            np.ndarray) or probability_array.ndim != 1:
+    if not isinstance(probability_array, np.ndarray) or probability_array.ndim != 1:
         raise TypeError("probability_array must be a 1D numpy.ndarray")
 
     if not np.all((probability_array >= 0) & (probability_array <= 1)):
-        raise ValueError(
-            "All values in probability_array must be in the range [0, 1]")
+        raise ValueError("All values in probability_array must be in the range [0, 1]")
 
     # Calculate the likelihood for each probability in probability_array
     likelihoods = []
