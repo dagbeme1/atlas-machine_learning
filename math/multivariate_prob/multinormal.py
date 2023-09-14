@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+"""
+update multinormal
+"""
+
 import numpy as np
 
 
