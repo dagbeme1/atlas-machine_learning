@@ -4,7 +4,7 @@ if __name__ == '__main__':
     # This conditional checks if the script is being run as the main program.
     # It ensures that the following code block is only executed when the script
     # is run directly and not when it is imported as a module in another script.
-
+    
     import numpy as np
     # Import the NumPy library and alias it as 'np'. NumPy is a popular library
     # for numerical operations on arrays and matrices.
@@ -23,7 +23,6 @@ if __name__ == '__main__':
 
     mn = MultiNormal(data)
     # Create an instance of the 'MultiNormal' class, passing the 'data' as input.
-
     print(mn.mean)
     # Print the mean vector of the dataset.
 
