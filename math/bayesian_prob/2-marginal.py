@@ -6,25 +6,6 @@ import numpy as np
 
 
 def marginal(x, n, P, Pr):
-    """
-    Calculate the intersection of obtaining this data given various
-    hypothetical probabilities of developing severe side effects.
-
-    Args:
-        x (int): Number of patients experiencing severe side effects.
-        n (int): Total number of patients observed.
-        P (np.ndarray): Array of hypothetical probabilities.
-
-    Returns:
-        np.ndarray: Array containing the intersection of obtaining
-        the data for each probability.
-
-    Raises:
-        ValueError: If n is not a positive integer,
-        if x is not a valid integer,
-        if x > n, or if any value in P or Pr is not in [0, 1],
-        or if Pr does not sum to 1.
-    """
     if not isinstance(n, (int, float)) or n <= 0:
         raise ValueError("n must be a positive integer")
 
@@ -55,8 +36,8 @@ def marginal(x, n, P, Pr):
         n) / (np.math.factorial(x) * np.math.factorial(n - x)))
 
     # Calculate the likelihood for each probability in P
-    marginal_probability = (
-        binomial_coefficient * (P ** x) * ((1 - P) ** (n - x))
-    ) * Pr
+    marginal_probability = np.sum(
+        binomial_coefficient * (P ** x) * ((1 - P) ** (n - x)) * Pr
+    )
 
     return marginal_probability
