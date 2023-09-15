@@ -2,7 +2,8 @@
 
 """posterior
 
-a function def posterior(x, n, P, Pr): that calculates the posterior probability for the various hypothetical probabilities of developing severe side effects given the data
+a function to calculate the posterior probability for various hypothetical
+probabilities of developing severe side effects given the data.
 
 """
 
@@ -11,22 +12,23 @@ import numpy as np
 
 def posterior(x, n, P, Pr):
     """
-    Calculate the posterior probability for the various hypothetical
-    probabilities of developing severe side effects given the data.
+    Calculate the posterior probability for various hypothetical
+    probabilities of developing severe side effects given observed data.
 
     Args:
         x (int): Number of patients experiencing severe side effects.
         n (int): Total number of patients observed.
         P (np.ndarray): Array of hypothetical probabilities.
-        Pr (np.ndarray): Array containing prior beliefs of P.
+        Pr (np.ndarray): Array containing prior beliefs about P.
 
     Returns:
         np.ndarray: Array containing the posterior probabilities for each
         probability in P.
 
     Raises:
-        ValueError: If n is not a positive integer, x is not a valid integer,
-                    x > n, or any value in P or Pr is not in [0, 1],
+        ValueError: If n is not a positive integer,
+        if x is not a valid integer,
+                    if x > n, or if any value in P or Pr is not in [0, 1],
                     or if Pr does not sum to 1.
         TypeError: If P is not a 1D numpy.ndarray, or Pr is not
                     a numpy.ndarray with the same shape as P.
@@ -56,26 +58,30 @@ def posterior(x, n, P, Pr):
 
     # Check if all values in P are in the range [0, 1]
     if np.any(P > 1) or np.any(P < 0):
-        raise ValueError(f"All values in P must be in the range [0, 1]")
+        raise ValueError("All values in P must be in the range [0, 1]")
 
     # Check if all values in Pr are in the range [0, 1]
     if np.any(Pr > 1) or np.any(Pr < 0):
-        raise ValueError(f"All values in Pr must be in the range [0, 1]")
+        raise ValueError("All values in Pr must be in the range [0, 1]")
 
     # Check if the sum of values in Pr is approximately equal to 1
     if not np.isclose(np.sum(Pr), 1):
         raise ValueError("Pr must sum to 1")
 
+    # Initialize an empty array to store posterior probabilities
+    posterior_probabilities = np.zeros_like(P, dtype=float)
+
     # Compute the binomial coefficient manually
     binomial_coefficient = (np.math.factorial(
         n) / (np.math.factorial(x) * np.math.factorial(n - x)))
 
-    # Calculate the posterior probabilities for each probability in P
-    posterior_probabilities = (
-        binomial_coefficient * (P ** x) * ((1 - P) ** (n - x)) * Pr
-    )
+    # Calculate the likelihood for each probability in P
+    for i, p in enumerate(P):
+        posterior_probabilities[i] = (
+            binomial_coefficient * (p ** x) * ((1 - p) ** (n - x)) * Pr[i]
+        )
 
-    # Normalize the posterior probabilities
+    # Normalize posterior probabilities to sum to 1
     posterior_probabilities /= np.sum(posterior_probabilities)
 
     return posterior_probabilities
