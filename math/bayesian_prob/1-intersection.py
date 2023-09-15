@@ -20,7 +20,8 @@ def intersection(x, n, P, Pr):
         the data for each probability.
 
     Raises:
-        ValueError: If n is not a positive integer, if x is not a valid integer,
+        ValueError: If n is not a positive integer,
+        if x is not a valid integer,
         if x > n, or if any value in P or Pr is not in [0, 1],
         or if Pr does not sum to 1.
     """
