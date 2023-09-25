@@ -5,7 +5,6 @@ that calculates the maximization step in the EM algorithm for a GMM
 """
 import numpy as np
 
-
 def maximization(X, g):
     """
     Calculate the maximization step in the EM algorithm for a Gaussian Mixture Model (GMM).
@@ -44,15 +43,22 @@ def maximization(X, g):
     updated_means = np.zeros((n_clusters, n_features))
     updated_covariances = np.zeros((n_clusters, n_features, n_features))
 
-    # Update priors, means, and covariances for each cluster
+    # Update priors for each cluster
+    for i in range(n_clusters):
+        updated_priors[i] = np.sum(g[i]) / n_samples
+
+    # Update means for each cluster
     for i in range(n_clusters):
         cluster_weights = g[i]
         total_weight = np.sum(cluster_weights)
 
-        updated_priors[i] = total_weight / n_samples
-
         updated_means[i] = np.sum(
             X * cluster_weights.reshape(-1, 1), axis=0) / total_weight
+
+    # Update covariances for each cluster
+    for i in range(n_clusters):
+        cluster_weights = g[i]
+        total_weight = np.sum(cluster_weights)
 
         diff = X - updated_means[i]
         updated_covariances[i] = np.dot(
