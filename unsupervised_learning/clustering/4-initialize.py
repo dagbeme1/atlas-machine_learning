@@ -23,15 +23,12 @@ def initialize(X, k):
             - covariances (numpy.ndarray): The covariance matrices for each cluster, initialized as identity matrices.
             Returns (None, None, None) on failure.
     """
-    # Check if X is a numpy array and has 2 dimensions (n_samples, n_features)
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None, None
 
-    # Get the dimensions of the input dataset X
     n_samples, n_features = X.shape
 
-    # Check if k is a positive integer within the valid range
-    if not isinstance(k, int) or k <= 0 or k > n_samples:
+    if not isinstance(k, int) or k <= 0 or k >= n_samples:
         return None, None, None
 
     # Initialize the "priors" array of shape (k,) containing the priors for each cluster, initialized evenly
@@ -41,8 +38,7 @@ def initialize(X, k):
     centroids, _ = kmeans(X, k)
 
     # Initialize the "covariances" array of shape (k, n_features, n_features) containing the covariance matrices for each cluster, initialized as identity matrices
-    covariance_identity = np.identity(n_features)
-    covariances = np.tile(covariance_identity, (k, 1, 1))
+    covariances = np.tile(np.identity(n_features), (k, 1, 1))
 
     return priors, centroids, covariances
 
