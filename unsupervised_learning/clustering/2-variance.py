@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-2-variance
-"""
+"""contains the variance function"""
 
 import numpy as np
 
