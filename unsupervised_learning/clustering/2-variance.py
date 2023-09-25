@@ -18,8 +18,6 @@ def variance(X, C):
         float: The total intra-cluster variance, or None on failure.
     """
     try:
-        k, d = C.shape
-
         # Calculate the squared Euclidean distances between data points and
         # centroids
         distances = np.sum((X[:, np.newaxis] - C) ** 2, axis=2)
