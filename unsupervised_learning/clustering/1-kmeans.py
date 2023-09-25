@@ -11,14 +11,18 @@ def kmeans(X, k, iterations=1000):
     Perform K-means clustering on a dataset.
 
     Args:
-        X (numpy.ndarray): The input dataset with shape (n_samples, n_features).
+        X (numpy.ndarray): The input dataset with
+        shape (n_samples, n_features).
         k (int): The number of clusters.
         iterations (int): The maximum number of iterations (default is 1000).
 
     Returns:
         Tuple[Optional[np.ndarray], Optional[np.ndarray]]: A tuple containing:
-            - C: A numpy.ndarray of shape (k, n_features) containing the centroid means for each cluster.
-            - clss: A numpy.ndarray of shape (n_samples,) containing the index of the cluster in C that each data point belongs to.
+            - C: A numpy.ndarray of shape (k, n_features)
+            containing the centroid means for each cluster.
+            - clss: A numpy.ndarray of shape (n_samples,)
+            containing the index of the cluster in C
+            that each data point belongs to.
               If the function fails, it returns (None, None).
     """
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
