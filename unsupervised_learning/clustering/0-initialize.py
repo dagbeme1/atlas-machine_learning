@@ -33,6 +33,6 @@ def initialize(X, k):
     feature_max = np.max(X, axis=0)
 
     # Initialize centroids using random values within the data range
-    centroid = np.random.uniform(feature_min, feature_max, (k, n_features))
+    centroids = np.random.uniform(feature_min, feature_max, (k, n_features))
 
-    return centroid
+    return centroids
