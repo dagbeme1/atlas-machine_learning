@@ -6,7 +6,6 @@ the expectation maximization for a GMM
 """
 
 import numpy as np
-
 init = __import__('4-initialize').initialize
 expect = __import__('6-expectation').expectation
 maximize = __import__('7-maximization').maximization
