@@ -13,7 +13,8 @@ def pca(X, ndim):
     Perform Principal Component Analysis (PCA) on a dataset.
 
     Args:
-        X (numpy.ndarray): The input dataset with shape (n_samples, n_features).
+        X (numpy.ndarray): The input dataset with
+        shape (n_samples, n_features).
         ndim (int): The number of dimensions for the transformed data.
 
     Returns:
