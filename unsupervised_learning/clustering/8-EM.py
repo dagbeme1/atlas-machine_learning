@@ -45,19 +45,13 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     prev_log_likelihood = 0
 
     for iteration in range(iterations + 1):
-        posterior_probs, log_likelihood = expectation(
-            X, priors, cluster_means, cluster_covariances)
-
+        posterior_probs, log_likelihood = expectation(X, priors, cluster_means, cluster_covariances)
         if iteration != 0:
-            priors, cluster_means, cluster_covariances = maximization(
-                X, posterior_probs)
+            priors, cluster_means, cluster_covariances = maximization(X, posterior_probs)
 
         if verbose:
-            if iteration % 10 == 0 or iteration == iterations or abs(
-                    log_likelihood - prev_log_likelihood) <= tol:
-                print(
-                    "Log Likelihood after {} iterations: {}".format(
-                        iteration, log_likelihood.round(5)))
+            if iteration % 10 == 0 or iteration == iterations or abs(log_likelihood - prev_log_likelihood) <= tol:
+                print("Log Likelihood after {} iterations: {}".format(iteration, log_likelihood.round(5)))
 
         if abs(log_likelihood - prev_log_likelihood) <= tol:
             break
