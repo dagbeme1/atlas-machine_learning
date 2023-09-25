@@ -31,7 +31,7 @@ def initialize(X, k):
         return None
 
     # Initialize centroids as an array of zeros
-    centroids = np.zeros((k, n_features))
+    centroids = np.random.uniform((k, n_features))
 
     # Randomly choose k distinct data points as initial centroids
     indices = np.random.choice(n_samples, k, replace=False)
