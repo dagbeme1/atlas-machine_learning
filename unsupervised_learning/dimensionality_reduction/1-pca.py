@@ -36,10 +36,10 @@ def pca(X, ndim):
 
     # Extract the desired number of principal components from VT
     V = VT.T
-    W = V[:, :ndim]
+    U = V[:, :ndim]
 
     # Project the centered data onto the principal components
-    X_pca = np.dot(X_centered, W)
+    X_pca = np.matmul(X_centered, U)
 
     # Return the transformed dataset
     return X_pca
