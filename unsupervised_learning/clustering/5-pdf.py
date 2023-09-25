@@ -9,7 +9,8 @@ import numpy as np
 
 def pdf(X, m, S):
     """
-    Calculates the probability density function (PDF) of a Gaussian distribution.
+    Calculates the probability density function (PDF) of
+    a Gaussian distribution.
 
     Args:
         X (numpy.ndarray): Data points of shape (n_samples, n_features).
