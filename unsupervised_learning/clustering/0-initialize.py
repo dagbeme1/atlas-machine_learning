@@ -6,21 +6,17 @@
 import numpy as np
 
 
-def initialize(X, k, seed=None):
+def initialize(X, k):
     """
     Initializes cluster centroids for K-means.
 
     Args:
         X (numpy.ndarray): The input dataset with shape (n_samples, n_features).
         k (int): The number of clusters.
-        seed (int): Random seed for reproducibility.
 
     Returns:
         numpy.ndarray: The initialized centroids for each cluster.
     """
-    if seed is not None:
-        np.random.seed(seed)  # Set the random seed
-
     # Check if X is a numpy array with two dimensions
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None
