@@ -35,16 +35,11 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     """
 
     if (
-        not isinstance(X, np.ndarray)
-        or len(X.shape) != 2
-        or not isinstance(k, int)
-        or k <= 0
-        or X.shape[0] < k
-        or not isinstance(iterations, int)
-        or iterations <= 0
-        or not isinstance(tol, float)
-        or tol < 0
-        or not isinstance(verbose, bool)
+        not isinstance(X, np.ndarray) or len(X.shape) != 2 or
+        not isinstance(k, int) or k <= 0 or X.shape[0] < k or
+        not isinstance(iterations, int) or iterations <= 0 or
+        not isinstance(tol, float) or tol < 0 or
+        not isinstance(verbose, bool)
     ):
         return None, None, None, None, None
 
@@ -53,12 +48,12 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     priors, means, covariances = init(X, k)
     responsibilities, likelihood = expect(X, priors, means, covariances)
 
-    for iteration in range(iterations):
+    iteration = 0
+    while True:
         if verbose and (iteration % 10 == 0):
             print(
                 'Log Likelihood after {} iterations: {}'.format(
-                    iteration, likelihood.round(5))
-            )
+                    iteration, likelihood.round(5)))
 
         priors, means, covariances = maximize(X, responsibilities)
         responsibilities, likelihood = expect(X, priors, means, covariances)
@@ -67,12 +62,12 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
             break
 
         prev_likelihood = likelihood
+        iteration += 1
 
     if verbose:
         print(
             'Log Likelihood after {} iterations: {}'.format(
-                iteration + 1,
-                likelihood.round(5))
-        )
+                iteration,
+                likelihood.round(5)))
 
     return priors, means, covariances, responsibilities, likelihood
