@@ -4,8 +4,8 @@ A function to initialize variables for a Gaussian Mixture Model (GMM)
 """
 
 import numpy as np
-# Import kmeans function
 kmeans = __import__('1-kmeans').kmeans
+
 
 def initialize(X, k):
     """
@@ -13,6 +13,8 @@ def initialize(X, k):
 
     Args:
         X (numpy.ndarray): The input dataset with shape (n_samples, n_features) containing the dataset for K-means clustering.
+            - n_samples: The number of data points.
+            - n_features: The number of dimensions for each data point.
         k (int): A positive integer containing the number of clusters.
 
     Returns:
@@ -23,22 +25,15 @@ def initialize(X, k):
             - covariances (numpy.ndarray): The covariance matrices for each cluster, initialized as identity matrices.
             Returns (None, None, None) on failure.
     """
-    if not isinstance(X, np.ndarray) or X.ndim != 2:
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+        return None, None, None
+    if not isinstance(k, int) or k <= 0 or k >= X.shape[0]:
         return None, None, None
 
     n_samples, n_features = X.shape
-
-    if not isinstance(k, int) or k <= 0 or k >= n_samples:
-        return None, None, None
-
-    # Initialize the "priors" array of shape (k,) containing the priors for each cluster, initialized evenly
-    priors = np.full(shape=(k,), fill_value=1/k)
-
-    # Initialize the "centroids" array of shape (k, n_features) containing the centroid means for each cluster, initialized with K-means
+    priors = np.tile(1 / k, (k,))
     centroids, _ = kmeans(X, k)
-
-    # Initialize the "covariances" array of shape (k, n_features, n_features) containing the covariance matrices for each cluster, initialized as identity matrices
-    covariances = np.tile(np.identity(n_features), (k, 1, 1))
+    identity_matrix = np.identity(n_features)
+    covariances = np.tile(identity_matrix, (k, 1, 1))
 
     return priors, centroids, covariances
-
