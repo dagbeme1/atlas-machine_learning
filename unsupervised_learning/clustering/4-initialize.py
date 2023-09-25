@@ -12,7 +12,8 @@ def initialize(X, k):
     Initializes variables for a Gaussian Mixture Model
 
     Args:
-        X (numpy.ndarray): The input dataset with shape (n_samples, n_features).
+        X (numpy.ndarray): The input dataset with
+        shape (n_samples, n_features).
         k (int): The number of clusters.
 
     Returns:
@@ -27,28 +28,27 @@ def initialize(X, k):
             initialized as identity matrices.
             Returns (None, None, None) on failure.
     """
+    # Check if X is a valid ndarray with two dimensions
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None, None
 
-    # Get the number of data points (n_samples)
-    # and the number of features (n_features)
+    # Get the number of data points (n_samples) and
+    # the number of features (n_features)
     n_samples, n_features = X.shape
 
+    # Check if k is a valid integer within the valid range
     if not isinstance(k, int) or k <= 0 or k > n_samples:
         return None, None, None
 
-    # Initialize the "priors" array of shape (k,)
-    # containing the priors for each cluster
+    # Initialize the "priors" array of shape (k,) with
+    # equal priors for each cluster
     priors = np.tile(1 / k, (k,))
 
-    # Initialize the "means" array of shape (k, n_features) containing
-    # the centroid means for each cluster, initialized with K-means
-    means, _ = kmeans(X, k)
+    # Initialize the "means" array of shape (k, n_features) using K-means
+    cluster_means, cluster_assignments = kmeans(X, k)
 
-    # Initialize the "covariances" array of shape
-    # (k, n_features, n_features) containing
-    # the covariance matrices for each cluster,
-    # initialized as identity matrices
-    covariances = np.tile(np.identity(n_features), (k, 1, 1))
+    # Initialize the "covariances" array of
+    # shape (k, n_features, n_features) as identity matrices
+    cluster_covariances = np.tile(np.identity(n_features), (k, 1, 1))
 
-    return priors, means, covariances
+    return priors, cluster_means, cluster_covariances
