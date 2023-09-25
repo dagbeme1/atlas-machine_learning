@@ -30,9 +30,20 @@ def initialize(X, k):
     if not isinstance(k, int) or k <= 0 or k >= X.shape[0]:
         return None, None, None
 
+    # Get the dimensions of the input dataset X
     n_samples, n_features = X.shape
+
+    # Initialize the "priors" array of shape (k,) containing the priors for
+    # each cluster, initialized evenly
     priors = np.tile(1 / k, (k,))
+
+    # Initialize the "centroids" array of shape (k, n_features) containing the
+    # centroid means for each cluster, initialized with K-means
     centroids, _ = kmeans(X, k)
+
+    # Initialize the "covariances" array of shape (k, n_features, n_features)
+    # containing the covariance matrices for each cluster, initialized as
+    # identity matrices
     identity_matrix = np.identity(n_features)
     covariances = np.tile(identity_matrix, (k, 1, 1))
 
