@@ -44,7 +44,8 @@ def expectation(X, pi, m, S):
     num_clusters = pi.shape[0]
     if m.shape[0] != num_clusters or m.shape[1] != num_features:
         return None, None
-    if S.shape[0] != num_clusters or S.shape[1] != num_features or S.shape[2] != num_features:
+    if S.shape[0] != num_clusters or S.shape[1] != \
+            num_features or S.shape[2] != num_features:
         return None, None
 
     if not np.isclose([np.sum(pi)], [1])[0]:
