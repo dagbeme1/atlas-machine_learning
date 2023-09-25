@@ -35,4 +35,5 @@ def gmm(X, k):
     cluster_covariances = gmm_params.covariances_
     bic_scores = gmm.bic(X)
 
-    return cluster_priors, cluster_means, cluster_covariances, cluster_indices, bic_scores
+    return cluster_priors, cluster_means, cluster_covariances, \
+        cluster_indices, bic_scores
