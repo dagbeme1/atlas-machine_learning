@@ -5,7 +5,6 @@
 
 import numpy as np
 
-
 def initialize(X, k):
     """
     Initializes cluster centroids for K-means.
@@ -37,3 +36,4 @@ def initialize(X, k):
     centroids = np.random.uniform(feature_min, feature_max, (k, n_features))
 
     return centroids
+
