@@ -33,21 +33,19 @@ def maximization(X, g):
     n_samples, n_features = X.shape
     n_clusters = g.shape[0]
 
-    # Check if the sum of all posterior probabilities (over the n_clusters) is
-    # equal to 1
+
     if not np.isclose(np.sum(g, axis=0), np.ones(n_samples)).all():
         return None, None, None
 
-    # Initialize arrays
+
     updated_priors = np.zeros(n_clusters)
     updated_means = np.zeros((n_clusters, n_features))
     updated_covariances = np.zeros((n_clusters, n_features, n_features))
 
-    # Update priors for each cluster
+
     for i in range(n_clusters):
         updated_priors[i] = np.sum(g[i]) / n_samples
 
-    # Update means for each cluster
     for i in range(n_clusters):
         cluster_weights = g[i]
         total_weight = np.sum(cluster_weights)
@@ -55,7 +53,6 @@ def maximization(X, g):
         updated_means[i] = np.sum(
             X * cluster_weights.reshape(-1, 1), axis=0) / total_weight
 
-    # Update covariances for each cluster
     for i in range(n_clusters):
         cluster_weights = g[i]
         total_weight = np.sum(cluster_weights)
