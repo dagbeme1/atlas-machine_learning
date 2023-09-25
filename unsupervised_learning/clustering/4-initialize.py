@@ -41,6 +41,8 @@ def initialize(X, k):
     centroids, _ = kmeans(X, k)
 
     # Initialize the "covariances" array of shape (k, n_features, n_features) containing the covariance matrices for each cluster, initialized as identity matrices
-    covariances = np.tile(np.identity(n_features), (k, 1, 1))
+    covariance_identity = np.identity(n_features)
+    covariances = np.tile(covariance_identity, (k, 1, 1))
 
     return priors, centroids, covariances
+
