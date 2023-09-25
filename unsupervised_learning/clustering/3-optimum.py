@@ -18,7 +18,8 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     Function that tests for the optimum number of clusters by variance.
 
     Args:
-        X (numpy.ndarray): The input dataset with shape (n_samples, n_features).
+        X (numpy.ndarray): The input dataset with
+        shape (n_samples, n_features).
         kmin (int): The minimum number of clusters to check for (inclusive).
         kmax (int): The maximum number of clusters to check for (inclusive).
         iterations (int): The maximum number of iterations for K-means.
@@ -26,8 +27,8 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     Returns:
         Tuple[Optional[list], Optional[list]]: A tuple containing:
             - A list of tuples, where each tuple contains cluster centroids
-              (centroids) and data point cluster assignments (assignments) for a specific
-              cluster size.
+              (centroids) and data point cluster assignments
+              (assignments) for a specific cluster size.
             - A list of differences in variance from the smallest cluster size
               for each cluster size. Returns (None, None) on failure.
     """
