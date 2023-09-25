@@ -7,6 +7,8 @@
 import numpy as np
 
 # Define a function called 'initialize' that takes two arguments: 'X' and 'k'
+
+
 def initialize(X, k):
     """
     Initializes cluster centroids for K-means.
@@ -36,7 +38,7 @@ def initialize(X, k):
 
     # Initialize centroids as an array of random values within the data range
     centroids = np.random.uniform(np.min(X, axis=0),
-            np.max(X, axis=0), (k, n_features))
+                                  np.max(X, axis=0), (k, n_features))
 
     # Return the initialized centroids
     return centroids
