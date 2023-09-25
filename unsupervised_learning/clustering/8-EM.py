@@ -45,8 +45,8 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
 
     num_samples, num_features = X.shape
     prev_likelihood = 0
-    priors, means, covariances = init(X, k)
-    responsibilities, likelihood = expect(X, priors, means, covariances)
+    priors, means, covariances = initialize(X, k)
+    responsibilities, likelihood = expectation(X, priors, means, covariances)
 
     iteration = 0
     while True:
@@ -55,8 +55,8 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
                 'Log Likelihood after {} iterations: {}'.format(
                     iteration, likelihood.round(5)))
 
-        priors, means, covariances = maximize(X, responsibilities)
-        responsibilities, likelihood = expect(X, priors, means, covariances)
+        priors, means, covariances = maximization(X, responsibilities)
+        responsibilities, likelihood = expectation(X, priors, means, covariances)
 
         if abs(prev_likelihood - likelihood) <= tol:
             break
