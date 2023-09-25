@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 A function def expectation_maximization(X, k, iterations=1000,
-tol=1e-5, verbose=False) that performs
-the expectation maximization for a GMM.
+tol=1e-5, verbose=False): that performs
+the expectation maximization for a GMM
 """
 
 import numpy as np
@@ -10,6 +10,7 @@ import numpy as np
 initialize = __import__('4-initialize').initialize
 expectation = __import__('6-expectation').expectation
 maximization = __import__('7-maximization').maximization
+
 
 def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     """
@@ -33,37 +34,40 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     Returns (None, None, None, None, None) on failure.
     """
 
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
-        return None, None, None, None, None
-    if not isinstance(k, int) or k <= 0 or X.shape[0] < k:
-        return None, None, None, None, None
-    if not isinstance(iterations, int) or iterations <= 0:
-        return None, None, None, None, None
-    if not isinstance(tol, float) or tol < 0:
-        return None, None, None, None, None
-    if not isinstance(verbose, bool):
+    if (
+        not isinstance(X, np.ndarray) or len(X.shape) != 2 or
+        not isinstance(k, int) or k <= 0 or X.shape[0] < k or
+        not isinstance(iterations, int) or iterations <= 0 or
+        not isinstance(tol, float) or tol < 0 or
+        not isinstance(verbose, bool)
+    ):
         return None, None, None, None, None
 
     num_samples, num_features = X.shape
     prev_likelihood = 0
-    priors, means, covariances = initialize(X, k)
-    responsibilities, likelihood = expectation(X, priors, means, covariances)
+    priors, means, covariances = init(X, k)
+    responsibilities, likelihood = expect(X, priors, means, covariances)
 
-    for iteration in range(iterations):
+    iteration = 0
+    while True:
         if verbose and (iteration % 10 == 0):
-            print('Log Likelihood after {} iterations: {}'.format(
-                iteration, likelihood.round(5)))
+            print(
+                'Log Likelihood after {} iterations: {}'.format(
+                    iteration, likelihood.round(5)))
 
-        priors, means, covariances = maximization(X, responsibilities)
-        responsibilities, likelihood = expectation(X, priors, means, covariances)
+        priors, means, covariances = maximize(X, responsibilities)
+        responsibilities, likelihood = expect(X, priors, means, covariances)
 
         if abs(prev_likelihood - likelihood) <= tol:
             break
 
         prev_likelihood = likelihood
+        iteration += 1
 
     if verbose:
-        print('Log Likelihood after {} iterations: {}'.format(
-            iteration + 1, likelihood.round(5)))
+        print(
+            'Log Likelihood after {} iterations: {}'.format(
+                iteration,
+                likelihood.round(5)))
 
     return priors, means, covariances, responsibilities, likelihood
