@@ -32,7 +32,7 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
 
     Returns (None, None, None, None, None) on failure.
     """
-
+    
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None, None, None, None, None
     if not isinstance(k, int) or k <= 0 or X.shape[0] < k:
