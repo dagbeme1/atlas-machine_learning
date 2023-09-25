@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""contains the initialize function"""
+"""
+0-initialize.py
+"""
 
 import numpy as np
 
@@ -12,25 +14,18 @@ def initialize(X, k):
         k (int): The number of clusters.
 
     Returns:
-        numpy.ndarray: The initialized centroids for each cluster, or None on failure.
+        numpy.ndarray: The initialized centroids for each cluster.
     """
-    # Check if X is a numpy array with two dimensions
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None
 
-    # Get the number of data points (n_samples) and the dimensionality of each
-    # data point (n_features)
     n_samples, n_features = X.shape
 
-    # Check if k is a positive integer within a valid range
     if not isinstance(k, int) or k <= 0 or k > n_samples:
         return None
 
-    # Compute the minimum and maximum values for each feature
-    feature_min = np.amin(X, axis=0)
-    feature_max = np.amax(X, axis=0)
-
-    # Initialize centroids using random values within the data range
-    centroids = np.random.uniform(feature_min, feature_max, (k, n_features))
+    centroids = np.random.uniform(np.min(X, axis=0),
+            np.max(X, axis=0), (k, n_features))
 
     return centroids
+
