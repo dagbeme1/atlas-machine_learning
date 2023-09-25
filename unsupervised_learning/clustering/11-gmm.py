@@ -4,6 +4,7 @@
 """
 import sklearn.mixture
 
+
 def gmm(X, k):
     """
     Calculate a Gaussian Mixture Model (GMM) from a dataset.
@@ -13,12 +14,17 @@ def gmm(X, k):
         k (int): Number of clusters.
 
     Returns:
-        Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray]:
+        Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray,
+        numpy.ndarray, numpy.ndarray]:
             - cluster_priors (numpy.ndarray): Cluster priors of shape (k,).
-            - cluster_means (numpy.ndarray): Centroid means of shape (k, n_features).
-            - cluster_covariances (numpy.ndarray): Covariance matrices of shape (k, n_features, n_features).
-            - cluster_indices (numpy.ndarray): Index of the cluster for each data point, shape (n_samples,).
-            - bic_scores (numpy.ndarray): Bayesian Information Criterion (BIC) for different cluster sizes, shape (kmax - kmin + 1,).
+            - cluster_means (numpy.ndarray):
+            Centroid means of shape (k, n_features).
+            - cluster_covariances (numpy.ndarray):
+            Covariance matrices of shape (k, n_features, n_features).
+            - cluster_indices (numpy.ndarray):
+            Index of the cluster for each data point, shape (n_samples,).
+            - bic_scores (numpy.ndarray): Bayesian Information Criterion (BIC)
+            for different cluster sizes, shape (kmax - kmin + 1,).
     """
     gmm = sklearn.mixture.GaussianMixture(n_components=k)
 
