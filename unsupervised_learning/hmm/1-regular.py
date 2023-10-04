@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
- the function def regular(P): that determines the steady
- state probabilities of a regular markov chain
+the function def regular(P): that determines
+the steady state probabilities of a regular markov chain
 """
 import numpy as np
 
@@ -28,8 +28,8 @@ def regular(P):
     if n != m:
         return None
 
-    # Check if the sum of transition probabilities along
-    # rows is approximately 1
+    # Check if the sum of transition probabilities
+    # along rows is approximately 1
     row_sums = np.sum(P, axis=1)
     if not np.allclose(row_sums, 1):
         return None
@@ -41,7 +41,7 @@ def regular(P):
     index = np.argmax(np.isclose(eigenvalues, 1))
 
     # Check if an eigenvalue equal to one is found
-    if eigenvalues[index] != 1:
+    if not np.isclose(eigenvalues[index], 1):
         return None
 
     # Get the corresponding eigenvector
