@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
-"""Contains the forward function for Hidden Markov Models."""
+"""
+the function def forward(Observation, Emission, Transition, Initial):
+that performs the forward algorithm for a hidden markov model
+"""
 
 import numpy as np
+
 
 def forward(Observation, Emission, Transition, Initial):
     """
     Perform the forward algorithm for a Hidden Markov Model (HMM).
 
     Args:
-        Observation (numpy.ndarray): 1D array of shape (T,) containing the indices of observations.
-        Emission (numpy.ndarray): 2D array of shape (N, M) with emission probabilities.
-        Transition (numpy.ndarray): 2D array of shape (N, N) with transition probabilities.
-        Initial (numpy.ndarray): 2D array of shape (N, 1) containing the initial state probabilities.
+        Observation (numpy.ndarray): 1D array of shape (T,)
+        containing the indices of observations.
+        Emission (numpy.ndarray): 2D array of shape (N, M)
+        with emission probabilities.
+        Transition (numpy.ndarray): 2D array of shape (N, N)
+        with transition probabilities.
+        Initial (numpy.ndarray): 2D array of shape (N, 1)
+        containing the initial state probabilities.
 
     Returns:
-        Tuple[float, numpy.ndarray]: Likelihood of the observations given the model (P) and
+        Tuple[float, numpy.ndarray]: Likelihood of the
+        observations given the model (P) and
         the forward path probabilities (F).
         Returns (None, None) on failure.
     """
@@ -34,7 +43,7 @@ def forward(Observation, Emission, Transition, Initial):
     if not isinstance(Initial, np.ndarray) or len(Initial.shape) != 2:
         return None, None
 
-    # Get the number of observations (T) and the dimensions of the model (N, M)
+    # Get the number of observations (T) and the dimensions of model (N, M)
     T = Observation.shape[0]
     N, M = Emission.shape
 
