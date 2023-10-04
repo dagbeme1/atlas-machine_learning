@@ -84,6 +84,7 @@ def forward(Observation, Emission, Transition, Initial):
 
     return P, F
 
+
 def backward(Observation, Emission, Transition, Initial):
     """
     Perform the backward algorithm for a hidden Markov model.
@@ -154,6 +155,7 @@ def backward(Observation, Emission, Transition, Initial):
 
     return P, B
 
+
 def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
     """
     Performs the Baum-Welch algorithm for a hidden Markov model.
@@ -175,10 +177,20 @@ def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
         matrices. Returns (None, None) on failure.
     """
     # Input Validation
-    if not all(isinstance(arr, np.ndarray) and len(arr.shape) == 1 for arr in [Observations]):
+    if not all(
+        isinstance(
+            arr, np.ndarray) and len(
+            arr.shape) == 1 for arr in [Observations]):
         return None, None
 
-    if not all(isinstance(arr, np.ndarray) and len(arr.shape) == 2 for arr in [Emission, Transition, Initial]):
+    if not all(
+        isinstance(
+            arr,
+            np.ndarray) and len(
+            arr.shape) == 2 for arr in [
+                Emission,
+                Transition,
+            Initial]):
         return None, None
 
     T = Observations.shape[0]
@@ -206,6 +218,7 @@ def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
 
     return a, b
 
+
 def calculate_xi(Observations, alpha, beta, Transition, Emission):
     # Calculate xi
     T = Observations.shape[0]
@@ -220,15 +233,19 @@ def calculate_xi(Observations, alpha, beta, Transition, Emission):
                 bjt1 = Emission[j, Observations[t + 1]]
                 Bjt1 = beta[j, t + 1]
                 NUM = Fit * aij * bjt1 * Bjt1
-                DEN = np.sum(alpha[:, t] * np.dot(Transition[:, j], Emission[j, Observations[t + 1]]) * beta[:, t + 1])
+                DEN = np.sum(alpha[:, t] * np.dot(Transition[:, j],
+                             Emission[j, Observations[t + 1]]) *
+                             beta[:, t + 1])
                 xi[i, j, t] = NUM / DEN
 
     return xi
+
 
 def calculate_gamma(xi):
     # Calculate gamma
     gamma = np.sum(xi, axis=1)
     return gamma
+
 
 def update_parameters(Observations, xi, gamma, Transition, Emission):
     # Update Transition and Emission matrices
