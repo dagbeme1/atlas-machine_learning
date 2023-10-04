@@ -5,6 +5,7 @@ that performs the backward algorithm for a hidden markov model
 """
 import numpy as np
 
+
 def backward(Observation, Emission, Transition, Initial):
     """
     Perform the backward algorithm for a hidden Markov model.
@@ -71,4 +72,3 @@ def backward(Observation, Emission, Transition, Initial):
     P = np.sum(P_first)
 
     return P, B
-
