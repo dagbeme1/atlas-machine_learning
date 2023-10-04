@@ -11,7 +11,8 @@ def markov_chain(P, s, t=1):
 
     Args:
         P (numpy.ndarray): Transition matrix of shape (n, n),
-            where P[i, j] is the probability of transitioning from state i to state j.
+            where P[i, j] is the probability of transitioning
+            from state i to state j.
         s (numpy.ndarray): Initial probability distribution of shape (1, n),
             representing the probability of starting in each state.
         t (int): Number of iterations.
@@ -45,7 +46,8 @@ def regular(P):
 
     Args:
         P (numpy.ndarray): Transition matrix of shape (n, n),
-            where P[i, j] is the probability of transitioning from state i to state j.
+            where P[i, j] is the probability of transitioning
+            from state i to state j.
 
     Returns:
         bool: True if the Markov chain is regular, or False on failure.
@@ -66,7 +68,8 @@ def absorbing(P):
 
     Args:
         P (numpy.ndarray): Transition matrix of shape (n, n),
-            where P[i, j] is the probability of transitioning from state i to state j.
+            where P[i, j] is the probability of transitioning
+            from state i to state j.
 
     Returns:
         bool: True if the Markov chain is absorbing, or False on failure.
