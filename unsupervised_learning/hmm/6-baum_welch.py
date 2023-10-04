@@ -282,6 +282,32 @@ def calculate_gamma(xi):
 
 
 def update_parameters(Observations, xi, gamma, Transition, Emission):
+    """
+    Update the model parameters (Transition and Emission) using the
+    calculated xi and gamma matrices in the Baum-Welch algorithm.
+
+    Args:
+        Observations (numpy.ndarray): An array of shape (T,) that contains
+            the index of observations.
+        xi (numpy.ndarray): The xi matrix of shape (N, N, T-1) containing
+            the joint probabilities of being in state i at time t and state j
+            at time t+1 given the observations and the model parameters.
+        gamma (numpy.ndarray): The gamma matrix of shape (N, T) containing
+            the probabilities of being in state i at time t given the
+            observations and the model parameters.
+        Transition (numpy.ndarray): An array of shape (M, M) representing the
+            transition probabilities of the hidden states.
+        Emission (numpy.ndarray): An array of shape (M, N) representing the
+            emission probabilities for each observation in each hidden state.
+
+    Returns:
+        tuple: A tuple containing the updated Transition and Emission matrices.
+
+    Note:
+        This function modifies the input Transition and Emission matrices
+        in-place and returns the updated matrices.
+    """
+
     # Update Transition and Emission matrices
     N = Transition.shape[0]
     M = Emission.shape[1]
