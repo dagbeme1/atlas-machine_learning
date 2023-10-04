@@ -263,6 +263,19 @@ def calculate_xi(Observations, alpha, beta, Transition, Emission):
 
 
 def calculate_gamma(xi):
+    """
+    Calculate the gamma matrix for the Baum-Welch algorithm.
+
+    Args:
+        xi (numpy.ndarray): The xi matrix of shape (N, N, T-1) containing
+            the joint probabilities of being in state i at time t and state j
+            at time t+1 given the observations and the model parameters.
+
+    Returns:
+        numpy.ndarray: The gamma matrix of shape (N, T) containing the
+        probabilities of being in state i at time t given the observations
+        and the model parameters.
+    """
     # Calculate gamma
     gamma = np.sum(xi, axis=1)
     return gamma
