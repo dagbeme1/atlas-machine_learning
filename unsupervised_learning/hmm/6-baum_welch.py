@@ -80,7 +80,7 @@ def forward(Observation, Emission, Transition, Initial):
         F[:, i] = prob
 
     # Calculate the likelihood of the observations given the model
-    P = np.sum(F[:, T - 1])
+    P = np.sum(F[:, -1])
 
     return P, F
 
