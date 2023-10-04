@@ -59,11 +59,14 @@ def backward(Observation, Emission, Transition, Initial):
 
     # Recursion
     for t in range(T - 2, -1, -1):
+        # Calculate the matrix multiplication of Transition, Emission,
+        # and Beta at time t+1
         a = Transition
         b = Emission[:, Observation[t + 1]]
         c = B[:, t + 1]
-
         abc = a * b * c
+
+        # Sum along the rows of abc to calculate the backward probabilities
         prob = np.sum(abc, axis=1)
         B[:, t] = prob
 
