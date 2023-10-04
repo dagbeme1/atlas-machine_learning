@@ -220,6 +220,27 @@ def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
 
 
 def calculate_xi(Observations, alpha, beta, Transition, Emission):
+    """
+    Calculate the xi matrix for the Baum-Welch algorithm.
+
+    Args:
+        Observations (numpy.ndarray): An array of shape (T,) containing
+            the index of observations.
+        alpha (numpy.ndarray): The forward probabilities computed by the
+            forward algorithm.
+        beta (numpy.ndarray): The backward probabilities computed by the
+            backward algorithm.
+        Transition (numpy.ndarray): An array of shape (N, N) containing
+            transition probabilities.
+        Emission (numpy.ndarray): An array of shape (N, M) containing
+            emission probabilities.
+
+    Returns:
+        numpy.ndarray: The xi matrix of shape (N, N, T-1) containing the
+        joint probabilities of being in state i at time t and
+        state j at time t+1
+        given the observations and the model parameters.
+    """
     # Calculate xi
     T = Observations.shape[0]
     N = alpha.shape[0]
