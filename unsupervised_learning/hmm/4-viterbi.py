@@ -43,7 +43,7 @@ def viterbi(Observation, Emission, Transition, Initial):
         return None, None
 
     if Observation.ndim != 1 or Emission.ndim != 2 or \
-    Transition.ndim != 2 or Initial.ndim != 2:
+            Transition.ndim != 2 or Initial.ndim != 2:
         return None, None
 
     N, M = Emission.shape
