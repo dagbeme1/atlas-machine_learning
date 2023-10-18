@@ -5,19 +5,24 @@ GaussianProcess class representing a noiseless 1D Gaussian process.
 
 import numpy as np
 
+
 class GaussianProcess:
     """
     Class that represents a noiseless 1D Gaussian process.
 
     Attributes:
-        X (numpy.ndarray): Inputs already sampled with the black-box function.
-        Y (numpy.ndarray): Outputs of the black-box function for each input.
+        X (numpy.ndarray): Inputs already sampled
+        with the black-box function.
+        Y (numpy.ndarray): Outputs of the black-box
+        function for each input.
         l (float): Length parameter for the kernel.
-        sigma_f (float): Standard deviation given to the output of the black-box function.
+        sigma_f (float): Standard deviation given to
+        the output of the black-box function.
         K (numpy.ndarray): Covariance kernel matrix.
 
     Methods:
-        kernel(X1, X2): Calculate the covariance kernel matrix between two matrices.
+        kernel(X1, X2): Calculate the covariance kernel
+        matrix between two matrices.
 
     """
 
@@ -26,10 +31,14 @@ class GaussianProcess:
         Constructor for GaussianProcess.
 
         Args:
-            X_init (numpy.ndarray): Inputs already sampled with the black-box function.
-            Y_init (numpy.ndarray): Outputs of the black-box function for each input.
-            l (float, optional): Length parameter for the kernel. Default is 1.
-            sigma_f (float, optional): Standard deviation given to the output of the black-box function. Default is 1.
+            X_init (numpy.ndarray): Inputs already sampled
+            with the black-box function.
+            Y_init (numpy.ndarray): Outputs of the black-box
+            function for each input.
+            l (float, optional): Length parameter for the kernel.
+            Default is 1.
+            sigma_f (float, optional): Standard deviation given to
+            the output of the black-box function. Default is 1.
 
         """
         self.X = X_init
@@ -50,6 +59,6 @@ class GaussianProcess:
             numpy.ndarray: Covariance kernel matrix of shape (m, n).
 
         """
-        sqdist = np.sum(X1 ** 2, 1).reshape(-1, 1) + np.sum(X2 ** 2, 1) - 2 * np.dot(X1, X2.T)
+        sqdist = np.sum(X1 ** 2, 1).reshape(-1, 1) + \
+            np.sum(X2 ** 2, 1) - 2 * np.dot(X1, X2.T)
         return self.sigma_f ** 2 * np.exp(-0.5 / self.l ** 2 * sqdist)
-
