@@ -13,82 +13,129 @@ import numpy as np
 
 
 class GaussianProcess:
-    """A class representing a noiseless 1D Gaussian process."""
+    """
+    Represents a noiseless 1D Gaussian process.
+    """
 
-    def __init__(self, X_init, Y_init, length_scale=1, signal_stddev=1):
+    def __init__(self, X_init, Y_init, l=1, sigma_f=1):
         """
-        Constructor for GaussianProcess.
+        Initialize a Gaussian Process.
 
         Args:
-            X_init (numpy.ndarray): Inputs already sampled
-            with the black-box function.
-            Y_init (numpy.ndarray): Outputs of the black-box
-            function for each input.
-            length_scale (float, optional): Length
-            parameter for the kernel. Default is 1.
-            signal_stddev (float, optional): Standard deviation given to the
-            output of the black-box function. Default is 1.
+            X_init (numpy.ndarray): Initial input data points, shape (t, 1).
+            Y_init (numpy.ndarray): Initial output data points, shape (t, 1).
+            l (float, optional): Length parameter for the kernel.
+            Defaults to 1.
+            sigma_f (float, optional): Standard deviation of the output.
+            Defaults to 1.
+
+        This constructor initializes a 1D Gaussian Process with
+        input-output data points.
+        The length parameter (l) controls the length scale of the
+        kernel, which influences
+        the smoothness of functions. The standard deviation (sigma_f)
+        represents the noise
+        level in the output.
+
+        The class attributes X, Y, and K are also initialized.
+        X represents the input data,
+        Y represents the output data, and K represents the
+        initial covariance kernel matrix.
         """
+
         self.X = X_init
         self.Y = Y_init
-        self.length_scale = length_scale
-        self.signal_stddev = signal_stddev
-        self.K = self.compute_kernel(X_init, X_init)
+        self.l = l
+        self.sigma_f = sigma_f
+        self.K = self.kernel(X_init, X_init)
 
-    def compute_kernel(self, X1, X2):
+    def kernel(self, X1, X2):
         """
         Calculate the covariance kernel matrix between two matrices.
 
         Args:
-            X1 (numpy.ndarray): Matrix of shape (m, 1).
-            X2 (numpy.ndarray): Matrix of shape (n, 1).
+            X1 (numpy.ndarray): Matrix of shape (m, 1) representing
+            the input points.
+            X2 (numpy.ndarray): Matrix of shape (n, 1) representing
+            the input points.
 
         Returns:
             numpy.ndarray: Covariance kernel matrix of shape (m, n).
+
+        This method computes the covariance kernel matrix based on
+        the input points. It uses the
+        radial basis function (RBF) kernel to measure the similarity
+        between input points in space.
+        The hyperparameters, signal variance (sigma_f) and length
+        scale (l), are used to control
+        the shape of the kernel.
+
         """
-        sqdist = np.sum(X1 ** 2, 1).reshape(-1, 1) + \
-            np.sum(X2 ** 2, 1) - 2 * np.dot(X1, X2.T)
-        return self.signal_stddev ** 2 * \
-            np.exp(-0.5 / self.length_scale ** 2 * sqdist)
+
+        # Calculate squared distances between inputs
+        squared_distances = np.sum(X1 ** 2, axis=1, keepdims=True) + \
+            np.sum(X2 ** 2, axis=1) - 2 * np.matmul(X1, X2.T)
+
+        # Compute the covariance kernel matrix (K)
+        K = (self.sigma_f ** 2) * \
+            np.exp(-0.5 * (1 / (self.l ** 2)) * squared_distances)
+
+        return K
 
     def predict(self, X_s):
         """
-        Predict the mean and standard deviation of
-        points in a Gaussian process.
+        Predict the mean and standard deviation of points in a
+        Gaussian process.
 
         Args:
-            X_s (numpy.ndarray): Points for which mean and standard
+            X_s (numpy.ndarray): Points for which the mean and standard
             deviation should be calculated.
 
         Returns:
             numpy.ndarray: Mean for each point in X_s.
             numpy.ndarray: Standard deviation for each point in X_s.
+
+        This method predicts the mean and standard deviation for
+        the specified input points
+        using the Gaussian process. It uses the kernel matrix and
+        the training data to make
+        these predictions. The result is returned as arrays of
+        means and standard deviations.
+
         """
-        K = self.compute_kernel(self.X, self.X)
-        K_s = self.compute_kernel(self.X, X_s)
-        K_ss = self.compute_kernel(X_s, X_s)
+
+        # Calculate the covariance kernel matrix
+        K = self.K
+        K_s = self.kernel(self.X, X_s)
+        K_ss = self.kernel(X_s, X_s)
+
+        # Calculate the mean and covariance matrix
         K_inv = np.linalg.inv(K)
+        predict_mean = np.matmul(np.matmul(K_s.T, K_inv), self.Y).reshape(-1)
+        cov_s = K_ss - np.matmul(np.matmul(K_s.T, K_inv), K_s)
+        sigma = np.diag(cov_s)
 
-        # Calculate the mean
-        mean = K_s.T.dot(K_inv).dot(self.Y)[:, 0]
-
-        # Calculate the standard deviation
-        stddev = np.diag(K_ss - K_s.T.dot(K_inv).dot(K_s))
-
-        return mean, stddev
+        return predict_mean, sigma
 
     def update(self, X_new, Y_new):
         """
-        Update the Gaussian Process with new sample points.
+        Update the Gaussian process with new sample points.
 
         Args:
-            X_new (numpy.ndarray): New sample point.
-            Y_new (numpy.ndarray): New sample function value.
+            X_new (numpy.ndarray): New sample points.
+            Y_new (numpy.ndarray): New sample function values.
+
+        This method updates the Gaussian process with new sample
+        points and their associated
+        function values. It appends these points to the existing
+        data and recomputes the kernel
+        matrix to incorporate the new information.
+
         """
-        self.X = np.append(self.X, X_new)
-        self.X = self.X[:, np.newaxis]
 
-        self.Y = np.append(self.Y, Y_new)
-        self.Y = self.Y[:, np.newaxis]
+        # Append the new sample point and function value
+        self.X = np.concatenate((self.X, X_new[..., np.newaxis]), axis=0)
+        self.Y = np.concatenate((self.Y, Y_new[..., np.newaxis]), axis=0)
 
-        self.K = self.compute_kernel(self.X, self.X)
+        # Recompute the kernel matrix
+        self.K = self.kernel(self.X, self.X)
