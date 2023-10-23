@@ -1,20 +1,10 @@
 #!/usr/bin/env python3
 """
-This script contains the definition of an autoencoder using TensorFlow/Keras.
-The autoencoder is composed of an encoder and a decoder, both consisting of
-dense layers. This autoencoder is used for dimensionality reduction and
-representation learning.
-
-The autoencoder can be created by providing the input dimensions, a list of
-hidden layer sizes for the encoder, and the number of dimensions in the latent
-space representation.
+0-vanilla.py
 """
-# Import the necessary libraries
 import tensorflow.keras as keras
-# Alias the imported library
 K = keras
 
-# Define the autoencoder function
 def autoencoder(input_dims, hidden_layers, latent_dims):
     """
     Creates an autoencoder instance.
@@ -32,34 +22,28 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     """
     # Define the encoder model
     encoder_inputs = K.Input(shape=(input_dims,))
-    for i in range(len(hidden_layers)):
-        layer = K.layers.Dense(units=hidden_layers[i], activation='relu')
-        if i == 0:
-            outputs = layer(encoder_inputs)
-        else:
-            outputs = layer(outputs)
-    layer = K.layers.Dense(units=latent_dims, activation='relu')
-    outputs = layer(outputs)
-    encoder = K.models.Model(inputs=encoder_inputs, outputs=outputs)
+    x = encoder_inputs
+    for units in hidden_layers:
+        x = K.layers.Dense(units, activation='relu')(x)
+    latent_space = K.layers.Dense(latent_dims, activation='relu')(x)
+    encoder = K.models.Model(inputs=encoder_inputs, outputs=latent_space)
 
     # Define the decoder model
     decoder_inputs = K.Input(shape=(latent_dims,))
-    for i in range(len(hidden_layers) - 1, -1, -1):
-        layer = K.layers.Dense(units=hidden_layers[i], activation='relu')
-        if i == len(hidden_layers) - 1:
-            outputs = layer(decoder_inputs)
-        else:
-            outputs = layer(outputs)
-    layer = K.layers.Dense(units=input_dims, activation='sigmoid')
-    outputs = layer(outputs)
-    decoder = K.models.Model(inputs=decoder_inputs, outputs=outputs)
+    x = decoder_inputs
+    for units in hidden_layers[::-1]:
+        x = K.layers.Dense(units, activation='relu')(x)
+    reconstruction = K.layers.Dense(input_dims, activation='sigmoid')(x)
+    decoder = K.models.Model(inputs=decoder_inputs, outputs=reconstruction)
 
     # Define the autoencoder
-    outputs = encoder(encoder_inputs)
-    outputs = decoder(outputs)
-    auto = K.models.Model(inputs=encoder_inputs, outputs=outputs)
+    auto_inputs = K.Input(shape=(input_dims,))
+    encoded = encoder(auto_inputs)
+    decoded = decoder(encoded)
+    auto = K.models.Model(inputs=auto_inputs, outputs=decoded)
 
     # Compile the autoencoder
     auto.compile(optimizer='Adam', loss='binary_crossentropy')
 
     return encoder, decoder, auto
+
