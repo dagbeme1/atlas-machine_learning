@@ -2,77 +2,71 @@
 """
 contains the sparse functions
 """
-import tensorflow.keras as keras  # Import TensorFlow and its Keras module
-K = keras
 
+import tensorflow.keras as keras
+K = keras
 
 def sparse(input_dims, hidden_layers, latent_dims, lambtha):
     """
-    Create a sparse autoencoder instance.
+    Instantiates a sparse autoencoder instance.
 
     Args:
-        input_dims (int): Dimensions of the model input.
-        hidden_layers (list): Number of nodes for each hidden layer in
-        the encoder.
-        latent_dims (int): Dimensions of the latent space representation.
-        lambtha (float): L1 regularization parameter for sparsity.
+        input_dims (int): The dimensions of the model input.
+        hidden_layers (list): The number of nodes for each hidden layer in
+            the encoder, respectively.
+        latent_dims (int): The dimensions of the latent space representation.
+        lambtha (float): The regularization parameter for sparsity.
 
     Returns:
         encoder (keras.Model): The encoder model.
         decoder (keras.Model): The decoder model.
         auto (keras.Model): The full autoencoder model.
     """
+
     # Define the encoder model
-    encoder_inputs = K.Input(shape=(input_dims,))  # Create an input layer
-    encoder_outputs = encoder_inputs  # Initialize encoder_outputs
+    encoder_inputs = K.Input(shape=(input_dims,))
+    encoder_layers = []
 
-    for i in range(len(hidden_layers)):  # Loop through the hidden layers
-        encoder_layer = K.layers.Dense(units=hidden_layers[i], activation='relu')
-        # Create a dense hidden layer
-        # Connect to the previous layer
-        encoder_outputs = encoder_layer(encoder_outputs)
+    i = 0
+    while i < len(hidden_layers):
+        layer = K.layers.Dense(units=hidden_layers[i], activation='relu')
+        encoder_layers.append(layer)
+        if i == 0:
+            encoder_outputs = layer(encoder_inputs)
+        else:
+            encoder_outputs = layer(encoder_outputs)
+        i += 1
 
-    encoder_layer = K.layers.Dense(units=latent_dims, activation='relu',
-                                   activity_regularizers=K.regularizers.l1(lambtha))
-    # Create the final layer for the encoder
-    # Connect to the previous layer
-    encoder_outputs = encoder_layer(encoder_outputs)
-
+    reg_layer = K.layers.Dense(units=latent_dims, activation='relu',
+                              activity_regularizer=K.regularizers.l1(lambtha))
+    encoder_layers.append(reg_layer)
+    encoder_outputs = reg_layer(encoder_outputs)
     encoder = K.models.Model(inputs=encoder_inputs, outputs=encoder_outputs)
-    # Create the encoder model
 
     # Define the decoder model
-    # Create an input layer for the decoder
     decoder_inputs = K.Input(shape=(latent_dims,))
-    decoder_outputs = decoder_inputs  # Initialize decoder_outputs
+    decoder_layers = []
+    i = len(hidden_layers) - 1
+    while i >= 0:
+        layer = K.layers.Dense(units=hidden_layers[i], activation='relu')
+        decoder_layers.append(layer)
+        if i == len(hidden_layers) - 1:
+            decoder_outputs = layer(decoder_inputs)
+        else:
+            decoder_outputs = layer(decoder_outputs)
+        i -= 1
 
-    # Loop through the hidden layers in reverse
-    for i in range(len(hidden_layers) - 1, -1, -1):
-        decoder_layer = K.layers.Dense(
-            units=hidden_layers[i], activation='relu')
-        # Create a dense hidden layer
-        # Connect to the previous layer
-        decoder_outputs = decoder_layer(decoder_outputs)
-
-    decoder_layer = K.layers.Dense(units=input_dims, activation='sigmoid')
-    # Create the final layer for the decoder
-    # Connect to the previous layer
-    decoder_outputs = decoder_layer(decoder_outputs)
-
+    output_layer = K.layers.Dense(units=input_dims, activation='sigmoid')
+    decoder_layers.append(output_layer)
+    decoder_outputs = output_layer(decoder_outputs)
     decoder = K.models.Model(inputs=decoder_inputs, outputs=decoder_outputs)
-    # Create the decoder model
 
     # Define the autoencoder
-    auto_outputs = encoder(encoder_inputs)  # Pass input through the encoder
-    # Pass encoder output through the decoder
+    auto_outputs = encoder(encoder_inputs)
     auto_outputs = decoder(auto_outputs)
-
     auto = K.models.Model(inputs=encoder_inputs, outputs=auto_outputs)
-    # Create the full autoencoder model
 
     # Compile the autoencoder
     auto.compile(optimizer='Adam', loss='binary_crossentropy')
-    # Compile the model with Adam optimizer and BCE loss
 
-    # Return the encoder, decoder, and autoencoder models
     return encoder, decoder, auto
