@@ -27,16 +27,13 @@ def sparse(input_dims, hidden_layers, latent_dims, lambtha):
     encoder_outputs = encoder_inputs  # Initialize encoder_outputs
 
     for i in range(len(hidden_layers)):  # Loop through the hidden layers
-        encoder_layer = \
-            K.layers.Dense(units=hidden_layers[i], activation='relu')
+        encoder_layer = K.layers.Dense(units=hidden_layers[i], activation='relu')
         # Create a dense hidden layer
         # Connect to the previous layer
         encoder_outputs = encoder_layer(encoder_outputs)
 
-    encoder_layer = K.layers.Dense(
-        units=latent_dims,
-        activation='relu',
-        activity_regularizers=K.regularizers.l1(lambtha))
+    encoder_layer = K.layers.Dense(units=latent_dims, activation='relu',
+                                   activity_regularizers=K.regularizers.l1(lambtha))
     # Create the final layer for the encoder
     # Connect to the previous layer
     encoder_outputs = encoder_layer(encoder_outputs)
