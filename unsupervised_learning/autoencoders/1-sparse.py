@@ -6,6 +6,7 @@ contains the sparse functions
 import tensorflow.keras as keras
 K = keras
 
+
 def sparse(input_dims, hidden_layers, latent_dims, lambtha):
     """
     Instantiates a sparse autoencoder instance.
@@ -38,7 +39,7 @@ def sparse(input_dims, hidden_layers, latent_dims, lambtha):
         i += 1
 
     reg_layer = K.layers.Dense(units=latent_dims, activation='relu',
-                              activity_regularizer=K.regularizers.l1(lambtha))
+                               activity_regularizer=K.regularizers.l1(lambtha))
     encoder_layers.append(reg_layer)
     encoder_outputs = reg_layer(encoder_outputs)
     encoder = K.models.Model(inputs=encoder_inputs, outputs=encoder_outputs)
