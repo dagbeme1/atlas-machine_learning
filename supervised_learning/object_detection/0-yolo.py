@@ -8,6 +8,9 @@ import numpy as np
 
 
 class Yolo:
+    "
+     a class Yolo that uses the Yolo v3 algorithm to perform object detection
+    "
     def __init__(self, model_path, classes_path, class_t, nms_t, anchors):
         """
         Initialize the Yolo object detector.
