@@ -31,6 +31,15 @@ class Yolo:
         self.anchors = anchors
 
     def load_class_names(self, file_path):
+        """
+        Load class names from a file.
+
+        Args:
+        - file_path (str): Path to the file containing class names.
+
+        Returns:
+        - list: List of class names.
+        """
         # Open the file and read class names into a list
         with open(file_path, 'r') as file:
             return [line.strip() for line in file]
