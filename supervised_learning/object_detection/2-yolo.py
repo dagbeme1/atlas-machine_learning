@@ -17,9 +17,11 @@ class Yolo:
 
         Parameters:
         - model_path (str): Path to the Darknet Keras model.
-        - classes_path (str): Path to the file containing class names used by the model.
+        - classes_path (str): Path to the file containing class names used by
+        the model.
         - class_t (float): Box score threshold for the initial filtering step.
-        - nms_t (float): IOU (Intersection over Union) threshold for non-max suppression.
+        - nms_t (float): IOU (Intersection over Union) threshold for non-max
+        suppression.
         - anchors (numpy.ndarray): Array containing anchor box dimensions.
 
         Attributes:
@@ -44,7 +46,8 @@ class Yolo:
         - x (numpy.ndarray): Input array.
 
         Returns:
-        - numpy.ndarray: Result of the sigmoid activation applied to the input array.
+        - numpy.ndarray: Result of the sigmoid activation applied to
+        the input array.
         """
         return 1 / (1 + np.exp(-x))
 
@@ -53,17 +56,23 @@ class Yolo:
         Process single-image predictions from the YOLO model.
 
         Parameters:
-        - outputs (list of numpy.ndarray): Predictions from the Darknet model for a single image.
-        - image_size (numpy.ndarray): Original size of the image [image_height, image_width].
+        - outputs (list of numpy.ndarray): Predictions from the
+        Darknet model for a single image.
+        - image_size (numpy.ndarray): Original size of the
+        image [image_height, image_width].
 
         Returns:
         - Tuple of (boxes, box_confidences, box_class_probs):
-          - boxes: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, 4)
+          - boxes: List of numpy.ndarrays of shape (grid_height,
+          grid_width, anchor_boxes, 4)
                    containing the processed boundary boxes for each output.
-          - box_confidences: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, 1)
+          - box_confidences: List of numpy.ndarrays of shape (grid_height,
+          grid_width, anchor_boxes, 1)
                              containing the box confidences for each output.
-          - box_class_probs: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, classes)
-                            containing the box’s class probabilities for each output.
+          - box_class_probs: List of numpy.ndarrays of shape (grid_height,
+          grid_width, anchor_boxes, classes)
+                            containing the box’s class probabilities
+                            for each output.
         """
         boxes = []
         box_confidences = []
@@ -116,14 +125,19 @@ class Yolo:
 
         Parameters:
         - boxes (list of numpy.ndarrays): Processed boundary boxes.
-        - box_confidences (list of numpy.ndarrays): Processed box confidences.
-        - box_class_probs (list of numpy.ndarrays): Processed box class probabilities.
+        - box_confidences (list of numpy.ndarrays): Processed
+        box confidences.
+        - box_class_probs (list of numpy.ndarrays): Processed
+        box class probabilities.
 
         Returns:
         - Tuple of (filtered_boxes, box_classes, box_scores):
-          - filtered_boxes: A numpy.ndarray of shape (?, 4) containing all of the filtered bounding boxes.
-          - box_classes: A numpy.ndarray of shape (?,) containing the class number that each box in filtered_boxes predicts.
-          - box_scores: A numpy.ndarray of shape (?) containing the box scores for each box in filtered_boxes.
+          - filtered_boxes: A numpy.ndarray of shape (?, 4) containing
+          all of the filtered bounding boxes.
+          - box_classes: A numpy.ndarray of shape (?,) containing the class
+          number that each box in filtered_boxes predicts.
+          - box_scores: A numpy.ndarray of shape (?) containing the box
+          scores for each box in filtered_boxes.
         """
         obj_thresh = self.class_t
 
