@@ -72,7 +72,8 @@ class Yolo:
                              containing the box confidences for each output.
           - box_class_probs: List of numpy.ndarrays of shape (grid_height,
                             grid_width, anchor_boxes, classes)
-                            containing the box’s class probabilities for each output.
+                            containing the box’s class probabilities for
+                            each output.
         """
         # Initialize lists to store processed data
         boxes = []
