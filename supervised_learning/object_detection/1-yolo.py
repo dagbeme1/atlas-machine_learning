@@ -17,9 +17,11 @@ class Yolo:
 
         Parameters:
         - model_path (str): Path to the Darknet Keras model.
-        - classes_path (str): Path to the file containing class names used by the model.
+        - classes_path (str): Path to the file containing class names used by
+        the model.
         - class_t (float): Box score threshold for the initial filtering step.
-        - nms_t (float): IOU (Intersection over Union) threshold for non-max suppression.
+        - nms_t (float): IOU (Intersection over Union) threshold for non-max
+        suppression.
         - anchors (numpy.ndarray): Array containing anchor box dimensions.
 
         Attributes:
@@ -32,7 +34,7 @@ class Yolo:
         self.model = K.models.load_model(model_path)  # Load the YOLO model
         with open(classes_path, 'r') as f:
             self.class_names = [class_name[:-1]
-                                for class_name in f]  # Read class names from file
+                                for class_name in f]  # Read class names file
         self.class_t = class_t  # Set class score threshold
         self.nms_t = nms_t  # Set non-max suppression threshold
         self.anchors = anchors  # Set anchor boxes
@@ -45,7 +47,8 @@ class Yolo:
         - array (numpy.ndarray): Input array.
 
         Returns:
-        - numpy.ndarray: Result of the sigmoid activation applied to the input array.
+        - numpy.ndarray: Result of the sigmoid activation applied to
+        the input array.
         """
         return 1 / (1 + np.exp(-1 * array))  # Sigmoid activation function
 
@@ -54,16 +57,21 @@ class Yolo:
         Process single-image predictions from the YOLO model.
 
         Parameters:
-        - outputs (list of numpy.ndarray): Predictions from the Darknet model for a single image.
-        - image_size (numpy.ndarray): Original size of the image [image_height, image_width].
+        - outputs (list of numpy.ndarray): Predictions from the
+        Darknet model for a single image.
+        - image_size (numpy.ndarray): Original size of the image
+        [image_height, image_width].
 
         Returns:
         - Tuple of (boxes, box_confidences, box_class_probs):
-          - boxes: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, 4)
+          - boxes: List of numpy.ndarrays of shape (grid_height,
+          grid_width, anchor_boxes, 4)
                    containing the processed boundary boxes for each output.
-          - box_confidences: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, 1)
+          - box_confidences: List of numpy.ndarrays of shape (grid_height,
+          grid_width, anchor_boxes, 1)
                              containing the box confidences for each output.
-          - box_class_probs: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, classes)
+          - box_class_probs: List of numpy.ndarrays of shape (grid_height,
+                            grid_width, anchor_boxes, classes)
                             containing the box’s class probabilities for each output.
         """
         # Initialize lists to store processed data
@@ -127,7 +135,8 @@ class Yolo:
 
             # Extract the network output box_confidence prediction
             box_confidence = output[..., 4:5]
-            # The prediction is passed through a sigmoid function, which squashes the output in a range from 0 to 1,
+            # The prediction is passed through a sigmoid function,
+            # which squashes the output in a range from 0 to 1,
             # to be interpreted as a probability.
             box_confidence = self.sigmoid(box_confidence)
 
@@ -136,7 +145,8 @@ class Yolo:
 
             # Extract the network ouput class_probability predictions
             classes = output[..., 5:]
-            # The predictions are passed through a sigmoid function, which squashes the output in a range from 0 to 1,
+            # The predictions are passed through a sigmoid function,
+            # which squashes the output in a range from 0 to 1,
             # to be interpreted as a probability.
             classes = self.sigmoid(classes)
 
