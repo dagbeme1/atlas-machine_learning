@@ -2,6 +2,7 @@
 """
  a class Yolo (Based on 0-yolo.py)
 """
+
 import numpy as np
 import tensorflow as tf
 import tensorflow.keras as K
@@ -17,7 +18,7 @@ class Yolo:
         Parameters:
         - model_path (str): Path to the Darknet Keras model.
         - classes_path (str): Path to the file containing class names used by the model.
-        - class_t (float): Box score threshold for initial filtering step.
+        - class_t (float): Box score threshold for the initial filtering step.
         - nms_t (float): IOU (Intersection over Union) threshold for non-max suppression.
         - anchors (numpy.ndarray): Array containing anchor box dimensions.
 
@@ -97,8 +98,8 @@ class Yolo:
             # Calculate bounding box dimensions
             anchor_width = self.anchors[i, :, 0]
             anchor_height = self.anchors[i, :, 1]
-            image_width = self.model.input.shape[1].value
-            image_height = self.model.input.shape[2].value
+            image_width = self.model.input_shape[1]
+            image_height = self.model.input_shape[2]
             b_w = (anchor_width * np.exp(t_w)) / image_width
             b_h = (anchor_height * np.exp(t_h)) / image_height
 
