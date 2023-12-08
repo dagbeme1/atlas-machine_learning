@@ -1,8 +1,8 @@
-#!/usr/bin/env python3  
+#!/usr/bin/env python3
 import numpy as np
-import tensorflow as tf 
+import tensorflow as tf
 
-class Yolo:  
+class Yolo:
     """
     Yolo class for performing object detection using YOLO v3 algorithm
     """
@@ -175,11 +175,11 @@ class Yolo:
         Returns:
         - float: Intersection over union (IOU) between the two boxes.
         """
-        xi1 = max(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
-        yi1 = max(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
-        xi2 = min(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
-        yi2 = min(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
-        inter_area = max(yi2 - yi1, 0) * max(xi2 - xi1, 0)  # Calculate the area of intersection.
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
 
         box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
         box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
@@ -188,6 +188,8 @@ class Yolo:
         iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
 
         return iou  # Return the IOU.
+
+
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """
