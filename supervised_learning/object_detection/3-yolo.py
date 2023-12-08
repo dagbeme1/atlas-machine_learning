@@ -202,34 +202,31 @@ class Yolo:
 
         Returns:
         - Tuple of (box_predictions, predicted_box_classes, predicted_box_scores):
-          - box_predictions: A numpy.ndarray of shape (?, 4) containing all of the predicted bounding boxes ordered by
-                             class and box score.
-          - predicted_box_classes: A numpy.ndarray of shape (?,) containing the class number for box_predictions
-                                  ordered by class and box score.
-          - predicted_box_scores: A numpy.ndarray of shape (?) containing the box scores for box_predictions
-                                 ordered by class and box score.
+        - box_predictions: A numpy.ndarray of shape (?, 4) containing all of the predicted bounding boxes ordered by
+                         class and box score.
+        - predicted_box_classes: A numpy.ndarray of shape (?,) containing the class number for box_predictions
+                              ordered by class and box score.
+        - predicted_box_scores: A numpy.ndarray of shape (?) containing the box scores for box_predictions
+                             ordered by class and box score.
         """
-        # Sort indices based on box scores (in descending order)
-        sorted_indices = np.argsort(box_scores)[::-1]
-
         # Initialize lists to store final predictions
         box_predictions = []  # List to store predicted bounding boxes.
         predicted_box_classes = []  # List to store predicted class numbers.
         predicted_box_scores = []  # List to store predicted box scores.
 
         # Loop through sorted indices
-        for i in sorted_indices:
+        for i in range(len(filtered_boxes)):
             # Check if the index is within bounds
-            if i >= len(filtered_boxes):
+            if i >= len(box_scores):
                 continue
 
-            # Append the first box to predictions
+            # Append the box to predictions
             box_predictions.append(filtered_boxes[i])
             predicted_box_classes.append(box_classes[i])
             predicted_box_scores.append(box_scores[i])
 
-            # Calculate IOU between the first box and the rest
-            iou_scores = np.array([self.iou(filtered_boxes[i], box) for box in filtered_boxes])
+            # Calculate IOU between the current box and the rest
+            iou_scores = np.array([self.iou(filtered_boxes[i], box) for j, box in enumerate(filtered_boxes) if j != i])
 
             # Remove indices where IOU is higher than the threshold
             index_to_remove = np.where(iou_scores > self.nms_t)[0]
