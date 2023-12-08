@@ -54,12 +54,12 @@ class Yolo:
 
         Returns:
         - Tuple of (boxes, box_confidences, box_class_probs):
-          - boxes: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, 4)
-                   containing the processed boundary boxes for each output.
-          - box_confidences: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, 1)
-                             containing the box confidences for each output.
-          - box_class_probs: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, classes)
-                            containing the box’s class probabilities for each output.
+        - boxes: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, 4)
+                containing the processed boundary boxes for each output.
+        - box_confidences: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, 1)
+                         containing the box confidences for each output.
+        - box_class_probs: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, classes)
+                        containing the box’s class probabilities for each output.
         """
         boxes = []  # Initialize a list to store processed boundary boxes.
         box_confidences = []  # Initialize a list to store box confidences.
@@ -90,8 +90,8 @@ class Yolo:
             b_y = (box_xy[..., 1] + grid_y) / grid_height
 
             # Calculate box width and height
-            b_w = box_wh[..., 0] * self.anchors[i, :, 0] / image_size[1]
-            b_h = box_wh[..., 1] * self.anchors[i, :, 1] / image_size[0]
+            b_w = self.anchors[i, :, 0] * np.exp(box_wh[..., 0]) * image_size[1] / self.model.input.shape[1]
+            b_h = self.anchors[i, :, 1] * np.exp(box_wh[..., 1]) * image_size[0] / self.model.input.shape[2]
 
             # Calculate box coordinates in the original image
             x_1 = (b_x - b_w / 2) * image_size[1]
@@ -105,6 +105,7 @@ class Yolo:
             box_class_probs.append(self.sigmoid(box_class_probs_raw))
 
         return boxes, box_confidences, box_class_probs
+
 
     def filter_boxes(self, boxes, box_confidences, box_class_probs):
         """
@@ -235,9 +236,12 @@ class Yolo:
             box_scores = np.delete(box_scores, index_to_remove)
 
         # Convert lists to numpy arrays
-        box_predictions = np.array(box_predictions)
+        if len(box_predictions) == 0:
+            box_predictions = np.empty((0, 4))
+        else:
+            box_predictions = np.array(box_predictions)
+
         predicted_box_classes = np.array(predicted_box_classes)
         predicted_box_scores = np.array(predicted_box_scores)
 
         return box_predictions, predicted_box_classes, predicted_box_scores
-
