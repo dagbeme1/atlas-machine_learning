@@ -1,8 +1,9 @@
-#!/usr/bin/env python3  # Shebang line specifying the Python interpreter to use.
-import numpy as np  # Import NumPy for numerical operations.
-import tensorflow as tf  # Import TensorFlow for deep learning operations.
+#!/usr/bin/env python3
+import numpy as np
+import tensorflow as tf
 
-class Yolo:  # Define the YOLO class for object detection using YOLO v3 algorithm.
+
+class Yolo:
     """
     Yolo class for performing object detection using YOLO v3 algorithm
     """
@@ -25,12 +26,12 @@ class Yolo:  # Define the YOLO class for object detection using YOLO v3 algorith
         - nms_t (float): Non-max suppression threshold.
         - anchors (numpy.ndarray): Anchor box dimensions.
         """
-        self.model = tf.keras.models.load_model(model_path)  # Load YOLO model using TensorFlow Keras.
-        with open(classes_path, 'r') as f:  # Open and read the file containing class names.
-            self.class_names = [line.strip() for line in f]  # Create a list of class names.
-        self.class_t = class_t  # Set box score threshold.
-        self.nms_t = nms_t  # Set non-max suppression threshold.
-        self.anchors = anchors  # Set anchor box dimensions.
+        self.model = tf.keras.models.load_model(model_path)
+        with open(classes_path, 'r') as f:
+            self.class_names = [line.strip() for line in f]
+        self.class_t = class_t
+        self.nms_t = nms_t
+        self.anchors = anchors
 
     def sigmoid(self, x):
         """
@@ -42,7 +43,7 @@ class Yolo:  # Define the YOLO class for object detection using YOLO v3 algorith
         Returns:
         - numpy.ndarray: Result of the sigmoid activation applied to the input array.
         """
-        return 1 / (1 + np.exp(-x))  # Apply sigmoid activation function.
+        return 1 / (1 + np.exp(-x))
 
     def process_outputs(self, outputs, image_size):
         """
@@ -61,15 +62,15 @@ class Yolo:  # Define the YOLO class for object detection using YOLO v3 algorith
           - box_class_probs: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, classes)
                             containing the box’s class probabilities for each output.
         """
-        boxes = []  # Initialize a list to store processed boundary boxes.
-        box_confidences = []  # Initialize a list to store box confidences.
-        box_class_probs = []  # Initialize a list to store box class probabilities.
+        boxes = []
+        box_confidences = []
+        box_class_probs = []
 
         # Loop over the output feature maps
         for i, output in enumerate(outputs):
-            grid_height, grid_width, anchor_boxes, _ = output.shape  # Get output shape.
+            grid_height, grid_width, anchor_boxes, _ = output.shape
 
-            # Extract box coordinates and dimensions using sigmoid activation
+            # Extract box coordinates and dimensions
             box_xy = self.sigmoid(output[..., :2])
             box_wh = np.exp(output[..., 2:4])
             box_confidence = self.sigmoid(output[..., 4:5])
@@ -121,12 +122,12 @@ class Yolo:  # Define the YOLO class for object detection using YOLO v3 algorith
           - box_classes: A numpy.ndarray of shape (?,) containing the class number that each box in filtered_boxes predicts.
           - box_scores: A numpy.ndarray of shape (?) containing the box scores for each box in filtered_boxes.
         """
-        obj_thresh = self.class_t  # Set box score threshold for filtering.
+        obj_thresh = self.class_t
 
         # Initialize lists to store filtered data
-        filtered_boxes = []  # List to store filtered bounding boxes.
-        box_classes = []  # List to store predicted class numbers.
-        box_scores = []  # List to store box scores.
+        filtered_boxes = []
+        box_classes = []
+        box_scores = []
 
         # Loop over each output
         for i, (box_confidence, box_class_prob, box) in enumerate(
@@ -175,19 +176,19 @@ class Yolo:  # Define the YOLO class for object detection using YOLO v3 algorith
         Returns:
         - float: Intersection over union (IOU) between the two boxes.
         """
-        xi1 = max(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
-        yi1 = max(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
-        xi2 = min(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
-        yi2 = min(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
-        inter_area = max(yi2 - yi1, 0) * max(xi2 - xi1, 0)  # Calculate the area of intersection.
+        xi1 = max(box1[0], box2[0])
+        yi1 = max(box1[1], box2[1])
+        xi2 = min(box1[2], box2[2])
+        yi2 = min(box1[3], box2[3])
+        inter_area = max(yi2 - yi1, 0) * max(xi2 - xi1, 0)
 
-        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
-        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
-        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])
+        union_area = box1_area + box2_area - inter_area
 
-        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+        iou = inter_area / union_area if union_area > 0 else 0
 
-        return iou  # Return the IOU.
+        return iou
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """
@@ -207,20 +208,16 @@ class Yolo:  # Define the YOLO class for object detection using YOLO v3 algorith
           - predicted_box_scores: A numpy.ndarray of shape (?) containing the box scores for box_predictions
                                  ordered by class and box score.
         """
+        # Initialize lists to store final predictions
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
         # Sort indices based on box scores (in descending order)
         sorted_indices = np.argsort(box_scores)[::-1]
 
-        # Initialize lists to store final predictions
-        box_predictions = []  # List to store predicted bounding boxes.
-        predicted_box_classes = []  # List to store predicted class numbers.
-        predicted_box_scores = []  # List to store predicted box scores.
-
         # Loop through sorted indices
         for i in sorted_indices:
-            # Check if the index is within bounds
-            if i >= len(filtered_boxes):
-                continue
-
             # Append the first box to predictions
             box_predictions.append(filtered_boxes[i])
             predicted_box_classes.append(box_classes[i])
@@ -228,7 +225,7 @@ class Yolo:  # Define the YOLO class for object detection using YOLO v3 algorith
 
             # Calculate IOU between the first box and the rest
             iou_scores = np.array([self.iou(filtered_boxes[i], box)
-                for box in filtered_boxes])
+                                  for j, box in enumerate(filtered_boxes) if j != i])
 
             # Remove indices where IOU is higher than the threshold
             index_to_remove = np.where(iou_scores > self.nms_t)[0]
@@ -242,4 +239,3 @@ class Yolo:  # Define the YOLO class for object detection using YOLO v3 algorith
         predicted_box_scores = np.array(predicted_box_scores)
 
         return box_predictions, predicted_box_classes, predicted_box_scores
-
