@@ -101,7 +101,8 @@ class Yolo:
 
             # Extract box coordinates and dimensions
             box_coords = output[..., :4]
-            t_x, t_y, t_w, t_h = box_coords[..., 0], box_coords[..., 1], box_coords[..., 2], box_coords[..., 3]
+            t_x, t_y, t_w, t_h = box_coords[..., 0], box_coords[..., 1],
+            box_coords[..., 2], box_coords[..., 3]
 
             # Calculate bounding box coordinates
             b_x = (self.sigmoid(t_x) + c_x) / grid_width
@@ -121,7 +122,8 @@ class Yolo:
             x_2 = x_1 + b_w
             y_2 = y_1 + b_h
 
-            # Express the boundary box coordinates relative to the original image
+            # Express the boundary box coordinates
+            # relative to the original image
             x_1 *= image_size[1]
             y_1 *= image_size[0]
             x_2 *= image_size[1]
@@ -164,14 +166,19 @@ class Yolo:
 
         Parameters:
         - boxes (list of numpy.ndarrays): Processed boundary boxes.
-        - box_confidences (list of numpy.ndarrays): Processed box confidences.
-        - box_class_probs (list of numpy.ndarrays): Processed box class probabilities.
+        - box_confidences (list of numpy.ndarrays):
+        Processed box confidences.
+        - box_class_probs (list of numpy.ndarrays):
+        Processed box class probabilities.
 
         Returns:
         - Tuple of (filtered_boxes, box_classes, box_scores):
-          - filtered_boxes: A numpy.ndarray of shape (?, 4) containing all of the filtered bounding boxes.
-          - box_classes: A numpy.ndarray of shape (?,) containing the class number that each box in filtered_boxes predicts.
-          - box_scores: A numpy.ndarray of shape (?) containing the box scores for each box in filtered_boxes.
+          - filtered_boxes: A numpy.ndarray of shape (?, 4)
+          containing all of the filtered bounding boxes.
+          - box_classes: A numpy.ndarray of shape (?,)
+          containing the class number that each box in filtered_boxes predicts.
+          - box_scores: A numpy.ndarray of shape (?)
+          containing the box scores for each box in filtered_boxes.
         """
         obj_thresh = self.class_t  # Set box score threshold for filtering.
 
