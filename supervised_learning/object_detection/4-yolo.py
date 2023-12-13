@@ -11,7 +11,6 @@ import cv2
 import glob
 
 
-
 class Yolo:
     """
     Define the YOLO class for object detection using YOLO v3 algorithm
@@ -356,7 +355,7 @@ class Yolo:
 
         # Initialize lists to store images and their paths
         images = []
-        valid_image_paths = []
+        image_paths = []
 
         # Load each image using cv2.imread()
         for image_path in image_paths:
@@ -364,11 +363,10 @@ class Yolo:
             # Check if the image is loaded correctly
             if image is not None:
                 images.append(image)
-                valid_image_paths.append(image_path)
+                image_paths.append(image_path)
 
         # Check if any images were loaded
         if not images:
             raise ValueError(f"No valid images found in folder: {yolo}")
 
-        return images, valid_image_paths
-
+        return images, image_paths
