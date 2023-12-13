@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-A class Yolo (Based on 0-yolo.py)
+A class Yolo (Based on 2-yolo.py)
 """
 
 import numpy as np
