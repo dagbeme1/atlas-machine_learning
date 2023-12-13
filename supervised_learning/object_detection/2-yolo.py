@@ -4,7 +4,6 @@ A class Yolo (Based on 2-yolo.py)
 """
 
 import numpy as np
-import tensorflow as tf
 import tensorflow.keras as K
 
 
@@ -102,8 +101,7 @@ class Yolo:
 
             # Extract box coordinates and dimensions
             box_coords = output[..., :4]
-            t_x, t_y, t_w, t_h = box_coords[..., 0], box_coords[..., 1],
-            box_coords[..., 2], box_coords[..., 3]
+            t_x, t_y, t_w, t_h = box_coords[..., 0], box_coords[..., 1], box_coords[..., 2], box_coords[..., 3]
 
             # Calculate bounding box coordinates
             b_x = (self.sigmoid(t_x) + c_x) / grid_width
@@ -123,8 +121,7 @@ class Yolo:
             x_2 = x_1 + b_w
             y_2 = y_1 + b_h
 
-            # Express the boundary box coordinates relative to the original
-            # image
+            # Express the boundary box coordinates relative to the original image
             x_1 *= image_size[1]
             y_1 *= image_size[0]
             x_2 *= image_size[1]
@@ -161,7 +158,7 @@ class Yolo:
 
         return boxes, box_confidences, box_class_probs
 
-        def filter_boxes(self, boxes, box_confidences, box_class_probs):
+    def filter_boxes(self, boxes, box_confidences, box_class_probs):
         """
         Filter bounding boxes based on box confidence and class probability.
 
@@ -176,12 +173,12 @@ class Yolo:
           - box_classes: A numpy.ndarray of shape (?,) containing the class number that each box in filtered_boxes predicts.
           - box_scores: A numpy.ndarray of shape (?) containing the box scores for each box in filtered_boxes.
         """
-        obj_thresh = self.class_t
+        obj_thresh = self.class_t  # Set box score threshold for filtering.
 
         # Initialize lists to store filtered data
-        filtered_boxes = []
-        box_classes = []
-        box_scores = []
+        filtered_boxes = []  # List to store filtered bounding boxes.
+        box_classes = []  # List to store predicted class numbers.
+        box_scores = []  # List to store box scores.
 
         # Loop over each output
         for i, (box_confidence, box_class_prob, box) in enumerate(
@@ -211,9 +208,9 @@ class Yolo:
             box_classes.append(max_box_classes_filtered)
             filtered_boxes.append(filtered_box)
 
-        # Concatenate the np.ndarrays of all the output feature maps
-        box_scores = np.concatenate(box_scores)
-        box_classes = np.concatenate(box_classes)
+        # Concatenate the lists into numpy arrays
         filtered_boxes = np.concatenate(filtered_boxes, axis=0)
+        box_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
 
         return filtered_boxes, box_classes, box_scores
