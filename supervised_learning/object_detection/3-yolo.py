@@ -3,27 +3,25 @@
 A class Yolo (Based on 0-yolo.py)
 """
 
-from typing import Tuple  # Import the Tuple type
-
 import numpy as np
 import tensorflow as tf
 import tensorflow.keras as K
 
 
 class Yolo:
-    """
-    Define the YOLO class for object detection using YOLO v3 algorithm
-    """
+    """Define the YOLO class for object detection using YOLO v3 algorithm"""
 
-    def __init__(self, model_path: str, classes_path: str, class_t: float, nms_t: float, anchors: np.ndarray):
+    def __init__(self, model_path, classes_path, class_t, nms_t, anchors):
         """
         Initialize the YOLO object.
 
         Parameters:
         - model_path (str): Path to the Darknet Keras model.
-        - classes_path (str): Path to the file containing class names used by the model.
+        - classes_path (str): Path to the file containing class names used by
+        the model.
         - class_t (float): Box score threshold for the initial filtering step.
-        - nms_t (float): IOU (Intersection over Union) threshold for non-max suppression.
+        - nms_t (float): IOU (Intersection over Union) threshold for non-max
+        suppression.
         - anchors (numpy.ndarray): Array containing anchor box dimensions.
 
         Attributes:
@@ -35,12 +33,13 @@ class Yolo:
         """
         self.model = K.models.load_model(model_path)  # Load the YOLO model
         with open(classes_path, 'r') as f:
-            self.class_names = [class_name[:-1] for class_name in f]  # Read class names file
+            self.class_names = [class_name[:-1]
+                                for class_name in f]  # Read class names file
         self.class_t = class_t  # Set class score threshold
         self.nms_t = nms_t  # Set non-max suppression threshold
         self.anchors = anchors  # Set anchor boxes
 
-    def sigmoid(self, array: np.ndarray) -> np.ndarray:
+    def sigmoid(self, array):
         """
         Calculate the sigmoid activation function.
 
@@ -48,26 +47,33 @@ class Yolo:
         - array (numpy.ndarray): Input array.
 
         Returns:
-        - numpy.ndarray: Result of the sigmoid activation applied to the input array.
+        - numpy.ndarray: Result of the sigmoid activation applied to
+        the input array.
         """
         return 1 / (1 + np.exp(-1 * array))  # Sigmoid activation function
 
-    def process_outputs(self, outputs: list, image_size: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def process_outputs(self, outputs, image_size):
         """
         Process single-image predictions from the YOLO model.
 
         Parameters:
-        - outputs (list of numpy.ndarray): Predictions from the Darknet model for a single image.
-        - image_size (numpy.ndarray): Original size of the image [image_height, image_width].
+        - outputs (list of numpy.ndarray): Predictions from the
+        Darknet model for a single image.
+        - image_size (numpy.ndarray): Original size of the image
+        [image_height, image_width].
 
         Returns:
         - Tuple of (boxes, box_confidences, box_class_probs):
-          - boxes: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, 4)
+          - boxes: List of numpy.ndarrays of shape (grid_height,
+          grid_width, anchor_boxes, 4)
                    containing the processed boundary boxes for each output.
-          - box_confidences: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, 1)
+          - box_confidences: List of numpy.ndarrays of shape (grid_height,
+          grid_width, anchor_boxes, 1)
                              containing the box confidences for each output.
-          - box_class_probs: List of numpy.ndarrays of shape (grid_height, grid_width, anchor_boxes, classes)
-                            containing the box’s class probabilities for each output.
+          - box_class_probs: List of numpy.ndarrays of shape (grid_height,
+                            grid_width, anchor_boxes, classes)
+                            containing the box’s class probabilities for
+                            each output.
         """
         # Initialize lists to store processed data
         boxes = []
@@ -78,7 +84,7 @@ class Yolo:
         for i, output in enumerate(outputs):
             grid_height, grid_width, anchor_boxes, _ = output.shape
 
-            # BONDING BOX CENTER COORDINATES (x, y)
+            # BONDING BOX CENTER COORDINATES (x,y)
             c_x = np.arange(grid_width).reshape(1, grid_width)
             c_x = np.repeat(c_x, grid_height, axis=0)
             c_x = np.repeat(c_x[..., np.newaxis], anchor_boxes, axis=2)
@@ -109,7 +115,8 @@ class Yolo:
             x_2 = x_1 + b_w
             y_2 = y_1 + b_h
 
-            # Express the boundary box coordinates relative to the original image
+            # Express the boundary box coordinates relative to the original
+            # image
             x_1 *= image_size[1]
             y_1 *= image_size[0]
             x_2 *= image_size[1]
@@ -144,9 +151,9 @@ class Yolo:
             # Append class_probability predictions to box_class_probs
             box_class_probs.append(classes)
 
-        return np.array(boxes), np.array(box_confidences), np.array(box_class_probs)
+        return boxes, box_confidences, box_class_probs
 
-    def filter_boxes(self, boxes: list, box_confidences: list, box_class_probs: list) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def filter_boxes(self, boxes, box_confidences, box_class_probs):
         """
         Filter bounding boxes based on box confidence and class probability.
 
@@ -169,13 +176,15 @@ class Yolo:
         box_scores = []  # List to store box scores.
 
         # Loop over each output
-        for i, (box_confidence, box_class_prob, box) in enumerate(zip(box_confidences, box_class_probs, boxes)):
+        for i, (box_confidence, box_class_prob, box) in enumerate(
+                zip(box_confidences, box_class_probs, boxes)):
             # Compute the box scores for each output feature map
             box_scores_per_output = box_confidence * box_class_prob
             max_box_scores = np.max(box_scores_per_output, axis=3).reshape(-1)
 
             # Determine the object class of the boxes with the max scores
-            max_box_classes = np.argmax(box_scores_per_output, axis=3).reshape(-1)
+            max_box_classes = np.argmax(
+                box_scores_per_output, axis=3).reshape(-1)
 
             # Combine all the boxes in a 2D np.ndarray
             box = box.reshape(-1, 4)
@@ -202,7 +211,7 @@ class Yolo:
         return filtered_boxes, box_classes, box_scores
 
     @staticmethod
-    def iou(box1: np.ndarray, box2: np.ndarray) -> float:
+    def iou(box1, box2):
         """
         Calculate intersection over union (IOU) for two bounding boxes.
 
@@ -226,47 +235,35 @@ class Yolo:
         iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
 
         return iou  # Return the IOU.
+
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
-    """
-    Perform non-maximum suppression to filter out overlapping bounding boxes.
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
 
-    Parameters:
-    - filtered_boxes (numpy.ndarray): Array of shape (?, 4) containing all filtered bounding boxes.
-    - box_classes (numpy.ndarray): Array of shape (?,) containing the class number predicted for each box.
-    - box_scores (numpy.ndarray): Array of shape (?) containing the box scores for each box.
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
 
-    Returns:
-    - Tuple of (box_predictions, predicted_box_classes, predicted_box_scores):
-      - box_predictions (numpy.ndarray): Array of shape (?, 4) containing the final predicted bounding boxes after non-max suppression.
-      - predicted_box_classes (numpy.ndarray): Array of shape (?,) containing the class numbers corresponding to the final predicted boxes.
-      - predicted_box_scores (numpy.ndarray): Array of shape (?) containing the scores corresponding to the final predicted boxes.
-    """
-    if len(filtered_boxes) == 0:  # Check if there are no filtered boxes
-        return np.array([]), np.array([]), np.array([])  # Return empty arrays
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
 
-    unique_classes = np.unique(box_classes)  # Get unique classes in box_classes
-    box_predictions = []  # List to store final predicted bounding boxes
-    predicted_box_classes = []  # List to store class numbers for final predicted boxes
-    predicted_box_scores = []  # List to store scores for final predicted boxes
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
 
-    for cls in unique_classes:  # Iterate over unique classes
-        class_indices = np.where(box_classes == cls)[0]  # Get indices for the current class
-        class_boxes = filtered_boxes[class_indices]  # Get boxes for the current class
-        class_scores = box_scores[class_indices]  # Get scores for the current class
-        sorted_indices = np.argsort(class_scores)[::-1]  # Sort indices in descending order of scores
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
 
-        while len(sorted_indices) > 0:  # Continue until no more indices
-            best_index = sorted_indices[0]  # Get the index with the highest score
-            box_predictions.append(class_boxes[best_index])  # Append the box to predictions
-            predicted_box_classes.append(cls)  # Append the class to predicted_box_classes
-            predicted_box_scores.append(class_scores[best_index])  # Append the score to predicted_box_scores
-            sorted_indices = sorted_indices[1:]  # Remove the best index
-            iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]  # Calculate IOUs
-            overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]  # Get indices of overlapping boxes
-            sorted_indices = np.delete(sorted_indices, overlapping_indices)  # Remove overlapping indices
+        return box_predictions, predicted_box_classes, predicted_box_scores
 
-    box_predictions = np.array(box_predictions)  # Convert to numpy array
-    predicted_box_classes = np.array(predicted_box_classes)  # Convert to numpy array
-    predicted_box_scores = np.array(predicted_box_scores)  # Convert to numpy array
-
-    return box_predictions, predicted_box_classes, predicted_box_scores  # Return final predictions
