@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """
 A class Yolo (Based on 3-yolo.py)
 """
@@ -10,7 +9,7 @@ import tensorflow.keras as K
 import os
 import cv2
 import glob
-from tensorflow.keras.preprocessing import image
+
 
 
 class Yolo:
@@ -352,11 +351,24 @@ class Yolo:
             - images: List of images as numpy.ndarrays.
             - image_paths: List of paths to the individual images in images.
         """
+        # Get a list of all image filenames in the folder
         image_paths = glob.glob(folder_path + '/*')
-        images = [cv2.imread(image) for image in image_paths]
 
+        # Initialize lists to store images and their paths
+        images = []
+        valid_image_paths = []
+
+        # Load each image using cv2.imread()
+        for image_path in image_paths:
+            image = cv2.imread(image_path)
+            # Check if the image is loaded correctly
+            if image is not None:
+                images.append(image)
+                valid_image_paths.append(image_path)
+
+        # Check if any images were loaded
         if not images:
-            raise ValueError(f"No images found in folder: yolo")
+            raise ValueError(f"No valid images found in folder: {yolo}")
 
-        return images, image_paths
+        return images, valid_image_paths
 
