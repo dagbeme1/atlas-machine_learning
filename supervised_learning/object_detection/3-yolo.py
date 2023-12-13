@@ -236,34 +236,104 @@ class Yolo:
 
         return iou  # Return the IOU.
 
-    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
-        if len(filtered_boxes) == 0:
-            return np.array([]), np.array([]), np.array([])
+    def non_max_suppredef non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+    """
+    Perform non-maximum suppression to filter out overlapping bounding boxes.
 
-        unique_classes = np.unique(box_classes)
-        box_predictions = []
-        predicted_box_classes = []
-        predicted_box_scores = []
+    Parameters:
+    - filtered_boxes (numpy.ndarray): Array of shape (?, 4) containing all
+      filtered bounding boxes.
+    - box_classes (numpy.ndarray): Array of shape (?,) containing the class
+      number predicted for each box.
+    - box_scores (numpy.ndarray): Array of shape (?) containing the box scores
+      for each box.
 
-        for cls in unique_classes:
-            class_indices = np.where(box_classes == cls)[0]
-            class_boxes = filtered_boxes[class_indices]
-            class_scores = box_scores[class_indices]
-            sorted_indices = np.argsort(class_scores)[::-1]
+    Returns:
+    - Tuple of (box_predictions, predicted_box_classes, predicted_box_scores):
+      - box_predictions (numpy.ndarray): Array of shape (?, 4) containing the
+        final predicted bounding boxes after non-max suppression.
+      - predicted_box_classes (numpy.ndarray): Array of shape (?,) containing
+        the class numbers corresponding to the final predicted boxes.
+      - predicted_box_scores (numpy.ndarray): Array of shape (?) containing
+        the scores corresponding to the final predicted boxes.
+    """
+    if len(filtered_boxes) == 0:  # Check if there are no filtered boxes
+        return np.array([]), np.array([]), np.array([])  # Return empty arrays
 
-            while len(sorted_indices) > 0:
-                best_index = sorted_indices[0]
-                box_predictions.append(class_boxes[best_index])
-                predicted_box_classes.append(cls)
-                predicted_box_scores.append(class_scores[best_index])
-                sorted_indices = sorted_indices[1:]
-                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
-                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
-                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+    unique_classes = np.unique(box_classes)  # Get unique classes in box_classes
+    box_predictions = []  # List to store final predicted bounding boxes
+    predicted_box_classes = []  # List to store class numbers for final predicted boxes
+    predicted_box_scores = []  # List to store scores for final predicted boxes
 
-        box_predictions = np.array(box_predictions)
-        predicted_box_classes = np.array(predicted_box_classes)
-        predicted_box_scores = np.array(predicted_box_scores)
+    for cls in unique_classes:  # Iterate over unique classes
+        class_indices = np.where(box_classes == cls)[0]  # Get indices for the current class
+        class_boxes = filtered_boxes[class_indices]  # Get boxes for the current class
+        class_scores = box_scores[class_indices]  # Get scores for the current class
+        sorted_indices = np.argsort(class_scores)[::-1]  # Sort indices in descending order of scores
 
-        return box_predictions, predicted_box_classes, predicted_box_scores
+        while len(sorted_indices) > 0:  # Continue until no more indices
+            best_index = sorted_indices[0]  # Get the index with the highest score
+            box_predictions.append(class_boxes[best_index])  # Append the box to predictions
+            predicted_box_classes.append(cls)  # Append the class to predicted_box_classes
+            predicted_box_scores.append(class_scores[best_index])  # Append the score to predicted_box_scores
+            sorted_indices = sorted_indices[1:]  # Remove the best index
+            iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]  # Calculate IOUs
+            overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]  # Get indices of overlapping boxes
+            sorted_indices = np.delete(sorted_indices, overlapping_indices)  # Remove overlapping indices
 
+    box_predictions = np.array(box_predictions)  # Convert to numpy array
+    predicted_box_classes = np.array(predicted_box_classes)  # Convert to numpy array
+    predicted_box_scores = np.array(predicted_box_scores)  # Convert to numpy array
+
+    return box_predictions, predicted_box_classes, predicted_box_scores  # Return final predictions
+
+def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+    """
+    Perform non-maximum suppression to filter out overlapping bounding boxes.
+
+    Parameters:
+    - filtered_boxes (numpy.ndarray): Array of shape (?, 4) containing all
+      filtered bounding boxes.
+    - box_classes (numpy.ndarray): Array of shape (?,) containing the class
+      number predicted for each box.
+    - box_scores (numpy.ndarray): Array of shape (?) containing the box scores
+      for each box.
+
+    Returns:
+    - Tuple of (box_predictions, predicted_box_classes, predicted_box_scores):
+      - box_predictions (numpy.ndarray): Array of shape (?, 4) containing the
+        final predicted bounding boxes after non-max suppression.
+      - predicted_box_classes (numpy.ndarray): Array of shape (?,) containing
+        the class numbers corresponding to the final predicted boxes.
+      - predicted_box_scores (numpy.ndarray): Array of shape (?) containing
+        the scores corresponding to the final predicted boxes.
+    """
+    if len(filtered_boxes) == 0:  # Check if there are no filtered boxes
+        return np.array([]), np.array([]), np.array([])  # Return empty arrays
+
+    unique_classes = np.unique(box_classes)  # Get unique classes in box_classes
+    box_predictions = []  # List to store final predicted bounding boxes
+    predicted_box_classes = []  # List to store class numbers for final predicted boxes
+    predicted_box_scores = []  # List to store scores for final predicted boxes
+
+    for cls in unique_classes:  # Iterate over unique classes
+        class_indices = np.where(box_classes == cls)[0]  # Get indices for the current class
+        class_boxes = filtered_boxes[class_indices]  # Get boxes for the current class
+        class_scores = box_scores[class_indices]  # Get scores for the current class
+        sorted_indices = np.argsort(class_scores)[::-1]  # Sort indices in descending order of scores
+
+        while len(sorted_indices) > 0:  # Continue until no more indices
+            best_index = sorted_indices[0]  # Get the index with the highest score
+            box_predictions.append(class_boxes[best_index])  # Append the box to predictions
+            predicted_box_classes.append(cls)  # Append the class to predicted_box_classes
+            predicted_box_scores.append(class_scores[best_index])  # Append the score to predicted_box_scores
+            sorted_indices = sorted_indices[1:]  # Remove the best index
+            iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]  # Calculate IOUs
+            overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]  # Get indices of overlapping boxes
+            sorted_indices = np.delete(sorted_indices, overlapping_indices)  # Remove overlapping indices
+
+    box_predictions = np.array(box_predictions)  # Convert to numpy array
+    predicted_box_classes = np.array(predicted_box_classes)  # Convert to numpy array
+    predicted_box_scores = np.array(predicted_box_scores)  # Convert to numpy array
+
+    return box_predictions, predicted_box_classes, predicted_box_scores  # Return final predictions
