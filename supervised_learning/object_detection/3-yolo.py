@@ -236,7 +236,7 @@ class Yolo:
 
         return iou  # Return the IOU.
 
-    def non_max_suppredef non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
     """
     Perform non-maximum suppression to filter out overlapping bounding boxes.
 
@@ -287,143 +287,871 @@ class Yolo:
 
     return box_predictions, predicted_box_classes, predicted_box_scores  # Return final predictions
 
-def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
-    """
-    Perform non-maximum suppression to filter out overlapping bounding boxes.
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
 
-    Parameters:
-    - filtered_boxes (numpy.ndarray): Array of shape (?, 4) containing all
-      filtered bounding boxes.
-    - box_classes (numpy.ndarray): Array of shape (?,) containing the class
-      number predicted for each box.
-    - box_scores (numpy.ndarray): Array of shape (?) containing the box scores
-      for each box.
+        return filtered_boxes, box_classes, box_scores
 
-    Returns:
-    - Tuple of (box_predictions, predicted_box_classes, predicted_box_scores):
-      - box_predictions (numpy.ndarray): Array of shape (?, 4) containing the
-        final predicted bounding boxes after non-max suppression.
-      - predicted_box_classes (numpy.ndarray): Array of shape (?,) containing
-        the class numbers corresponding to the final predicted boxes.
-      - predicted_box_scores (numpy.ndarray): Array of shape (?) containing
-        the scores corresponding to the final predicted boxes.
-    """
-    if len(filtered_boxes) == 0:  # Check if there are no filtered boxes
-        return np.array([]), np.array([]), np.array([])  # Return empty arrays
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
 
-    unique_classes = np.unique(box_classes)  # Get unique classes in box_classes
-    box_predictions = []  # List to store final predicted bounding boxes
-    predicted_box_classes = []  # List to store class numbers for final predicted boxes
-    predicted_box_scores = []  # List to store scores for final predicted boxes
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
 
-    for cls in unique_classes:  # Iterate over unique classes
-        class_indices = np.where(box_classes == cls)[0]  # Get indices for the current class
-        class_boxes = filtered_boxes[class_indices]  # Get boxes for the current class
-        class_scores = box_scores[class_indices]  # Get scores for the current class
-        sorted_indices = np.argsort(class_scores)[::-1]  # Sort indices in descending order of scores
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
 
-        while len(sorted_indices) > 0:  # Continue until no more indices
-            best_index = sorted_indices[0]  # Get the index with the highest score
-            box_predictions.append(class_boxes[best_index])  # Append the box to predictions
-            predicted_box_classes.append(cls)  # Append the class to predicted_box_classes
-            predicted_box_scores.append(class_scores[best_index])  # Append the score to predicted_box_scores
-            sorted_indices = sorted_indices[1:]  # Remove the best index
-            iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]  # Calculate IOUs
-            overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]  # Get indices of overlapping boxes
-            sorted_indices = np.delete(sorted_indices, overlapping_indices)  # Remove overlapping indices
-def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
-    """
-    Perform non-maximum suppression to filter out overlapping bounding boxes.
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
 
-    Parameters:
-    - filtered_boxes (numpy.ndarray): Array of shape (?, 4) containing all filtered bounding boxes.
-    - box_classes (numpy.ndarray): Array of shape (?,) containing the class number predicted for each box.
-    - box_scores (numpy.ndarray): Array of shape (?) containing the box scores for each box.
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
 
-    Returns:
-    - Tuple of (box_predictions, predicted_box_classes, predicted_box_scores):
-      - box_predictions (numpy.ndarray): Array of shape (?, 4) containing the final predicted bounding boxes after non-max suppression.
-      - predicted_box_classes (numpy.ndarray): Array of shape (?,) containing the class numbers corresponding to the final predicted boxes.
-      - predicted_box_scores (numpy.ndarray): Array of shape (?) containing the scores corresponding to the final predicted boxes.
-    """
-    if len(filtered_boxes) == 0:  # Check if there are no filtered boxes
-        return np.array([]), np.array([]), np.array([])  # Return empty arrays
+        return iou  # Return the IOU.
 
-    unique_classes = np.unique(box_classes)  # Get unique classes in box_classes
-    box_predictions = []  # List to store final predicted bounding boxes
-    predicted_box_classes = []  # List to store class numbers for final predicted boxes
-    predicted_box_scores = []  # List to store scores for final predicted boxes
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
 
-    for cls in unique_classes:  # Iterate over unique classes
-        class_indices = np.where(box_classes == cls)[0]  # Get indices for the current class
-        class_boxes = filtered_boxes[class_indices]  # Get boxes for the current class
-        class_scores = box_scores[class_indices]  # Get scores for the current class
-        sorted_indices = np.argsort(class_scores)[::-1]  # Sort indices in descending order of scores
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
 
-        while len(sorted_indices) > 0:  # Continue until no more indices
-            best_index = sorted_indices[0]  # Get the index with the highest score
-            box_predictions.append(class_boxes[best_index])  # Append the box to predictions
-            predicted_box_classes.append(cls)  # Append the class to predicted_box_classes
-            predicted_box_scores.append(class_scores[best_index])  # Append the score to predicted_box_scores
-            sorted_indices = sorted_indices[1:]  # Remove the best index
-            iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]  # Calculate IOUs
-            overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]  # Get indices of overlapping boxes
-            sorted_indices = np.delete(sorted_indices, overlapping_indices)  # Remove overlapping indices
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
 
-    box_predictions = np.array(box_predictions)  # Convert to numpy array
-    predicted_box_classes = np.array(predicted_box_classes)  # Convert to numpy array
-    predicted_box_scores = np.array(predicted_box_scores)  # Convert to numpy array
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
 
-    return box_predictions, predicted_box_classes, predicted_box_scores  # Return final predictions
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
 
-    box_predictions = np.array(box_predictions)  # Convert to numpy array
-    predicted_box_classes = np.array(predicted_box_classes)  # Convert to numpy array
-    predicted_box_scores = np.array(predicted_box_scores)  # Convert to numpy array
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
 
-    return box_predictions, predicted_box_classes, predicted_box_scores  # Return final predictions
+        return filtered_boxes, box_classes, box_scores
 
-def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
-    """
-    Perform non-maximum suppression to filter out overlapping bounding boxes.
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
 
-    Parameters:
-    - filtered_boxes (numpy.ndarray): Array of shape (?, 4) containing all filtered bounding boxes.
-    - box_classes (numpy.ndarray): Array of shape (?,) containing the class number predicted for each box.
-    - box_scores (numpy.ndarray): Array of shape (?) containing the box scores for each box.
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
 
-    Returns:
-    - Tuple of (box_predictions, predicted_box_classes, predicted_box_scores):
-      - box_predictions (numpy.ndarray): Array of shape (?, 4) containing the final predicted bounding boxes after non-max suppression.
-      - predicted_box_classes (numpy.ndarray): Array of shape (?,) containing the class numbers corresponding to the final predicted boxes.
-      - predicted_box_scores (numpy.ndarray): Array of shape (?) containing the scores corresponding to the final predicted boxes.
-    """
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
 
-    if len(filtered_boxes) == 0:  # Check if there are no filtered boxes
-        return np.array([]), np.array([]), np.array([])  # Return empty arrays
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
 
-    unique_classes = np.unique(box_classes)  # Get unique classes in box_classes
-    box_predictions = []  # List to store final predicted bounding boxes
-    predicted_box_classes = []  # List to store class numbers for final predicted boxes
-    predicted_box_scores = []  # List to store scores for final predicted boxes
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
 
-    for cls in unique_classes:  # Iterate over unique classes
-        class_indices = np.where(box_classes == cls)[0]  # Get indices for the current class
-        class_boxes = filtered_boxes[class_indices]  # Get boxes for the current class
-        class_scores = box_scores[class_indices]  # Get scores for the current class
-        sorted_indices = np.argsort(class_scores)[::-1]  # Sort indices in descending order of scores
+        return iou  # Return the IOU.
 
-        while len(sorted_indices) > 0:  # Continue until no more indices
-            best_index = sorted_indices[0]  # Get the index with the highest score
-            box_predictions.append(class_boxes[best_index])  # Append the box to predictions
-            predicted_box_classes.append(cls)  # Append the class to predicted_box_classes
-            predicted_box_scores.append(class_scores[best_index])  # Append the score to predicted_box_scores
-            sorted_indices = sorted_indices[1:]  # Remove the best index
-            iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]  # Calculate IOUs
-            overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]  # Get indices of overlapping boxes
-            sorted_indices = np.delete(sorted_indices, overlapping_indices)  # Remove overlapping indices
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
 
-    box_predictions = np.array(box_predictions)  # Convert to numpy array
-    predicted_box_classes = np.array(predicted_box_classes)  # Convert to numpy array
-    predicted_box_scores = np.array(predicted_box_scores)  # Convert to numpy array
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
 
-    return box_predictions, predicted_box_classes, predicted_box_scores  # Return final predictions
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        if len(filtered_boxes) == 0:
+            return np.array([]), np.array([]), np.array([])
+
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
+
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
+            sorted_indices = np.argsort(class_scores)[::-1]
+
+            while len(sorted_indices) > 0:
+                best_index = sorted_indices[0]
+                box_predictions.append(class_boxes[best_index])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_scores[best_index])
+                sorted_indices = sorted_indices[1:]
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)
+
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
+ox_classes = np.concatenate(box_classes, axis=0)
+        box_scores = np.concatenate(box_scores, axis=0)
+
+        return filtered_boxes, box_classes, box_scores
+
+    @staticmethod
+    def iou(box1, box2):
+        """
+        Calculate intersection over union (IOU) for two bounding boxes.
+
+        Parameters:
+        - box1 (numpy.ndarray): Coordinates of the first box [x1, y1, x2, y2].
+        - box2 (numpy.ndarray): Coordinates of the second box [x1, y1, x2, y2].
+
+        Returns:
+        - float: Intersection over union (IOU) between the two boxes.
+        """
+        xi1 = np.maximum(box1[0], box2[0])  # Calculate the maximum x-coordinate of the intersection.
+        yi1 = np.maximum(box1[1], box2[1])  # Calculate the maximum y-coordinate of the intersection.
+        xi2 = np.minimum(box1[2], box2[2])  # Calculate the minimum x-coordinate of the intersection.
+        yi2 = np.minimum(box1[3], box2[3])  # Calculate the minimum y-coordinate of the intersection.
+        inter_area = np.maximum(yi2 - yi1, 0) * np.maximum(xi2 - xi1, 0)  # Calculate the area of intersection.
+
+        box1_area = (box1[3] - box1[1]) * (box1[2] - box1[0])  # Calculate the area of the first box.
+        box2_area = (box2[3] - box2[1]) * (box2[2] - box2[0])  # Calculate the area of the second box.
+        union_area = box1_area + box2_area - inter_area  # Calculate the area of union.
+
+        iou = inter_area / union_area if union_area > 0 else 0  # Calculate the IOU.
+
+        return iou  # Return the IOU.
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        """
+        Perform non-maximum suppression to filter out overlapping bounding boxes.
+
+        Parameters:
+        - filtered_boxes (numpy.ndarray): Array of shape (?, 4) containing all filtered bounding boxes.
+        - box_classes (numpy.ndarray): Array of shape (?,) containing the class number predicted for each box.
+        - box_scores (numpy.ndarray): Array of shape (?) containing the box scores for each box.
+
+        Returns:
+        - Tuple of (box_predictions, predicted_box_classes, predicted_box_scores):
+        - box_predictions (numpy.ndarray): Array of shape (?, 4) containing the final predicted bounding boxes after non-max suppression.
+        - predicted_box_classes (numpy.ndarray): Array of shape (?,) containing the class numbers corresponding to the final predicted boxes.
+        - predicted_box_scores (numpy.ndarray): Array of shape (?) containing the scores corresponding to the final predicted boxes.
+        """
+        if len(filtered_boxes) == 0:  # Check if there are no filtered boxes
+            return np.array([]), np.array([]), np.array([])  # Return empty arrays
+
+        unique_classes = np.unique(box_classes)  # Get unique classes in box_classes
+        box_predictions = []  # List to store final predicted bounding boxes
+        predicted_box_classes = []  # List to store class numbers for final predicted boxes
+        predicted_box_scores = []  # List to store scores for final predicted boxes
+
+        for cls in unique_classes:  # Iterate over unique classes
+            class_indices = np.where(box_classes == cls)[0]  # Get indices for the current class
+            class_boxes = filtered_boxes[class_indices]  # Get boxes for the current class
+            class_scores = box_scores[class_indices]  # Get scores for the current class
+            sorted_indices = np.argsort(class_scores)[::-1]  # Sort indices in descending order of scores
+
+            while len(sorted_indices) > 0:  # Continue until no more indices
+                best_index = sorted_indices[0]  # Get the index with the highest score
+                box_predictions.append(class_boxes[best_index])  # Append the box to predictions
+                predicted_box_classes.append(cls)  # Append the class to predicted_box_classes
+                predicted_box_scores.append(class_scores[best_index])  # Append the score to predicted_box_scores
+                sorted_indices = sorted_indices[1:]  # Remove the best index
+                iou_scores = [self.iou(class_boxes[best_index], class_boxes[i]) for i in sorted_indices]  # Calculate IOUs
+                overlapping_indices = np.where(np.array(iou_scores) > self.nms_t)[0]  # Get indices of overlapping boxes
+                sorted_indices = np.delete(sorted_indices, overlapping_indices)  # Remove overlapping indices
+
+        box_predictions = np.array(box_predictions)  # Convert to numpy array
+        predicted_box_classes = np.array(predicted_box_classes)  # Convert to numpy array
+        predicted_box_scores = np.array(predicted_box_scores)  # Convert to numpy array
+
+        return box_predictions, predicted_box_classes, predicted_box_scores  # Return final predictions
