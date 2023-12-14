@@ -367,6 +367,6 @@ class Yolo:
 
         # Check if any images were loaded
         if not images:
-            raise ValueError(f"No valid images found in folder: {yolo}")
+            raise ValueError(f"No valid images found in folder: {folder_path}")
 
         return images, image_paths
