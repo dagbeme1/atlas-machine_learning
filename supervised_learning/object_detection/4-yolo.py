@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-A class Yolo (Based on 3-yolo.py)
+A class Yolo (Based on 2-yolo.py)
 """
 
 import numpy as np
@@ -350,19 +350,12 @@ class Yolo:
             - images: List of images as numpy.ndarrays.
             - image_paths: List of paths to the individual images in images.
         """
+        # Check if the folder exists
+        if not os.path.exists(folder_path):
+            raise ValueError(f"Folder not found: {folder_path}")
+
         # Get a list of all image filenames in the folder
         image_paths = glob.glob(folder_path + '/*')
-
-        # Initialize lists to store images and their paths
-        images = []
-        image_paths = []
-
-        # Load each image using cv2.imread()
-        for image_path in image_paths:
-            image = cv2.imread(image_path)
-            # Check if the image is loaded correctly
-            if image is not None:
-                images.append(image)
-                image_paths.append(image_path)
+        images = [cv2.imread(image) for image in image_paths]
 
         return images, image_paths
