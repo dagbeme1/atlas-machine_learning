@@ -6,7 +6,6 @@ A class Yolo (Based on 2-yolo.py)
 import numpy as np
 import tensorflow as tf
 import tensorflow.keras as K
-import os
 import cv2
 import glob
 
@@ -350,9 +349,6 @@ class Yolo:
             - images: List of images as numpy.ndarrays.
             - image_paths: List of paths to the individual images in images.
         """
-        # Check if the folder exists
-        if not os.path.exists(folder_path):
-            raise ValueError(f"Folder not found: {folder_path}")
 
         # Get a list of all image filenames in the folder
         image_paths = glob.glob(folder_path + '/*')
