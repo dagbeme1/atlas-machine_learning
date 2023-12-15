@@ -36,7 +36,7 @@ class Yolo:
         - anchors (numpy.ndarray): Anchor box dimensions.
         """
         # Load the YOLO model
-        self.model = K.models.load_model(model_path)
+        self.model = K.models.load_model(model_path, compile=False)
         # Read class names file
         with open(classes_path, 'r') as f:
             self.class_names = [class_name[:-1] for class_name in f]
