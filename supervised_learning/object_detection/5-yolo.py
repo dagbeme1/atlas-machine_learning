@@ -375,8 +375,8 @@ class Yolo:
         image_shapes = []
 
         # Define the input height and width for the Darknet model
-        input_h = 416
-        input_w = 416
+        input_h = self.model.input.shape[1].value
+        input_w = self.model.input.shape[2].value
 
         # Preprocess each image
         for image in images:
