@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-A class Yolo (Based on 5-yolo.py)
+A class Yolo (Based on 6-yolo.py)
 """
 
 import numpy as np
@@ -106,7 +106,7 @@ class Yolo:
             # Extract box coordinates and dimensions
             box_coords = output[..., :4]
             t_x, t_y, t_w, t_h = box_coords[..., 0], box_coords[..., 1], \
-            box_coords[..., 2], box_coords[..., 3]
+                box_coords[..., 2], box_coords[..., 3]
 
             # Calculate bounding box coordinates
             b_x = (self.sigmoid(t_x) + c_x) / grid_width
@@ -467,56 +467,79 @@ class Yolo:
         within the specified folder.
 
         Parameters:
-        - folder_path (str): Path to the folder containing images for prediction.
+        - folder_path (str): Path to the folder
+        containing images for prediction.
 
         Returns:
         Tuple of (predictions, image_paths):
         - predictions (list): List of tuples, each containing:
-            - box_predictions (numpy.ndarray): Array of shape (?, 4) containing
+            - box_predictions (numpy.ndarray):
+            Array of shape (?, 4) containing
             final predicted bounding boxes after non-max suppression.
-            - predicted_box_classes (numpy.ndarray): Array of shape (?,)
-            containing the class numbers corresponding to the final predicted boxes.
-            - predicted_box_scores (numpy.ndarray): Array of shape (?) containing
+            - predicted_box_classes (numpy.ndarray):
+            Array of shape (?,)
+            containing the class numbers corresponding
+            to the final predicted boxes.
+            - predicted_box_scores (numpy.ndarray):
+            Array of shape (?) containing
             the scores corresponding to the final predicted boxes.
-        - image_paths (list): List of paths to the individual images in images.
+        - image_paths (list): List of paths to the individual images in images
 
         Displays images with bounding boxes using the show_boxes method.
 
-        This method loads images from the specified folder, preprocesses them,
-        predicts bounding boxes using the YOLO model, performs non-maximum suppression,
-        and displays the images with predicted bounding boxes. The predictions
+        This method loads images from the specified folder,
+        preprocesses them,
+        predicts bounding boxes using the YOLO model,
+        performs non-maximum suppression,
+        and displays the images with predicted bounding boxes.
+        The predictions
         and corresponding image paths are returned.
         """
+        # List to store predictions
         predictions = []
 
-        images, image_paths = self.load_images(folder_path)
-        pimages, image_shapes = self.preprocess_images(images)
+        # Load images
+        images, image_paths = \
+            self.load_images(folder_path)
+        # Preprocess the images
+        pimages, image_shapes = \
+            self.preprocess_images(images)
 
-        outputs = self.model.predict(pimages)
+        # Get predictions from the model
+        outputs = \
+            self.model.predict(pimages)
 
+        # Predictions for each image
         for i in range(pimages.shape[0]):
-            current_out = [out[i] for out in outputs]
+            # Extra the model output for the current image
+            current_out = \
+                [out[i] for out in outputs]
 
+            # Process output to get bounding boxes,class probabilities,scores
             boxes, box_confidences, box_class_probs = \
-                self.process_outputs(current_out, image_shapes[i])
+                self.process_outputs(
+                    current_out, image_shapes[i])
 
+            # Filter boxes based on confidence and class probabilities
             filtered_boxes, box_classes, box_scores = \
-                self.filter_boxes(boxes, box_confidences, box_class_probs)
+                self.filter_boxes(
+                    boxes, box_confidences, box_class_probs)
 
-            box_predictions, predicted_box_classes, predicted_box_scores = \
-                self.non_max_suppression(filtered_boxes,
-                                         box_classes,
-                                         box_scores)
+            # Perform non-maximum suppression
+            box_predictions, predicted_box_classes, \
+                predicted_box_scores = \
+                self.non_max_suppression(
+                    filtered_boxes, box_classes, box_scores)
 
+            # Display the images with bounding boxes and save predictions
             file_name = image_paths[i].split('/')[-1]
-            self.show_boxes(images[i], box_predictions,
-                            predicted_box_classes,
-                            predicted_box_scores,
-                            file_name)
+            self.show_boxes(
+                images[i],
+                box_predictions, predicted_box_classes,
+                predicted_box_scores, file_name)
 
-            predictions.append((box_predictions,
-                                predicted_box_classes,
-                                predicted_box_scores))
+            # Predictions for the current image to the list
+            predictions.append((
+                box_predictions, predicted_box_classes, predicted_box_scores))
 
-        return predictions, image_paths
-
+        return (predictions, image_paths)
