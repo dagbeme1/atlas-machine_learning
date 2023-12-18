@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-A class Yolo (Based on 6-yolo.py)
+A class Yolo (Based on 5-yolo.py)
 """
 
 import numpy as np
@@ -476,8 +476,7 @@ class Yolo:
             - box_predictions (numpy.ndarray):
             Array of shape (?, 4) containing
             final predicted bounding boxes after non-max suppression.
-            - predicted_box_classes (numpy.ndarray):
-            Array of shape (?,)
+            - predicted_box_classes (numpy.ndarray): Array of shape (?,)
             containing the class numbers corresponding
             to the final predicted boxes.
             - predicted_box_scores (numpy.ndarray):
@@ -491,8 +490,8 @@ class Yolo:
         preprocesses them,
         predicts bounding boxes using the YOLO model,
         performs non-maximum suppression,
-        and displays the images with predicted bounding boxes.
-        The predictions
+        and displays the images with predicted
+        bounding boxes. The predictions
         and corresponding image paths are returned.
         """
         # List to store predictions
@@ -509,37 +508,33 @@ class Yolo:
         outputs = \
             self.model.predict(pimages)
 
-        # Predictions for each image
+        # Process predictions for each image
         for i in range(pimages.shape[0]):
-            # Extra the model output for the current image
-            current_out = \
-                [out[i] for out in outputs]
+            current_out = [out[i] for out in outputs]
+            # Extract model output for the current image
 
-            # Process output to get bounding boxes,class probabilities,scores
+            # Process output to get bounding boxes, class probabilities,
+            # and scores
             boxes, box_confidences, box_class_probs = \
-                self.process_outputs(
-                    current_out, image_shapes[i])
+                self.process_outputs(current_out, image_shapes[i])
 
-            # Filter boxes based on confidence and class probabilities
+            # Filter boxes based on confidence and class probability
             filtered_boxes, box_classes, box_scores = \
-                self.filter_boxes(
-                    boxes, box_confidences, box_class_probs)
+                self.filter_boxes(boxes, box_confidences, box_class_probs)
 
             # Perform non-maximum suppression
-            box_predictions, predicted_box_classes, \
-                predicted_box_scores = \
-                self.non_max_suppression(
-                    filtered_boxes, box_classes, box_scores)
+            box_predictions, predicted_box_classes, predicted_box_scores = \
+                self.non_max_suppression(filtered_boxes,
+                                         box_classes, box_scores)
 
-            # Display the images with bounding boxes and save predictions
+            # Display the image with bounding boxes and save predictions
             file_name = image_paths[i].split('/')[-1]
-            self.show_boxes(
-                images[i],
-                box_predictions, predicted_box_classes,
-                predicted_box_scores, file_name)
+            self.show_boxes(images[i], box_predictions,
+                            predicted_box_classes, predicted_box_scores,
+                            file_name)
 
-            # Predictions for the current image to the list
-            predictions.append((
-                box_predictions, predicted_box_classes, predicted_box_scores))
+            # Append predictions for the current image to the list
+            predictions.append((box_predictions,
+                                predicted_box_classes, predicted_box_scores))
 
-        return (predictions, image_paths)
+        return predictions, image_paths
