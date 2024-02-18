@@ -7,7 +7,7 @@ import tensorflow.keras as keras
 K = keras
 
 
-def autoencoder_vanilla(input_dims, hidden_layers, latent_dims):
+def autoencoder(input_dims, hidden_layers, latent_dims):
     """
     Creates an autoencoder with a vanilla architecture.
 
@@ -23,7 +23,7 @@ def autoencoder_vanilla(input_dims, hidden_layers, latent_dims):
             decoder (keras.Model): Decoder model.
             auto (keras.Model): Full autoencoder model.
     """
-    # ENCODER
+    # Define ENCODER model
     inputs = keras.Input(shape=(input_dims,))
     x = inputs
     for units in hidden_layers:
@@ -31,7 +31,7 @@ def autoencoder_vanilla(input_dims, hidden_layers, latent_dims):
     encoded = keras.layers.Dense(latent_dims, activation='relu')(x)
     encoder = keras.Model(inputs=inputs, outputs=encoded)
 
-    # DECODER
+    # Define DECODER model
     inputs_dec = keras.Input(shape=(latent_dims,))
     x = inputs_dec
     for units in reversed(hidden_layers):
@@ -39,12 +39,12 @@ def autoencoder_vanilla(input_dims, hidden_layers, latent_dims):
     decoded = keras.layers.Dense(input_dims, activation='sigmoid')(x)
     decoder = keras.Model(inputs=inputs_dec, outputs=decoded)
 
-    # AUTOENCODER
+    # Define the AUTOENCODER
     auto_bottleneck = encoder.layers[-1].output
     auto_output = decoder(auto_bottleneck)
     auto = keras.Model(inputs=inputs, outputs=auto_output)
 
-    # Compilation
+    # Compilation of AUTOENCODER
     auto.compile(optimizer=keras.optimizers.Adam(), loss='binary_crossentropy')
 
     return encoder, decoder, auto
