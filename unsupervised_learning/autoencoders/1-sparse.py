@@ -29,8 +29,10 @@ def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
     for units in hidden_layers:
         x = keras.layers.Dense(units, activation='relu')(x)
 
-    encoded = keras.layers.Dense(latent_dims, activation='relu',
-                                 activity_regularizer=K.regularizers.l1(lambtha))(x)
+    encoded = keras.layers.Dense(
+        latent_dims,
+        activation='relu',
+        activity_regularizer=K.regularizers.l1(lambtha))(x)
     encoder = keras.Model(inputs=inputs, outputs=encoded)
 
     # Define DECODER model
@@ -51,4 +53,3 @@ def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
     auto.compile(optimizer=keras.optimizers.Adam(), loss='binary_crossentropy')
 
     return encoder, decoder, auto
-
