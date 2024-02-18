@@ -5,7 +5,7 @@ latent_dims): that creates an autoencoder
 """
 
 import tensorflow.keras as keras
-from tensorflow.keras.layers import Input
+K = keras
 
 def autoencoder(input_dims, hidden_layers, latent_dims):
     """
