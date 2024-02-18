@@ -8,7 +8,7 @@ K = keras
 
 def autoencoder(input_dims, hidden_layers, latent_dims):
     """
-        Creates an alternative autoencoder instance.
+    Creates an autoencoder.
 
     Parameters:
         input_dims (int): Dimensions of the model input.
@@ -24,9 +24,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     """
 
     # ENCODER
-    # Placeholder
     encoder_inputs = K.Input(shape=(input_dims,))
-    # Densely-connected layer
     for i in range(len(hidden_layers)):
         layer = K.layers.Dense(units=hidden_layers[i], activation='relu')
         if i == 0:
@@ -34,13 +32,11 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
         else:
             outputs = layer(outputs)
     layer = K.layers.Dense(units=latent_dims, activation='relu')
-    outputs = layer(outputs)
-    encoder = K.models.Model(inputs=encoder_inputs, outputs=outputs)
+    encoded = layer(outputs)
+    encoder = K.models.Model(inputs=encoder_inputs, outputs=encoded)
 
     # DECODER
-    # Placeholder
     decoder_inputs = K.Input(shape=(latent_dims,))
-    # Densely connected layer
     for i in range(len(hidden_layers) - 1, -1, -1):
         layer = K.layers.Dense(units=hidden_layers[i], activation='relu')
         if i == len(hidden_layers) - 1:
@@ -48,13 +44,13 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
         else:
             outputs = layer(outputs)
     layer = K.layers.Dense(units=input_dims, activation='sigmoid')
-    outputs = layer(outputs)
-    decoder = K.models.Model(inputs=decoder_inputs, outputs=outputs)
+    decoded = layer(outputs)
+    decoder = K.models.Model(inputs=decoder_inputs, outputs=decoded)
 
-    # AUTOENCODERS
-    outputs = encoder(encoder_inputs)
-    outputs = decoder(outputs)
-    auto = K.models.Model(inputs=encoder_inputs, outputs=outputs)
+    # AUTOENCODER
+    auto_bottleneck = encoder.layers[-1].output
+    auto_output = decoder(auto_bottleneck)
+    auto = K.models.Model(inputs=encoder_inputs, outputs=auto_output)
 
     # COMPILATION
     auto.compile(optimizer='Adam', loss='binary_crossentropy')
