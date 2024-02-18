@@ -22,8 +22,9 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
             decoder (keras.Model): Decoder model.
             auto (keras.Model): Full autoencoder model.
     """
+
     # Define ENCODER model
-    inputs = Input(shape=(input_dims,))
+    inputs = keras.Input(shape=(input_dims,))
 
     x = inputs
     for units in hidden_layers:
@@ -33,7 +34,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     encoder = keras.Model(inputs, encoded)
 
     # Define DECODER model
-    inputs_dec = Input(shape=(latent_dims,))
+    inputs_dec = keras.Input(shape=(latent_dims,))
     x = inputs_dec
 
     for units in reversed(hidden_layers):
