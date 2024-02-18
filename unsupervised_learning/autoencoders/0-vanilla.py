@@ -14,7 +14,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
 
     Parameters:
         input_dims (int): Dimensions of the model input.
-        hidden_layers (list): Number of nodes for each hidden layer in the encoder.
+        hidden_layers (list): Number of nodes for each hidden 
+        layer in the encoder.
         latent_dims (int): Dimensions of the latent space representation.
 
     Returns:
