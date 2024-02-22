@@ -41,8 +41,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     decoder = keras.Model(inputs=inputs_dec, outputs=decoded)
 
     # Define AUTOENCODER model
-    auto_bottleneck = encoder.layers[-1].output
-    auto_output = decoder(auto_bottleneck)
+    auto_en_ouput = encoder.layers[-1].output
+    auto_output = decoder(auto_en_output)
     auto = keras.Model(inputs=inputs, outputs=auto_output)
 
     # Compilation of the autoencoder
