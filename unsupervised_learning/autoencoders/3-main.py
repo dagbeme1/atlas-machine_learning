@@ -43,3 +43,5 @@ for i in range(25*25):
     ax.axis('off')
     plt.imshow(G[i].reshape((28, 28)))
 plt.show()
+
+print()
