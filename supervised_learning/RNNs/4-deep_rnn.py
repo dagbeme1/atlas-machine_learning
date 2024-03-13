@@ -12,7 +12,8 @@ def deep_rnn(rnn_cells, X, h_0):
     Forward propagation for a deep RNN.
 
     Args:
-        rnn_cells (list): List of RNNCell instances representing layers of the deep RNN.
+        rnn_cells (list): List of RNNCell instances representing
+        layers of the deep RNN.
         X (numpy.ndarray): Input data of shape (t, m, i), where:
                            - t is the maximum number of time steps
                            - m is the batch size
@@ -26,7 +27,8 @@ def deep_rnn(rnn_cells, X, h_0):
         tuple: A tuple containing:
             H (numpy.ndarray): All hidden states of shape (t+1, layers, m, h).
                                H[0] represents the initial hidden states.
-            Y (numpy.ndarray): All outputs of shape (t, m, o), where o is the dimensionality of the outputs.
+            Y (numpy.ndarray): All outputs of shape (t, m, o),
+            where o is the dimensionality of the outputs.
     """
     # List to store outputs
     Y = []
