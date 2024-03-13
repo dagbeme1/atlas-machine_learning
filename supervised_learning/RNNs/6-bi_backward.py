@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
 the class BidirectionalCell, based on 5-bi_forward.py
-public instance method def backward(self, h_next, x_t): 
-that calculates the hidden 
+public instance method def backward(self, h_next, x_t):
+that calculates the hidden
 state in the backward direction for one time step
 
 """
 import numpy as np
+
 
 class BidirectionalCell:
     """
