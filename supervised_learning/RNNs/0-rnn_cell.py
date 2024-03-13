@@ -9,7 +9,8 @@ class RNNCell:
     Represents a cell of a simple RNN.
 
     Attributes:
-        Wh (numpy.ndarray): Weight matrix for the concatenated hidden state and input data.
+        Wh (numpy.ndarray): Weight matrix for the concatenated hidden 
+        state and input data.
         bh (numpy.ndarray): Bias vector for the hidden state.
         Wy (numpy.ndarray): Weight matrix for the output.
         by (numpy.ndarray): Bias vector for the output.
