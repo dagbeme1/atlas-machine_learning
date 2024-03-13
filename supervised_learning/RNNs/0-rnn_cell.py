@@ -44,13 +44,13 @@ class RNNCell:
         """
         # Concatenate previous hidden state and input data
         concat_input = np.concatenate((h_prev, x_t), axis=1)
-        
+
         # Calculate next hidden state
         h_next = np.tanh(np.dot(concat_input, self.Wh) + self.bh)
-        
+
         # Calculate output
         y = np.dot(h_next, self.Wy) + self.by
-        y = np.exp(y) / np.sum(np.exp(y), axis=1, keepdims=True)  # Softmax activation
-        
-        return h_next, y
+        y = np.exp(y) / np.sum(np.exp(y), axis=1,
+                               keepdims=True)  # Softmax activation
 
+        return h_next, y
