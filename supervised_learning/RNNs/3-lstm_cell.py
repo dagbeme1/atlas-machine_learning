@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-the class LSTMCell that represents an LSTM unit,Creates 
+the class LSTMCell that represents an LSTM unit,Creates
 the public instance attributes Wf, Wu, Wc, Wo, Wy, bf,
-bu, bc, bo, by that represent 
+bu, bc, bo, by that represent
 the weights and biases of the cell
 
 """
 import numpy as np
+
 
 class LSTMCell:
     """
@@ -115,6 +116,5 @@ class LSTMCell:
         h_next = output_gate * self.tanh(c_next)
         # Compute output
         y = self.softmax(np.dot(h_next, self.Wy) + self.by)
-        
-        return h_next, c_next, y
 
+        return h_next, c_next, y
