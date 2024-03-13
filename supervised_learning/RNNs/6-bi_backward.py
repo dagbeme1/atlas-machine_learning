@@ -48,7 +48,8 @@ class BidirectionalCell:
 
     def backward(self, h_next, x_t):
         """
-        Calculates the hidden state in the backward direction for one time step.
+        Calculates the hidden state in the backward
+        direction for one time step.
 
         Args:
             h_next (numpy.ndarray): Next hidden state.
