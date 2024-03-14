@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-the function def bi_rnn(bi_cell, X, h_0, h_t): that performs forward 
+the function def bi_rnn(bi_cell, X, h_0, h_t): that performs forward
 propagation for a bidirectional RNN
 """
 
@@ -11,12 +11,12 @@ def bi_rnn(bi_cell, X, h_0, h_t):
     Performs forward propagation for a bidirectional RNN.
 
     Args:
-        bi_cell (BidirectionalCell): Instance of BidirectionalCell 
+        bi_cell (BidirectionalCell): Instance of BidirectionalCell
         for forward propagation.
         X (numpy.ndarray): Data input, shape (t, m, i).
-        h_0 (numpy.ndarray): Initial hidden state in 
+        h_0 (numpy.ndarray): Initial hidden state in
         the forward direction, shape (m, h).
-        h_t (numpy.ndarray): Initial hidden state in 
+        h_t (numpy.ndarray): Initial hidden state in
         the backward direction, shape (m, h).
 
     Returns:
