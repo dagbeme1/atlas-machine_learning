@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-H is a numpy.ndarray of shape (t, m, 2 * h) that contains the 
-concatenated hidden states from both directions, 
+H is a numpy.ndarray of shape (t, m, 2 * h) that contains the
+concatenated hidden states from both directions,
 excluding their initialized states
 """
 import numpy as np
+
 
 class BidirectionalCell:
     """
@@ -88,6 +89,7 @@ class BidirectionalCell:
 
         for step in range(t):
             Y[step] = np.matmul(H[step], self.Wy) + self.by
-            Y[step] = np.exp(Y[step]) / np.sum(np.exp(Y[step]), axis=1, keepdims=True)
+            Y[step] = np.exp(Y[step]) / \
+                np.sum(np.exp(Y[step]), axis=1, keepdims=True)
 
         return Y
