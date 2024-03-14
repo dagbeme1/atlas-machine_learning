@@ -43,4 +43,3 @@ def bi_rnn(bi_cell, X, h_0, h_t):
     Y = bi_cell.output(H)
 
     return H, Y
-
