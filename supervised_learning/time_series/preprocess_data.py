@@ -1,60 +1,105 @@
-#!/usr/bin/env python3
-"""
-Bitcoin Price Data Preprocessing
-"""
+#!/usr/bin/env python3:wq
 
+
+import os
+import zipfile
 import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
 
-def preprocess_data(file_path):
+# Define paths to zipped files
+bitstamp_zip_path = 'data/bitstampUSD_1-min_data_2012-01-01_to_2020-04-22.csv.zip'
+coinbase_zip_path = 'data/coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv.zip'
+
+# Function to extract zip files
+def extract_zip(zip_file, extract_dir):
     """
-    Preprocess Bitcoin price data from a CSV file.
+    Extracts a zip file to a specified directory.
 
     Args:
-        file_path (str): Path to the CSV file.
+    zip_file (str): Path to the zip file.
+    extract_dir (str): Directory where the zip file will be extracted.
+    """
+    with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+        zip_ref.extractall(extract_dir)
+
+# Extract zip files
+extract_zip(bitstamp_zip_path, 'data')
+extract_zip(coinbase_zip_path, 'data')
+
+# Function to load raw data from CSV file
+def load_data(file_path):
+    """
+    Load raw cryptocurrency data from a CSV file.
+
+    Args:
+    file_path (str): Path to the CSV file.
 
     Returns:
-        pd.DataFrame: Preprocessed training data.
-        pd.DataFrame: Preprocessed validation data.
-        pd.DataFrame: Preprocessed test data.
+    pandas.DataFrame: Loaded raw data.
     """
-    # Load the CSV file into a DataFrame
-    data = pd.read_csv(file_path)
+    return pd.read_csv(file_path)
 
-    # Drop rows with missing values
-    data.dropna(inplace=True)
+# Load raw data
+bitstamp_raw_data = load_data('data/bitstampUSD_1-min_data_2012-01-01_to_2020-04-22.csv')
+coinbase_raw_data = load_data('data/coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv')
 
-    # Convert 'Timestamp' column to datetime format
-    data['Timestamp'] = pd.to_datetime(data['Timestamp'], unit='s')
+# Function to preprocess data
+def preprocess_data(df):
+    """
+    Preprocess raw cryptocurrency data.
 
-    # Resample data to hourly frequency and forward-fill missing values
-    data.set_index('Timestamp', inplace=True)
-    data = data.resample('1H').ffill()
+    Args:
+    df (pandas.DataFrame): Raw data to be preprocessed.
 
-    # Filter data for the year 2017 and onwards
-    data = data[data.index.year >= 2017]
+    Returns:
+    numpy.ndarray: Preprocessed data.
+    """
+    # Drop rows with NaN values
+    df = df.dropna(subset=['Close'])
 
-    # Split data into train, validation, and test sets (70%, 20%, 10%)
-    train_size = int(0.7 * len(data))
-    val_size = int(0.2 * len(data))
-    train_data = data.iloc[:train_size]
-    val_data = data.iloc[train_size:train_size + val_size]
-    test_data = data.iloc[train_size + val_size:]
+    # Select the column to predict
+    data_to_use = df['Close'].values
 
-    # Normalize data using z-score standardization
-    train_mean = train_data.mean()
-    train_std = train_data.std()
-    train_data = (train_data - train_mean) / train_std
-    val_data = (val_data - train_mean) / train_std
-    test_data = (test_data - train_mean) / train_std
+    # Reshape the data
+    data_to_use = np.reshape(data_to_use, (-1, 1))
 
-    # Save preprocessed data to CSV files
-    train_data.to_csv('train_data.csv')
-    val_data.to_csv('val_data.csv')
-    test_data.to_csv('test_data.csv')
+    # Normalize the data
+    scaler = MinMaxScaler()
+    data_to_use = scaler.fit_transform(data_to_use)
 
-    return train_data, val_data, test_data
+    return data_to_use
 
-if __name__ == "__main__":
-    file_path = "bitstampUSD_1-min_data_2012-01-01_to_2020-04-22.csv"
-    preprocess_data(file_path)
+# Preprocess data
+bitstamp_preprocessed_data = preprocess_data(bitstamp_raw_data)
+coinbase_preprocessed_data = preprocess_data(coinbase_raw_data)
 
+# Function to save preprocessed data to a file
+def save_preprocessed_data(data, filename):
+    """
+    Save preprocessed data to a numpy file.
+
+    Args:
+    data (numpy.ndarray): Preprocessed data to be saved.
+    filename (str): Name of the file to save.
+    """
+    np.save(filename, data)
+
+# Save preprocessed data
+save_preprocessed_data(bitstamp_preprocessed_data, 'bitstamp_preprocessed_data.npy')
+save_preprocessed_data(coinbase_preprocessed_data, 'coinbase_preprocessed_data.npy')
+
+# Load preprocessed data
+bitstamp_preprocessed_data = np.load('bitstamp_preprocessed_data.npy')
+coinbase_preprocessed_data = np.load('coinbase_preprocessed_data.npy')
+
+# Check for NaN values in the preprocessed data
+print("Checking for NaN values in preprocessed data...")
+print("Bitstamp preprocessed data has NaN values:", np.isnan(bitstamp_preprocessed_data).any())
+print("Coinbase preprocessed data has NaN values:", np.isnan(coinbase_preprocessed_data).any())
+
+# Print preprocessed data
+print("Bitstamp preprocessed data:")
+print(bitstamp_preprocessed_data)
+print("Coinbase preprocessed data:")
+print(coinbase_preprocessed_data)
