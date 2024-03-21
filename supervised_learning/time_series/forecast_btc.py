@@ -1,150 +1,86 @@
 #!/usr/bin/env python3
 
-import tensorflow as tf
 import numpy as np
-np.set_printoptions(threshold=np.inf)
+import tensorflow as tf
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
-import pandas as pd
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-import math
 
-from keras.models import Sequential
-from keras.layers import LSTM, Bidirectional, Dense
+# Function to load and preprocess data
+def load_data(file_path, timesteps):
+    """
+    Load and preprocess the cryptocurrency data.
 
-preprocess_data = __import__('preprocess_data').preprocess_data
+    Args:
+    file_path (str): Path to the cryptocurrency data file.
+    timesteps (int): Number of time steps to consider for each sequence.
 
+    Returns:
+    tuple: Tuple containing the input features (X) and target labels (y).
+    """
+    data = np.load(file_path)
+    X, y = [], []
+    for i in range(len(data)-timesteps-1):
+        X.append(data[i:(i+timesteps), :])
+        y.append(data[i+timesteps, 0]) # Predicting only the close price
+    return np.array(X), np.array(y)
 
-def plot_0(df, title):
-    """Function that plots Price at Close vs. Timestamp"""
+# Load and preprocess Bitstamp data
+bitstamp_X, bitstamp_y = load_data('/content/bitstampUSD_1-min_data_2012-01-01_to_2020-04-22', timesteps=60)
 
-    plt.figure(figsize=(8,6))
-    plt.plot(df)
-    plt.title(title)
-    plt.xlabel('Timestamp')
-    plt.ylabel('Price at Close (USD)')
-    plt.show()
+# Load and preprocess Coinbase data
+coinbase_X, coinbase_y = load_data('/content/coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09', timesteps=60)
 
-def plot_1(history, title):
-    """Function that plots the loss results of the model"""
+# Split data into training and validation sets
+bitstamp_X_train, bitstamp_X_val, bitstamp_y_train, bitstamp_y_val = train_test_split(bitstamp_X, bitstamp_y, test_size=0.2)
+coinbase_X_train, coinbase_X_val, coinbase_y_train, coinbase_y_val = train_test_split(coinbase_X, coinbase_y, test_size=0.2)
 
-    plt.figure(figsize=(8,6))
-    plt.plot(history.history['loss'], 'o-', mfc='none',
-             markersize=10, label='Train')
-    plt.plot(history.history['val_loss'], 'o-', mfc='none',
-             markersize=10, label='Valid')
-    plt.title('LSTM Model Loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.legend()
-    plt.show()
+# Define LSTM model
+def create_model(input_shape):
+    """
+    Create and compile an LSTM model.
 
-def plot_2(data_24h, single_label, single_prediction, title):
-    """Function that plots a single-step price prediction following
-    24h of data"""
+    Args:
+    input_shape (tuple): Shape of the input data.
 
-    time_steps = list(range(24))
-    next_step = 24
-
-    plt.figure(figsize=(8, 6))
-    plt.plot(time_steps, data_24h, 'o-', markersize=8, label='data_24h')
-    plt.plot(next_step, single_label, 'b+', mfc='none',
-             markersize=12, label='Label')
-    plt.plot(next_step, single_prediction, 'ro', mfc='none',
-             markersize=12, label='Prediction')
-    plt.title(title)
-    plt.xlabel('Time Steps')
-    plt.ylabel('Price at Close (Standardized Data)')
-    plt.legend()
-    plt.show()
-
-def plot_3(future, prediction, title):
-    """Function that plots predictions over "batch_size" x 24h
-    timeframes"""
-
-    days = list(range(1, future.shape[0] + 1))
-    plt.figure(figsize=(12, 6))
-    plt.plot(days, future, 'o-', markersize=5, mfc='none', label='Labels')
-    plt.plot(days, prediction, 'o-', markersize=5,
-             mfc='none', label='Predictions')
-    plt.title(title)
-    plt.xlim([days[0], days[-1]])
-    plt.xlabel('24h Steps')
-    plt.ylabel('Price at Close (Standardized Data)')
-    plt.legend()
-    plt.show()
-
-
-if __name__ == "__main__":
-
-    file_path = 'data/bitstampUSD_1-min_data_2012-01-01_to_2020-04-22.csv'
-    dataset, df, x_train, y_train, x_val, y_val = preprocess_data(file_path)
-
-    print("dataset.shape: {}".format(dataset.shape))
-    print("df.shape: {}".format(df.shape))
-    print("x_train.shape: {}".format(x_train.shape))
-    print("y_train.shape: {}".format(y_train.shape))
-    print("x_val.shape: {}".format(x_val.shape))
-    print("y_val.shape: {}".format(y_val.shape))
-    print('=======================')
-
-    batch_size = 256
-    buffer_size = x_train.shape[0]
-
-    # Provide an infinite dataset
-    train_iterator = tf.data.Dataset.from_tensor_slices(
-        (x_train, y_train)).shuffle(buffer_size).batch(batch_size).repeat()
-
-    # Provide an infinite dataset
-    val_iterator = tf.data.Dataset.from_tensor_slices(
-        (x_val, y_val)).batch(batch_size).repeat()
-
-    n_steps = x_train.shape[-2]
-    n_features = x_train.shape[-1]
-
-    # Define the model
+    Returns:
+    tensorflow.keras.Model: Compiled LSTM model.
+    """
     model = Sequential()
-    model.add(Bidirectional(
-        LSTM(64, activation='relu', input_shape=(n_steps, n_features))))
+    model.add(LSTM(20, activation='tanh', input_shape=input_shape))
     model.add(Dense(1))
+    adam_optimizer = Adam(learning_rate=0.0001, clipvalue=1.0)
+    model.compile(optimizer=adam_optimizer, loss='mse')
+    return model
 
-    # Compile the model
-    model.compile(optimizer='adam', loss='mse')
+# Create Bitstamp model
+bitstamp_model = create_model(input_shape=(60, bitstamp_X.shape[2]))
 
-    epochs = 10
-    steps_per_epoch = 800
-    validation_steps = 80
+# Train Bitstamp model
+bitstamp_history = bitstamp_model.fit(bitstamp_X_train, bitstamp_y_train, epochs=5, validation_data=(bitstamp_X_val, bitstamp_y_val), verbose=1)
 
-    # Train with an infinite dataset
-    history = model.fit(train_iterator, epochs=epochs,
-                        steps_per_epoch=steps_per_epoch,
-                        validation_data=val_iterator,
-                        validation_steps=validation_steps)
+# Create Coinbase model
+coinbase_model = create_model(input_shape=(60, coinbase_X.shape[2]))
 
-    print('=======================')
-    model.summary()
+# Train Coinbase model
+coinbase_history = coinbase_model.fit(coinbase_X_train, coinbase_y_train, epochs=5, validation_data=(coinbase_X_val, coinbase_y_val), verbose=1)
 
-    # Plot “Price at Close vs. Timestamp” from the dataframe
-    plot_0(df['Close'], 'BTC: Price at Close vs. Timestamp')
+# Plot training and validation loss
+plt.plot(bitstamp_history.history['loss'], label='Bitstamp Train')
+plt.plot(bitstamp_history.history['val_loss'], label='Bitstamp Validation')
+plt.plot(coinbase_history.history['loss'], label='Coinbase Train')
+plt.plot(coinbase_history.history['val_loss'], label='Coinbase Validation')
+plt.title('Model Loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend()
+plt.show()
 
-    # Plot the model loss results
-    plot_1(history, 'Training / Validation Losses from History')
+# Save models
+bitstamp_model.save('bitstampUSD_1-min_data_2012-01-01_to_2020-04-22.h5')
+coinbase_model.save('coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.h5')
 
-    # Make a single-step price prediction following 24h of data
-    window_num = 0
-    for batch_num, (x, y) in enumerate(val_iterator.take(3)):
-        title = f'Prediction for Window {window_num}, Batch {batch_num}'
-        plot_2(x[window_num, :, -2].numpy(),
-             y[window_num].numpy(),
-             model.predict(x)[window_num],
-             title)
-
-    # Make predictions over "batch_size" x 24h timeframes
-    string = 'Predictions over a {} x 24h Timeframe (Batch {})'
-    for batch_num, (x, y) in enumerate(val_iterator.take(3)):
-        title = string.format(batch_size, batch_num)
-        plot_3(y.numpy(),
-             model.predict(x).reshape(-1),
-             title)
-        batch_num += 1
+print("Models saved")
 
