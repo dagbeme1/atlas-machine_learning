@@ -23,28 +23,17 @@ def bag_of_words(sentences, vocab=None):
                     f is the number of features analyzed
             features (list): A list of the features used for embeddings
     """
-    # Create vocabulary from sentences if vocab is None
     if vocab is None:
         vocab = set()
         for sentence in sentences:
             words = sentence.split()
             vocab.update(words)
 
-    # Map each word to an index
-    word_to_index = {word: i for i, word in enumerate(sorted(vocab))}
-
-    # Initialize embeddings matrix
+    vocab = sorted(vocab)
     embeddings = []
     for sentence in sentences:
-        # Initialize feature vector for the sentence
-        features = [0] * len(vocab)
-        for word in sentence.split():
-            if word in word_to_index:
-                # Increment the count of the word in the feature vector
-                features[word_to_index[word]] += 1
-        embeddings.append(features)
+        embedding = [sentence.split().count(word) for word in vocab]
+        embeddings.append(embedding)
 
-    # Convert embeddings to numpy array
     embeddings = np.array(embeddings)
-
-    return embeddings, sorted(vocab)
+    return embeddings, vocab
