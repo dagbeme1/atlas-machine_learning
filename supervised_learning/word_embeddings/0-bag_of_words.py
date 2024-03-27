@@ -4,6 +4,7 @@ Enhanced Bag of Words Embedding
 """
 from sklearn.feature_extraction.text import CountVectorizer
 
+
 def bag_of_words(sentences, vocab=None):
     """
     Creates a bag of words embedding matrix
@@ -28,7 +29,8 @@ def bag_of_words(sentences, vocab=None):
     X = vector.fit_transform(sentences)
 
     # retrieves the feature names
-    features = vector.get_feature_names_out() # Updated to use get_feature_names_out
+    # Updated to use get_feature_names_out
+    features = vector.get_feature_names_out()
 
     # Converts the sparse matrix to a dense array
     embeddings = X.toarray()
