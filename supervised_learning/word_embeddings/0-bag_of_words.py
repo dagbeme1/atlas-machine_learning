@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+"""
+Enhanced Bag of Words Embedding
+"""
 
 import sklearn.feature_extraction.text
+# from sklearn.feature_extraction.text import CountVectorizer
+
 
 def bag_of_words(sentences, vocab=None):
     """
@@ -19,20 +24,11 @@ def bag_of_words(sentences, vocab=None):
                 f is the number of features analyzed
             features (list): A list of the features used for embeddings
     """
-    if vocab is None:
-        all_words = ' '.join(sentences).split()
-        vocab = list(set(all_words))
 
-    # Initialize CountVectorizer with custom vocabulary and lowercase=False
-    vectorizer = sklearn.feature_extraction.text.CountVectorizer(vocabulary=vocab, lowercase=False)
-
-    # Fit and transform the sentences
+    vectorizer = sklearn.feature_extraction.text.CountVectorizer()
     X = vectorizer.fit_transform(sentences)
 
-    # Get the embeddings matrix
     embeddings = X.toarray()
-
-    # Get the feature names from the vocabulary
     features = vectorizer.get_feature_names_out()
 
     return embeddings, features
