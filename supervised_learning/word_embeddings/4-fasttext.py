@@ -26,8 +26,8 @@ def fasttext_model(sentences, size=100, min_count=5, negative=5, window=5,
     """
     sg = 0 if cbow else 1
 
-    model = FastText(size=size, window=window, min_count=min_count,
-                     workers=workers, sg=sg, negative=negative, seed=seed)
+    model = FastText(window=window, min_count=min_count, workers=workers,
+                     sg=sg, negative=negative, seed=seed)
     model.build_vocab(sentences)
     model.train(sentences, total_examples=len(sentences), epochs=iterations)
 
