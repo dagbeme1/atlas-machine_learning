@@ -2,10 +2,7 @@
 """
 Enhanced Bag of Words Embedding
 """
-
-import sklearn.feature_extraction.text
-#from sklearn.feature_extraction.text import CountVectorizer
-
+from sklearn.feature_extraction.text import CountVectorizer
 
 def bag_of_words(sentences, vocab=None):
     """
@@ -24,11 +21,16 @@ def bag_of_words(sentences, vocab=None):
                 f is the number of features analyzed
             features (list): A list of the features used for embeddings
     """
+    # This initializes CountVectorizer with optional vocabulary
+    vector = CountVectorizer(vocabulary=vocab)
 
-    vectorizer = sklearn.feature_extraction.text.CountVectorizer()
-    X = vectorizer.fit_transform(sentences)
+    # the fits and transforms the sentences to create the embedding matrix
+    X = vector.fit_transform(sentences)
 
+    # retrieves the feature names
+    features = vector.get_feature_names_out() # Updated to use get_feature_names_out
+
+    # Converts the sparse matrix to a dense array
     embeddings = X.toarray()
-    features = vectorizer.get_feature_names_out()
 
     return embeddings, features
