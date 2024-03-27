@@ -26,7 +26,7 @@ def bag_of_words(sentences, vocab=None):
     # This initializes CountVectorizer with optional vocabulary
     vector = CountVectorizer(vocabulary=vocab)
 
-    # the fits and transforms the sentences to create the embedding matrix
+    # fits and transforms the sentences to create the embedding matrix
     X = vector.fit_transform(sentences)
 
     # retrieves the feature names
