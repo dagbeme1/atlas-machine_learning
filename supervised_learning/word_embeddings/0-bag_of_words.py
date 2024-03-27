@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-"""
-Enhanced Bag of Words Embedding
-"""
 
-import numpy as np
+import sklearn.feature_extraction.text
 
 def bag_of_words(sentences, vocab=None):
     """
@@ -12,28 +9,30 @@ def bag_of_words(sentences, vocab=None):
     Args:
         sentences (list): A list of sentences to analyze
         vocab (list, optional): A list of the vocabulary words
-            to use for the analysis. If None, all unique words
-            in sentences will be used.
+        to use for the analysis
 
     Returns:
         tuple: A tuple containing embeddings and features
             embeddings (numpy.ndarray): A numpy array of shape
-                (s, f) containing the embeddings
-                    s is the number of sentences in sentences
-                    f is the number of features analyzed
+            (s, f) containing the embeddings
+                s is the number of sentences in sentences
+                f is the number of features analyzed
             features (list): A list of the features used for embeddings
     """
     if vocab is None:
-        vocab = set()
-        for sentence in sentences:
-            words = sentence.split()
-            vocab.update(words)
+        all_words = ' '.join(sentences).split()
+        vocab = list(set(all_words))
 
-    vocab = sorted(vocab)
-    embeddings = []
-    for sentence in sentences:
-        embedding = [sentence.split().count(word) for word in vocab]
-        embeddings.append(embedding)
+    # Initialize CountVectorizer with custom vocabulary and lowercase=False
+    vectorizer = sklearn.feature_extraction.text.CountVectorizer(vocabulary=vocab, lowercase=False)
 
-    embeddings = np.array(embeddings)
-    return embeddings, vocab
+    # Fit and transform the sentences
+    X = vectorizer.fit_transform(sentences)
+
+    # Get the embeddings matrix
+    embeddings = X.toarray()
+
+    # Get the feature names from the vocabulary
+    features = vectorizer.get_feature_names_out()
+
+    return embeddings, features
