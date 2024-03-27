@@ -23,16 +23,16 @@ def bag_of_words(sentences, vocab=None):
                 f is the number of features analyzed
             features (list): A list of the features used for embeddings
     """
-    # This initializes CountVectorizer with optional vocabulary
+    # Initialize CountVectorizer with optional vocabulary
     vector = CountVectorizer(vocabulary=vocab)
 
-    # fits and transforms the sentences to create the embedding matrix
+    # Fit and transform the sentences to create the embedding matrix
     X = vector.fit_transform(sentences)
 
-    # retrieves the feature names
-    features = vector.get_feature_names()
+    # Retrieve the feature names
+    features = vector.get_feature_names_out()
 
-    # Converts the sparse matrix to a dense array
+    # Convert the sparse matrix to a dense array
     embeddings = X.toarray()
 
     return embeddings, features
