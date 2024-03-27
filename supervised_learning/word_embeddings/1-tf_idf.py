@@ -11,12 +11,14 @@ def tf_idf(sentences, vocab=None):
 
     Args:
         sentences (list): A list of sentences to analyze
-        vocab (list, optional): A list of the vocabulary words to use for the analysis
+        vocab (list, optional): A list of the vocabulary words to
+        use for the analysis
             If None, all words within sentences should be used
 
     Returns:
         tuple: A tuple containing embeddings and features
-            embeddings (numpy.ndarray): A numpy array of shape (s, f) containing the embeddings
+            embeddings (numpy.ndarray): A numpy array of shape
+            (s, f) containing the embeddings
                 s is the number of sentences in sentences
                 f is the number of features analyzed
             features (list): A list of the features used for embeddings
