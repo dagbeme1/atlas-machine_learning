@@ -28,4 +28,3 @@ def gensim_to_keras(model):
     )
 
     return keras_embedding_layer
-
