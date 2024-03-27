@@ -2,7 +2,8 @@
 """
 Enhanced Bag of Words Embedding
 """
-from sklearn.feature_extraction.text import CountVectorizer
+
+# from sklearn.feature_extraction.text import CountVectorizer
 
 
 def bag_of_words(sentences, vocab=None):
