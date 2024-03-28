@@ -70,9 +70,8 @@ class CountVectorizer:
 
 
 def bag_of_words(sentences, vocab=None):
-    """
-    Creates a bag of words embedding matrix.
-    """
+    """Creates a bag of words embedding matrix."""
+
     vectorizer = CountVectorizer(vocabulary=vocab)
     X = vectorizer.fit_transform(sentences)
 
