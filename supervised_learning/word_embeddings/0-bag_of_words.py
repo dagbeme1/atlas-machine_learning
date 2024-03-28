@@ -47,7 +47,7 @@ class CountVectorizer:
         for sentence in sentences:
             word_counts = Counter()
 
-            words = [word.strip(string.punctuation).lower()
+            words = [word.strip(string.punctuation).lower().replace("'s", "")
                      for word in sentence.split()]
             word_counts.update(words)
 
