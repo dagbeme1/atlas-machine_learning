@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Enhanced Bag of Words Embedding
-"""
+
 import numpy as np
 import string
 from collections import Counter
@@ -18,19 +16,19 @@ class CountVectorizer:
                      for sentence in sentences for word in sentence.split()]
             self.vocabulary_ = sorted(set(words))
 
-        # Count occurrences of words across all sentences using Counter
-        word_counts = Counter()
+        # Transform sentences into a matrix of token counts
+        embeddings = []
         for sentence in sentences:
+            # Initialize word_counts for each sentence
+            word_counts = Counter()
+
             words = [word.strip(string.punctuation).lower()
                      for word in sentence.split()]
             word_counts.update(words)
 
-        # Transform sentences into a matrix of token counts
-        embeddings = []
-        for sentence in sentences:
-            words = [word.strip(string.punctuation).lower()
-                     for word in sentence.split()]
-            embedding = [word_counts[word] for word in self.vocabulary_]
+            # Generate embedding for the current sentence
+            embedding = [
+                word_counts[word] if word in word_counts else 0 for word in self.vocabulary_]
             embeddings.append(embedding)
 
         embeddings = np.array(embeddings)
@@ -62,12 +60,7 @@ def bag_of_words(sentences, vocab=None):
     vectorizer = CountVectorizer(vocabulary=vocab)
     X = vectorizer.fit_transform(sentences)
 
-    embeddings = np.array(X)  # this converts list to numpy array
+    embeddings = np.array(X)  # Convert list of lists to numpy array
     features = vectorizer.get_feature_names()
 
     return embeddings, features
-
-
-def print_matrix(matrix):
-    for row in matrix:
-        print(" ".join(str(cell) for cell in row))
