@@ -47,8 +47,8 @@ def bag_of_words(sentences, vocab=None):
     X = vectorizer.fit_transform(sentences)
 
     # Transpose the embeddings
-    X_transposed = X.T
-    # embeddings = np.array(X) # this converts list to numpy array
+    # X_transposed = X.T
+    embeddings = np.array(X) # this converts list to numpy array
     features = vectorizer.get_feature_names()
 
-    return X_transposed, features
+    return embeddings, features
