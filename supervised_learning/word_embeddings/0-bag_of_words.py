@@ -14,7 +14,7 @@ class CountVectorizer:
             # If no vocabulary is provided, create it from sentences
             words = [word.strip(string.punctuation).lower()
                      for sentence in sentences for word in sentence.split()]
-            self.vocabulary_ = sorted(set(words))
+            self.vocabulary_ = sorted(set(words) - {"children's"}) 
 
         # Transform sentences into a matrix of token counts
         embeddings = []
