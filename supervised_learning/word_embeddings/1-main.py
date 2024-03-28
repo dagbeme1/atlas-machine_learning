@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-tf_idf = __import__('1-tf_idf').tf_idf
+bag_of_words = __import__('0-bag_of_words').bag_of_words
 
 sentences = ["Holberton school is Awesome!",
              "Machine learning is awesome",
@@ -10,7 +10,7 @@ sentences = ["Holberton school is Awesome!",
              "The cake was not very good",
              "No one said that the cake was not very good",
              "Life is beautiful"]
-vocab = ["awesome", "learning", "children", "cake", "good", "none", "machine"]
-E, F = tf_idf(sentences, vocab)
+vocab = ["children", "is", "awesome", "cake", "are", "our", "future"]
+E, F = bag_of_words(sentences, vocab)
 print(E)
 print(F)
