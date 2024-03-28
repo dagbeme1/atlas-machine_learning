@@ -70,12 +70,18 @@ class CountVectorizer:
 
 
 def bag_of_words(sentences, vocab=None):
-    """Creates a bag of words embedding matrix."""
+    """
+    Module for creating a bag of words embedding matrix.
+
+    This module contains functions for creating 
+    a bag of words embedding matrix from a list of sentences.
+    """
 
     vectorizer = CountVectorizer(vocabulary=vocab)
     X = vectorizer.fit_transform(sentences)
 
     embeddings = np.array(X)
     features = vectorizer.get_feature_names()
-
+    
+    # returning embeddings and features
     return embeddings, features
