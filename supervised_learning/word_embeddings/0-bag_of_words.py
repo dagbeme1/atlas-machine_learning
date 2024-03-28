@@ -72,20 +72,6 @@ class CountVectorizer:
 def bag_of_words(sentences, vocab=None):
     """
     Creates a bag of words embedding matrix.
-
-    Args:
-        sentences (list): A list of sentences to analyze.
-        vocab (list, optional): A list of the vocabulary words to use for
-        the analysis.
-                                Defaults to None.
-
-    Returns:
-        tuple: A tuple containing embeddings and features.
-            numpy.ndarray: A numpy array of shape (s, f)
-            containing the embeddings.
-                s is the number of sentences in sentences.
-                f is the number of features analyzed.
-            list: A list of the features used for embeddings.
     """
     vectorizer = CountVectorizer(vocabulary=vocab)
     X = vectorizer.fit_transform(sentences)
