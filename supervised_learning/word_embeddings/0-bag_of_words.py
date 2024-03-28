@@ -78,3 +78,8 @@ def bag_of_words(sentences, vocab=None):
     features = vectorizer.get_feature_names()
 
     return embeddings, features
+
+
+def print_matrix(matrix):
+    for row in matrix:
+        print(" ".join(str(cell) for cell in row))
