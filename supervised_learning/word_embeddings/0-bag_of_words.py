@@ -37,6 +37,14 @@ class CountVectorizer:
                      for sentence in sentences for word in sentence.split()]
             self.vocabulary_ = sorted(set(words))
 
+        # Count occurrences of words across all sentences
+        word_counts = {word: 0 for word in self.vocabulary_}
+        for sentence in sentences:
+            words = [word.strip(string.punctuation).lower() for word in sentence.split()]
+            for word in words:
+                if word in self.vocabulary_:
+                    word_counts[word] += 1 
+
         # Transform sentences into a matrix of token counts
         embeddings = []
         for sentence in sentences:
