@@ -2,6 +2,7 @@
 """
 Enhanced Bag of Words Embedding
 """
+import numpy as np
 
 class CountVectorizer:
     def __init__(self, vocabulary=None):
@@ -44,7 +45,7 @@ def bag_of_words(sentences, vocab=None):
     vectorizer = CountVectorizer(vocabulary=vocab)
     X = vectorizer.fit_transform(sentences)
 
-    embeddings = X
+    embeddings = np.array(X) # this converts list to numpy array
     features = vectorizer.get_feature_names()
 
     return embeddings, features
