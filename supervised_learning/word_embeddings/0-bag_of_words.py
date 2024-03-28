@@ -19,10 +19,11 @@ class CountVectorizer:
             embedding = [sentence.split().count(word) for word in self.vocabulary_]
             embeddings.append(embedding)
 
-        return embeddings
+        return np.array(embeddings)  # Convert list of lists to numpy array
 
     def get_feature_names(self):
         return self.vocabulary_
+
 
 def bag_of_words(sentences, vocab=None):
     """
