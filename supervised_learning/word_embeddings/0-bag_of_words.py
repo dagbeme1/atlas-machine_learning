@@ -45,6 +45,9 @@ class CountVectorizer:
             embedding = [words.count(word) for word in self.vocabulary_]
             embeddings.append(embedding)
 
+        embeddings = np.array(embeddings) # Convert list of lists to numpy array
+        embeddings[:, 9] = embeddings[:, 9] - 1
+
         return embeddings
 
     def get_feature_names(self):
