@@ -10,6 +10,9 @@ sentences = ["Holberton school is Awesome!",
              "The cake was not very good",
              "No one said that the cake was not very good",
              "Life is beautiful"]
+
 E, F = bag_of_words(sentences)
+
+# Print the embeddings and features
 print(E)
 print(F)
