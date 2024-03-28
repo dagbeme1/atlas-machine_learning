@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+"""
+Enhanced Bag of Words Embedding
+"""
 import numpy as np
 import string
 from collections import Counter
@@ -71,10 +73,21 @@ class CountVectorizer:
 
 def bag_of_words(sentences, vocab=None):
     """
-    Module for creating a bag of words embedding matrix.
+    Creates a bag of words embedding matrix.
 
-    This module contains functions for creating 
-    a bag of words embedding matrix from a list of sentences.
+    Args:
+        sentences (list): A list of sentences to analyze.
+        vocab (list, optional): A list of the vocabulary words to use for
+        the analysis.
+                                Defaults to None.
+
+    Returns:
+        tuple: A tuple containing embeddings and features.
+            numpy.ndarray: A numpy array of shape (s, f)
+            containing the embeddings.
+                s is the number of sentences in sentences.
+                f is the number of features analyzed.
+            list: A list of the features used for embeddings.
     """
 
     vectorizer = CountVectorizer(vocabulary=vocab)
@@ -82,6 +95,6 @@ def bag_of_words(sentences, vocab=None):
 
     embeddings = np.array(X)
     features = vectorizer.get_feature_names()
-    
+
     # returning embeddings and features
     return embeddings, features
