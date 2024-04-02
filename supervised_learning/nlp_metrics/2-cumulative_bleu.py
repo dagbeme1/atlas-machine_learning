@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 """
- the function def cumulative_bleu(references, sentence, n): 
+ the function def cumulative_bleu(references, sentence, n):
  that calculates the cumulative n-gram BLEU score for a sentence
 """
 
 import numpy as np
 
+
 def n_grams(sentence, n):
     """
     Generates the n-grams from a sentence.
-    
+
     Args:
         sentence (list): A list containing the proposed sentence.
         n (int): The size of the n-gram to use for evaluation.
-        
+
     Returns:
         list: The n-grams.
     """
@@ -32,16 +33,17 @@ def n_grams(sentence, n):
         i += 1
     return list_grams_cand
 
+
 def ngram_bleu(references, sentence, n):
     """
     Computes the unigram BLEU score for a sentence.
-    
+
     Args:
-        references (list): A list of reference translations. 
+        references (list): A list of reference translations.
             Each reference translation is a list of words in the translation.
         sentence (list): A list containing the proposed sentence.
         n (int): The size of the n-gram to use for evaluation.
-        
+
     Returns:
         float: Unigram BLEU score.
     """
@@ -79,16 +81,17 @@ def ngram_bleu(references, sentence, n):
     prob = sum(words_dict.values()) / len_g
     return prob
 
+
 def cumulative_bleu(references, sentence, n):
     """
     Computes the cumulative n-gram BLEU score for a sentence.
-    
+
     Args:
         references (list): A list of reference translations.
             Each reference translation is a list of words in the translation.
         sentence (list): A list containing the proposed sentence.
         n (int): The size of the largest n-gram to use for evaluation.
-        
+
     Returns:
         float: The cumulative n-gram BLEU score.
     """
@@ -123,4 +126,3 @@ def cumulative_bleu(references, sentence, n):
     # Calculate the cumulative n-gram BLEU score
     score = bp * np.exp(np.sum(np.log(prob)) / n)
     return score
-
