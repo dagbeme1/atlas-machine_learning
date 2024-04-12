@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Define the Dataset class to load and prepare a dataset for machine translation
+Define the Dataset class to load and prepare datasets for machine translation
 """
 import tensorflow.compat.v2 as tf  # Import TensorFlow
 import tensorflow_datasets as tfds  # Import TensorFlow Datasets
