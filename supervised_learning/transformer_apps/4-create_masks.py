@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """
-Creates all masks for training/validation
+Defines all masks for training/validation
 """
 import tensorflow.compat.v2 as tf
-
 
 def create_masks(inputs, target):
     """
@@ -24,11 +23,11 @@ def create_masks(inputs, target):
     # Create padding mask for decoder
     decoder_mask = tf.cast(tf.math.equal(target, 0), tf.float32)[:, tf.newaxis, tf.newaxis, :]
 
-    # Create combined mask for decoder by adding padding mask and look-ahead mask
-    combined_mask = decoder_mask[:, :, :, tf.newaxis] + tf.cast(tf.math.equal(inputs, 0), tf.float32)[:, tf.newaxis, tf.newaxis, :]
-
     # Create look-ahead mask for decoder
     size = target.shape[1]
     look_ahead_mask = 1 - tf.linalg.band_part(tf.ones((size, size)), -1, 0)
+
+    # Create combined mask for decoder by taking maximum of decoder padding mask and look-ahead mask
+    combined_mask = tf.maximum(decoder_mask, look_ahead_mask)
 
     return encoder_mask, look_ahead_mask, decoder_mask
