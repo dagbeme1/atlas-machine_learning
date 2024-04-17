@@ -78,7 +78,7 @@ def semantic_search(corpus_path, sentence):
                 documents.append(f.read())
 
     # Embed the documents using the Universal Sentence Encoder
-    embedded_doc = model(documents)
+    embedded_doc = semantic_model(documents)
 
     # Calculate the cosine similarity matrix between the embedded documents
     cosine = np.inner(embedded_doc, embedded_doc)
