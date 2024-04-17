@@ -16,7 +16,7 @@ toks = BertTokenizer.from_pretrained(
 model = hub.load('https://tfhub.dev/see--/bert-uncased-tf2-qa/1')
 
 
-def question_answer(question, reference):
+def question0_answer(question, reference):
     """
     Finds a snippet of text within a document to answer a question
 
@@ -111,8 +111,8 @@ def question_answer(corpus_path):
         if question.lower().strip() in words:
             print("A: Goodbye")
             break
-        reference = semantic_search(coprus_path, question)
-        answer = question_answer(question, reference)
+        reference = semantic_search(corpus_path, question)
+        answer = question0_answer(question, reference)
         if answer is None or answer is "":
             answer = "Sorry, I do not understand your question."
         print("A: {}".format(answer))
