@@ -36,17 +36,17 @@ def semantic_search(corpus_path, sentence):
                 documents.append(f.read())
     
     # Load the Universal Sentence Encoder model from TensorFlow Hub
-    module_url = "https://tfhub.dev/google/universal-sentence-encoder-large/5"
-    model = hub.load(module_url)
+    module_online = "https://tfhub.dev/google/universal-sentence-encoder-large/5"
+    model = hub.load(module_online)
     
     # Embed the documents using the Universal Sentence Encoder
-    embed = model(documents)
+    embedded_doc = model(documents)
     
     # Calculate the cosine similarity matrix between the embedded documents
-    corr = np.inner(embed, embed)
+    cosine = np.inner(embedded_doc, embedded_doc)
     
     # Find the index of the document with the highest similarity to the input sentence
-    closest_index = np.argmax(corr[0, 1:]) + 1
+    closest_index = np.argmax(cosine[0, 1:]) + 1
     
     # Retrieve the most similar document based on the closest index
     similarity = documents[closest_index]
