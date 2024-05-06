@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-the function def train(env, Q, episodes=5000, max_steps=100, 
-alpha=0.1, gamma=0.99, epsilon=1, min_epsilon=0.1, epsilon_decay=0.05): 
+the function def train(env, Q, episodes=5000, max_steps=100, alpha=0.1,
+gamma=0.99, epsilon=1, min_epsilon=0.1, epsilon_decay=0.05):
 that performs Q-learning
 """
 import numpy as np
+
 
 def train(env, Q, episodes=5000, max_steps=100, alpha=0.1, gamma=0.99,
           epsilon=1, min_epsilon=0.1, epsilon_decay=0.05):
@@ -35,30 +36,29 @@ def train(env, Q, episodes=5000, max_steps=100, alpha=0.1, gamma=0.99,
         # Reset the environment for each episode
         state = env.reset()
         total_reward = 0
-        
+
         # Loop through each step within the episode
-        for steps in range(max_steps):
+        for unused in range(max_steps):
             # Choose an action based on epsilon-greedy strategy
             if np.random.uniform(0, 1) < epsilon:
                 action = env.action_space.sample()  # Random action
             else:
                 action = np.argmax(Q[state])  # Greedy action
-            
+
             # Take a step in the environment based on the chosen action
             new_state, reward, done, _ = env.step(action)
-            
+
             # Update Q-value using Q-learning formula
-            Q[state, action] += alpha * (reward + gamma * np.max(Q[new_state]) - Q[state, action])
-            
-            # Update the current state
+            Q[state, action] += alpha * \
+                (reward + gamma * np.max(Q[new_state]) - Q[state, action])
+
             state = new_state
-            # Accumulate the total reward obtained in the episode
             total_reward += reward
-            
+
             # Check if the episode is done
             if done:
                 break
-        
+
         # Update epsilon for the next episode
         epsilon = max(min_epsilon, epsilon * np.exp(-epsilon_decay * episode))
         # Append the total reward of the current episode to the list
