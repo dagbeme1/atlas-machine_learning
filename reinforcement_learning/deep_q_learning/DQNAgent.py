@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Builds a projection block as described in Deep Residual Learning for Image Recognition (2015).
+Builds a projection block as described in Deep Residual Learning for Image Recognition.
 """
 
 import gym  # Importing the Gym library for reinforcement learning environments
