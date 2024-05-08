@@ -14,6 +14,7 @@ from collections import deque  # Importing deque for experience replay buffer
 
 # Step 1: Environment Setup
 env = gym.make('CartPole-v1')  # Creating the CartPole-v1 environment
+#env = gym.make('Breakout-v0')
 
 # Step 2: Preprocessing (if necessary)
 # No preprocessing needed for CartPole environment
