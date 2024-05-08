@@ -205,7 +205,7 @@ class DQNAgent:
 # Step 6: Training
 
 
-def train_agent(agent, num_episodes=5):
+def train_agent(agent, num_episodes=1000):
     """
     Trains the DQN agent.
 
