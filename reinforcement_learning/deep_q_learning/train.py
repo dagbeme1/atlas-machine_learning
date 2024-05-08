@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Train an agent using Deep Q-Learning (DQN) to play the CartPole-v1 environment.
 """
