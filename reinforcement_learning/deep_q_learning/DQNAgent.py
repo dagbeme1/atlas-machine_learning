@@ -5,8 +5,10 @@ Builds a projection block as described in Deep Residual Learning for Image Recog
 
 import gym  # Importing the Gym library for reinforcement learning environments
 import numpy as np  # Importing NumPy for numerical computations
-from tensorflow.keras import Sequential  # Importing Keras for building neural networks
-from tensorflow.keras.layers import Conv2D, Flatten, Dense  # Importing layers for the neural network
+# Importing Keras for building neural networks
+from tensorflow.keras import Sequential
+# Importing layers for the neural network
+from tensorflow.keras.layers import Conv2D, Flatten, Dense
 from tensorflow.keras.optimizers import Adam  # Importing the Adam optimizer
 import random  # Importing the random module for random sampling
 from collections import deque  # Importing deque for experience replay buffer
@@ -18,14 +20,16 @@ env = gym.make('Breakout-v0')  # Creating the Breakout environment
 # Implement preprocessing if needed
 
 # Step 3: Neural Network Architecture
+
+
 def create_model(input_shape, num_actions):
     """
     Builds the neural network model architecture.
-    
+
     Args:
         input_shape (tuple): The shape of the input data.
         num_actions (int): The number of possible actions.
-    
+
     Returns:
         keras.Sequential: The neural network model.
     """
@@ -40,49 +44,67 @@ def create_model(input_shape, num_actions):
     return model
 
 # Step 4: Experience Replay
+
+
 class ExperienceReplay:
     """
     Represents the experience replay buffer.
     """
+
     def __init__(self, capacity):
         """
         Initializes the experience replay buffer.
-        
+
         Args:
             capacity (int): The maximum capacity of the buffer.
         """
-        self.buffer = deque(maxlen=capacity)  # Initializing the experience replay buffer
-    
+        self.buffer = deque(
+            maxlen=capacity)  # Initializing the experience replay buffer
+
     def add(self, experience):
         """
         Adds an experience to the buffer.
-        
+
         Args:
             experience (tuple): The experience tuple to add.
         """
         self.buffer.append(experience)  # Adding experience to the buffer
-    
+
     def sample(self, batch_size):
         """
         Samples a batch from the buffer.
-        
+
         Args:
             batch_size (int): The size of the batch to sample.
-        
+
         Returns:
             list: A list of sampled experiences.
         """
-        return random.sample(self.buffer, batch_size)  # Sampling batch from the buffer
+        return random.sample(self.buffer,
+                             batch_size)  # Sampling batch from the buffer
 
 # Step 5: DQN Algorithm
+
+
 class DQNAgent:
     """
     Represents a DQN agent.
     """
-    def __init__(self, input_shape, num_actions, replay_buffer_capacity=10000, batch_size=32, gamma=0.99, epsilon=1.0, epsilon_decay=0.995, epsilon_min=0.01, learning_rate=0.00025):
+
+    def __init__(
+            self,
+            input_shape,
+            num_actions,
+            replay_buffer_capacity=10000,
+            batch_size=32,
+            gamma=0.99,
+            epsilon=1.0,
+            epsilon_decay=0.995,
+            epsilon_min=0.01,
+            learning_rate=0.00025):
         """
         Initializes the DQN agent.
-        
+
         Args:
             input_shape (tuple): The shape of the input data.
             num_actions (int): The number of possible actions.
@@ -96,75 +118,99 @@ class DQNAgent:
         """
         self.input_shape = input_shape
         self.num_actions = num_actions
-        self.replay_buffer = ExperienceReplay(replay_buffer_capacity)  # Initializing the experience replay buffer
+        # Initializing the experience replay buffer
+        self.replay_buffer = ExperienceReplay(replay_buffer_capacity)
         self.batch_size = batch_size
         self.gamma = gamma
         self.epsilon = epsilon
         self.epsilon_decay = epsilon_decay
         self.epsilon_min = epsilon_min
         self.learning_rate = learning_rate
-        self.model = create_model(input_shape, num_actions)  # Creating the DQN model
-        self.target_model = create_model(input_shape, num_actions)  # Creating the target DQN model
-        self.target_model.set_weights(self.model.get_weights())  # Initializing target model with main model weights
+        self.model = create_model(
+            input_shape, num_actions)  # Creating the DQN model
+        self.target_model = create_model(
+            input_shape, num_actions)  # Creating the target DQN model
+        # Initializing target model with main model weights
+        self.target_model.set_weights(self.model.get_weights())
         self.optimizer = Adam(learning_rate)
-        
+
         # Compile the model
         self.model.compile(optimizer=self.optimizer, loss='mse')
 
     def select_action(self, state):
         """
         Selects an action based on the current state.
-        
+
         Args:
             state (numpy.ndarray): The current state.
-        
+
         Returns:
             int: The selected action.
         """
         if np.random.rand() <= self.epsilon:
-            return np.random.choice(self.num_actions)  # Selecting a random action with epsilon probability
+            # Selecting a random action with epsilon probability
+            return np.random.choice(self.num_actions)
         q_values = self.model.predict(state)
-        return np.argmax(q_values[0])  # Selecting the action with the highest Q-value
-    
+        # Selecting the action with the highest Q-value
+        return np.argmax(q_values[0])
+
     def train(self):
         """
         Trains the agent using experience replay.
         """
         if len(self.replay_buffer.buffer) < self.batch_size:
             return
-        
-        batch = self.replay_buffer.sample(self.batch_size)  # Sampling a batch from the replay buffer
-        states, actions, rewards, next_states, dones = zip(*batch)  # Unzipping the batch
-        
+
+        # Sampling a batch from the replay buffer
+        batch = self.replay_buffer.sample(self.batch_size)
+        states, actions, rewards, next_states, dones = zip(
+            *batch)  # Unzipping the batch
+
         states = np.concatenate(states)  # Concatenating states
         next_states = np.concatenate(next_states)  # Concatenating next states
-        
+
         q_values = self.model.predict(states)  # Predicting Q-values for states
-        next_q_values = self.target_model.predict(next_states)  # Predicting Q-values for next states
-        
+        next_q_values = self.target_model.predict(
+            next_states)  # Predicting Q-values for next states
+
         for i, (state, action, reward, next_state, done) in enumerate(batch):
-            target = q_values[i]  # Getting the target Q-values for the current state
+            # Getting the target Q-values for the current state
+            target = q_values[i]
             if done:
-                target[action] = reward  # If episode is done, set target to the immediate reward
+                # If episode is done, set target to the immediate reward
+                target[action] = reward
             else:
-                target[action] = reward + self.gamma * np.amax(next_q_values[i])  # Else update target using Bellman equation
+                # Else update target using Bellman equation
+                target[action] = reward + self.gamma * \
+                    np.amax(next_q_values[i])
             q_values[i] = target  # Setting the updated target Q-values
-        
-        self.model.fit(states, q_values, batch_size=self.batch_size, epochs=1, verbose=0)  # Training the model
-        
-        self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)  # Decaying epsilon
-    
+
+        self.model.fit(
+            states,
+            q_values,
+            batch_size=self.batch_size,
+            epochs=1,
+            verbose=0)  # Training the model
+
+        self.epsilon = max(
+            self.epsilon_min,
+            self.epsilon *
+            self.epsilon_decay)  # Decaying epsilon
+
     def update_target_model(self):
         """
         Updates the target model by copying the weights from the main model.
         """
-        self.target_model.set_weights(self.model.get_weights())  # Updating the target model weights
+        self.target_model.set_weights(
+            self.model.get_weights())  # Updating the target model weights
 
 # Step 6: Training
+
+
 def train_agent(agent, num_episodes=1000):
     """
     Trains the agent for a specified number of episodes.
-    
+
     Args:
         agent (DQNAgent): The DQN agent.
         num_episodes (int): The number of episodes to train for.
@@ -174,18 +220,24 @@ def train_agent(agent, num_episodes=1000):
         state = np.expand_dims(state, axis=0)  # Adding batch dimension
         done = False
         total_reward = 0
-        
+
         while not done:
             action = agent.select_action(state)  # Selecting an action
-            next_state, reward, done, _ = env.step(action)  # Taking action in the environment
-            next_state = np.expand_dims(next_state, axis=0)  # Adding batch dimension
+            next_state, reward, done, _ = env.step(
+                action)  # Taking action in the environment
+            next_state = np.expand_dims(
+                next_state, axis=0)  # Adding batch dimension
             total_reward += reward  # Updating total reward
-            agent.replay_buffer.add((state, action, reward, next_state, done))  # Adding experience to replay buffer
+            # Adding experience to replay buffer
+            agent.replay_buffer.add((state, action, reward, next_state, done))
             agent.train()  # Training the agent
             state = next_state  # Updating the current state
-        
+
         agent.update_target_model()  # Updating the target model
-        print(f"Episode {episode + 1}/{num_episodes}, Total Reward: {total_reward}")  # Printing episode information
+        # Printing episode information
+        print(
+            f"Episode {episode + 1}/{num_episodes}, Total Reward: {total_reward}")
+
 
 # Initialize agent
 input_shape = env.observation_space.shape
@@ -194,4 +246,3 @@ agent = DQNAgent(input_shape, num_actions)
 
 # Train agent
 train_agent(agent)
-
