@@ -27,7 +27,7 @@ def td_lambtha(env, V, policy, lambtha, episodes=5000, max_steps=100, alpha=0.1,
     # Initialize eligibility traces
     z = np.zeros_like(V)
     
-    for _ in range(episodes):
+    for iteration in range(episodes):
         # Reset the environment to get initial state
         state = env.reset()
         
@@ -35,7 +35,7 @@ def td_lambtha(env, V, policy, lambtha, episodes=5000, max_steps=100, alpha=0.1,
         for t in range(max_steps):
             # Select and perform an action
             action = policy(state)
-            next_state, reward, done, _ = env.step(action)
+            next_state, reward, done, iteration = env.step(action)
             
             # Calculate the target value
             target = reward + gamma * np.max(V[next_state])
