@@ -6,6 +6,9 @@ td_lambtha = __import__('1-td_lambtha').td_lambtha
 
 np.random.seed(0)
 
+#use v1 instead of v0 when running in collab.
+#env = gym.make('FrozenLake8x8-v1')
+
 env = gym.make('FrozenLake8x8-v0')
 LEFT, DOWN, RIGHT, UP = 0, 1, 2, 3
 
