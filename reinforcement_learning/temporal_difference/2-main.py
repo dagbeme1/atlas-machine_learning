@@ -5,6 +5,8 @@ import numpy as np
 sarsa_lambtha = __import__('2-sarsa_lambtha').sarsa_lambtha
 
 np.random.seed(0)
+#use v1 instead of v0 when running in collab. 
+#env = gym.make('FrozenLake8x8-v1')
 env = gym.make('FrozenLake8x8-v0')
 Q = np.random.uniform(size=(64, 4))
 np.set_printoptions(precision=4)
