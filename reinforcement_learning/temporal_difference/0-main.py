@@ -6,6 +6,8 @@ monte_carlo = __import__('0-monte_carlo').monte_carlo
 
 np.random.seed(0)
 
+#use v1 instead of v0 when running in collab. 
+#env = gym.make('FrozenLake8x8-v1')
 env = gym.make('FrozenLake8x8-v0')
 LEFT, DOWN, RIGHT, UP = 0, 1, 2, 3
 
