@@ -23,7 +23,7 @@ def monte_carlo(env, V, policy, episodes=5000, max_steps=100, alpha=0.1, gamma=0
     Returns:
         numpy.ndarray: The updated value estimate V.
     """
-    for _ in range(episodes):  # Iterate over episodes
+    for iteration in range(episodes):  # Iterate over episodes
         # Reset the environment to get initial state
         state = env.reset()
         
