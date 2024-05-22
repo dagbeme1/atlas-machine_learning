@@ -5,7 +5,7 @@ a function that computes to policy with a weight of a matrix
 
 import numpy as np  # Importing the numpy library
 
-def calculate_policy(matrix, weights):
+def policy(matrix, weights):
     """
     Function to compute the policy with a given weight of a matrix.
 
