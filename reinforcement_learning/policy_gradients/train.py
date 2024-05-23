@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 a function that implements a full training.
-
 """
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Assuming policy and policy_gradient are imported correctly from policy_gradient.py
 
@@ -46,7 +46,6 @@ def policy_gradient(state, weights):
     calculated_gradient = state.T @ derivative_log[None, :]  # Compute the gradient with respect to the state
     return selected_action, calculated_gradient  # Return the selected action and the calculated gradient
 
-
 def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
     """
     Implements a full training process.
@@ -72,13 +71,19 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
 
         # Initialize the score for the current episode
         score = 0
+        grads = []
+        rewards = []
 
         while True:
             # Choose an action based on the current state and weights
-            action, _ = policy_gradient(state, weights)
+            action, grad = policy_gradient(state, weights)
 
             # Execute the chosen action and get the next state, reward, and done status
             next_state, reward, done, _ = env.step(action)
+
+            # Store the gradient and reward
+            grads.append(grad)
+            rewards.append(reward)
 
             # Update the state
             state = next_state[None, :]
@@ -89,6 +94,11 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
             # Break the loop if the episode is done
             if done:
                 break
+
+        # Compute the discounted rewards
+        for t in range(len(rewards)):
+            G = sum(gamma**i * rewards[t + i] for i in range(len(rewards) - t))
+            weights += alpha * G * grads[t]
 
         # Print the current episode number and score
         print(f"Episode: {episode}, Score: {score}", end="\r", flush=False)
