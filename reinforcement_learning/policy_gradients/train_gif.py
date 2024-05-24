@@ -164,8 +164,7 @@ to 500 to speed up the time
 #env = gym.make('CartPole-v1')
 
 # Call train with 2 arguments (nb_episodes and alpha)
-#scores = train(env, 10000, 0.000045)
+#scores = train(env, 10000, 0.000045, 0.98)
 
-#scores = train(env, 10000, 0.000045, 0.98, True)
 
 #env.close()
