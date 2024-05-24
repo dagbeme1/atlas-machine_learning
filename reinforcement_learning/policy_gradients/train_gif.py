@@ -154,7 +154,8 @@ def display_animation(frames_dir):
 
 """
 Main file I used to run the code. Takes a long period to 
-run but patience please
+run but patience please. You can change the nb_episodes from 10000 
+to 500 to speed up the time
 """
 #import gym
 
