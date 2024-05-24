@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from PIL import Image
+import IPython.display as display  # Import IPython display for Jupyter
 
 # Assuming policy and policy_gradient are imported correctly from policy_gradient.py
 
@@ -72,6 +73,10 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
     frames_dir = "/content/drive/MyDrive/image slots"
     os.makedirs(frames_dir, exist_ok=True)
 
+    fig, ax = plt.subplots()
+    plt.ion()  # Enable interactive mode
+    im = ax.imshow(np.zeros((400, 600, 3), dtype=np.uint8))  # Initialize with an empty frame
+
     for episode in range(nb_episodes):
         # Reset the environment and get the initial state
         state = env.reset()[None, :]
@@ -103,6 +108,11 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
             frame_path = os.path.join(frames_dir, f"episode_{episode}_frame_{len(rewards)}.png")
             Image.fromarray(frame).save(frame_path)
 
+            # Update the displayed frame
+            im.set_array(frame)
+            display.display(plt.gcf())
+            display.clear_output(wait=True)
+
             # Break the loop if the episode is done
             if done:
                 break
@@ -118,6 +128,9 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
         # Append the score to the list of scores
         scores.append(score)
 
+    # Disable interactive mode
+    plt.ioff()
+
     # Display the animation after training
     display_animation(frames_dir)
 
@@ -130,7 +143,7 @@ def display_animation(frames_dir):
     Parameters:
         frames_dir (str): Directory containing the saved frames.
     """
-    frame_paths = sorted([os.path.join(frames_dir, fname) for fname in os.listdir(frames_dir) if fname.endswith('.png')])
+    frame_paths = sorted([os.path.join(frames_dir, fname) for fname in os.listdir(frames_dir) if fname.endswith(('.png', '.jpg'))])
     frames = [Image.open(frame_path) for frame_path in frame_paths]
 
     # Create a figure
@@ -151,20 +164,18 @@ def display_animation(frames_dir):
     plt.axis('off')  # Hide axes
     plt.show()
 
-
 """
 Main file I used to run the code. Takes a long period to 
 run but patience please. You can change the nb_episodes from 10000 
-to 500 to speed up the time
+to 1000 to speed up the time
 """
 #import gym
-
 #from train import train
 
 #env = gym.make('CartPole-v1')
 
 # Call train with 2 arguments (nb_episodes and alpha)
-#scores = train(env, 10000, 0.000045, 0.98)
-
+#scores = train(env, 1000, 0.000045, 0.98)
 
 #env.close()
+
