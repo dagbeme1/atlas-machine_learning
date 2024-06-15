@@ -1,1 +1,1 @@
-This is a readme for this a function def flip_image(image): that flips an image horizontally
+This is a readme for the atlas machine learning
