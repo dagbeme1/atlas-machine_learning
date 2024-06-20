@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-a method that returns the list of ships that can hold a given number of passengers:
+a method that returns the list of ships that
+can hold a given number of passengers:
 
 Prototype: def availableShips(passengerCount):
 Don’t forget the pagination
@@ -8,6 +9,7 @@ If no ship available, return an empty list.
 """
 
 import requests  # Import the requests library for making HTTP requests
+
 
 def availableShips(passengerCount):
     """
@@ -36,7 +38,8 @@ def availableShips(passengerCount):
             data = response.json()
             # Return the response as a JSON dictionary
         except requests.exceptions.RequestException as e:
-            print("Request error: {}".format(e))  # Use .format() to print error message
+            # Use .format() to print error message
+            print("Request error: {}".format(e))
             break
 
         for ship in data.get("results", []):
@@ -50,4 +53,5 @@ def availableShips(passengerCount):
         # Get the URL of the next page, None if there are no more pages
         base_url = data.get("next")
 
-    return ship_list  # Return the list of starship names that meet the criteria
+    return ship_list
+# Return the list of starship names that meet the criteria
