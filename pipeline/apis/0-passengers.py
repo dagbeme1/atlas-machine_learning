@@ -1,4 +1,13 @@
 #!/usr/bin/env python3
+"""
+a method that returns the list of 
+ships that can hold a given number of passengers:
+
+Prototype: def availableShips(passengerCount):
+Don’t forget the pagination
+If no ship available, return an empty list.
+"""
+
 import requests  # Import the requests library for making HTTP requests
 
 
