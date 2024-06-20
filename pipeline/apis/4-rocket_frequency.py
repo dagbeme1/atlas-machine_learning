@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-a script that displays the number of launches per rocket.
+A script that displays the number of launches per rocket.
 
 Use this https://api.spacexdata.com/v4/launches to make request
 All launches should be taken into consideration
@@ -58,9 +58,9 @@ if __name__ == '__main__':
         # Print each rocket and its number of launches
         for rocket, count in sorted_rockets:
             # Print rocket name and its launch count
-            print(f"{rocket}: {count}")
+            print("{}: {}".format(rocket, count))
 
     except requests.exceptions.RequestException as e:
         # Handle any exceptions related to requests
         # Print error message if an exception occurs
-        print(f"An error occurred: {e}")
+        print("An error occurred: {}".format(e))
