@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
-create a method that returns the list of names
+Create a method that returns the list of names
 of the home planets of all sentient species.
-
 """
 import requests
 
@@ -28,21 +27,21 @@ def sentientPlanets():
             data = response.json()
             # Return the response as a JSON dictionary
         except requests.exceptions.RequestException as e:
-            print(f"Request error: {e}")
+            print("Request error: {}".format(e))
             break
 
         for species in data.get("results", []):
             homeworld_url = species.get("homeworld")
             if homeworld_url:
                 try:
-                    homeworld_response = requests.get(
-                        homeworld_url)  # Request the homeworld URL
+                    homeworld_response = requests.get(homeworld_url)
+                    # Request the homeworld URL
                     homeworld_response.raise_for_status()
                     homeworld_name = homeworld_response.json().get("name")
                     if homeworld_name:
                         world_list.append(homeworld_name)
                 except requests.exceptions.RequestException as e:
-                    print(f"Request error for homeworld: {e}")
+                    print("Request error for homeworld: {}".format(e))
                     continue
 
         # Get the URL of the next page, None if there are no more pages
