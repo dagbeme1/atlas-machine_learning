@@ -3,7 +3,8 @@
 Fetches and prints the location of a specific GitHub user.
 
 Args:
-    <GitHub API URL>: The full API URL of the GitHub user
+    https://api.github.com/users/holbertonschool:
+    The full API URL of the GitHub user
     whose location you want to fetch.
 
 Returns:
@@ -52,9 +53,9 @@ if __name__ == '__main__':
         minutes_remaining = int((rate_limit_reset - current_time) / 60)
 
         # Print the time until rate limit reset in minutes
-        print(f"Reset in {minutes_remaining} min")
+        print("Reset in {} min".format(minutes_remaining))
 
     else:
         # For any other status codes, print an error message with the status
         # code
-        print(f"Error: {response.status_code}")
+        print("Error: {}".format(response.status_code))
