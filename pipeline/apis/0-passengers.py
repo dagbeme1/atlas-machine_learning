@@ -7,9 +7,9 @@ Don’t forget the pagination
 If no ship available, return an empty list.
 """
 
-import requests
+import requests  # Import the requests library for making HTTP requests
 
-def get_starships(passengerCount):
+def availableShips(passengerCount):
     """
     Fetches and returns a list of starships from the
     SWAPI API that can hold at least the given number of passengers.
