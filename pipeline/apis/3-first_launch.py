@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Fetches and prints information about the next upcoming SpaceX launch.
-
+Fetches and prints information about the
+next upcoming SpaceX launch.
 """
 
 import requests
@@ -14,6 +14,8 @@ if __name__ == '__main__':
     try:
         # Send GET request to fetch upcoming launches data
         response = requests.get(url)
+        response.raise_for_status()
+        # Ensure we raise an error for bad responses
 
         # Initialize variables to find the earliest launch date
         earliest_date_unix = None
@@ -42,19 +44,22 @@ if __name__ == '__main__':
         if launch_info:
             # Construct rocket_url and launchpad_url using formatted strings
             rocket_base_url = "https://api.spacexdata.com/v4/rockets/"
-            rocket_endpoint = launch_info['rocket']
-            rocket_url = rocket_base_url + rocket_endpoint
+            rocket_url = "{}{}".format(rocket_base_url, launch_info['rocket'])
 
             launchpad_base_url = "https://api.spacexdata.com/v4/launchpads/"
-            launchpad_endpoint = launch_info['launchpad']
-            launchpad_url = launchpad_base_url + launchpad_endpoint
+            launchpad_url = "{}{}".format(
+                launchpad_base_url, launch_info['launchpad'])
 
             # Send GET request to fetch rocket information
             rocket_response = requests.get(rocket_url)
+            rocket_response.raise_for_status()
+            # Ensure we raise an error for bad responses
             rocket_name = rocket_response.json()["name"]
 
             # Send GET request to fetch launchpad information
             launchpad_response = requests.get(launchpad_url)
+            # Ensure we raise an error for bad responses
+            launchpad_response.raise_for_status()
             launchpad_name = launchpad_response.json()["name"]
             launchpad_locality = launchpad_response.json()["locality"]
 
@@ -71,4 +76,4 @@ if __name__ == '__main__':
             print(output)
 
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching data: {e}")
+        print("Error fetching data: {}".format(e))
