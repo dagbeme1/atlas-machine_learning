@@ -1,4 +1,4 @@
-General
+***General***
 What’s a relational database
 What’s a none relational database
 What is difference between SQL and NoSQL
@@ -15,7 +15,7 @@ How to query information from a NoSQL database
 How to insert/update/delete information from a NoSQL database
 How to use MongoDB
 Requirements
-General
+***General***
 A README.md file, at the root of the folder of the project, is mandatory
 All your SQL files will be executed on Ubuntu 16.04 LTS (or 18.04) using MySQL 5.7 (version 5.7.30)
 All your SQL queries should have a comment just before (i.e. syntax above)
