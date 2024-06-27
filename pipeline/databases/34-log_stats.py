@@ -3,7 +3,6 @@
 Fetches and prints statistics from a MongoDB collection of nginx logs.
 """
 
-# Import necessary module
 from pymongo import MongoClient
 
 if __name__ == "__main__":
@@ -24,11 +23,11 @@ if __name__ == "__main__":
         methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
         for method in methods:
             count = collection.count_documents({"method": method})
-            print(f"\t{count} logs with method={method}")
+            print(f"\tmethod {method}: {count}")
 
         # Count logs with specific method and path
         status_logs_count = collection.count_documents({"method": "GET", "path": "/status"})
-        print(f"{status_logs_count} logs with method=GET\npath=/status")
+        print(f"{status_logs_count} status check")
 
     except Exception as e:
         print(f"Error: {e}")
